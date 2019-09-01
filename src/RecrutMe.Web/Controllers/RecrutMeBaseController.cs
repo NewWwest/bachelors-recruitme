@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecrutMe.Web.Controllers
 {
-    public class BaseController : Controller
+    public class RecrutMeBaseController : Controller
     {
     }
 }
