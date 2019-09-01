@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using RecrutMe.Logic.Data;
+using RecrutMe.Web.Configuration;
 using RecrutMe.Web.Services.Data;
 
 namespace RecrutMe.Web
@@ -65,6 +62,8 @@ namespace RecrutMe.Web
                     ClockSkew = TimeSpan.Zero // remove delay of token when expire
                 };
             });
+
+            services.AddDependencInjection();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
