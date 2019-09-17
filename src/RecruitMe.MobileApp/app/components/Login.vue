@@ -45,11 +45,8 @@
 </script>
 
 <style scoped lang="scss">
-    // Start custom common variables
     @import '../app-variables';
-    // End custom common variables
-
-    // Custom styles
+    
     .fa {
         color: $warning-light;
     }
@@ -69,10 +66,6 @@
         margin-bottom: 30;
         padding-bottom: 8;
         letter-spacing: 0.1;
-    }
-
-    .loginPageBack {
-        background-image: linear-gradient(to right, #39B994, #337FC7);
     }
 
     .logoImage {
@@ -98,5 +91,13 @@
     .container {
         margin-left: 34;
         margin-right: 34;
+    }
+</style>
+
+<style lang="scss">
+    @import '../app-variables';
+    
+    .loginPageBack {
+        background-image: linear-gradient(to right, $login-left-color, $login-right-color);
     }
 </style>
