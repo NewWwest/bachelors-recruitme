@@ -83,7 +83,7 @@
     }
 
     .logingButton {
-        background-color: #4BD5DC;
+        background-color: $login-button-color;
         color: white;
         font-weight: bold;
         border-radius: 25;
@@ -93,16 +93,12 @@
         letter-spacing: 0.1;
     }
 
+    .loginPageBack {
+        background-image: linear-gradient(to right, $login-left-color, $login-right-color);
+    }
+
     .container {
         margin-left: 34;
         margin-right: 34;
-    }
-</style>
-
-<style lang="scss">
-    @import '../app-variables';
-    
-    .loginPageBack {
-        background-image: linear-gradient(to right, $login-left-color, $login-right-color);
     }
 </style>

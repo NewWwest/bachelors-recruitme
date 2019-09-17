@@ -3,7 +3,7 @@ import Vue from "nativescript-vue";
 import Home from "./components/Home";
 import Router from "./router";
 
-Vue.prototype.$router = router;
+Vue.prototype.$router = Router;
 Vue.prototype.$goto = function (to, options) {
     var options = options || { 
         clearHistory: false, 

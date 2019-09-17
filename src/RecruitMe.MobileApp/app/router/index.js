@@ -1,7 +1,7 @@
-import Home from './components/Home' 
-import Login from './components/Login' 
+import Home from '~/components/Home' 
+import Login from '~/components/Login' 
 
-const router = { 
+const Router = { 
     // add every component to which we will be navigating to
     home: Home, 
     login: Login,
