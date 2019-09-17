@@ -26,7 +26,7 @@
                     <TextField v-model="password" hint="Password" secure="true" class="form-input" />
                 </FlexboxLayout>
 
-                <Button text="Login" @tap="onLogginButtonTap" class="loggingButton" />
+                <Button text="Login" @tap="onLoginButtonTap" class="logingButton" />
             </StackLayout>
         </StackLayout>
         
@@ -40,13 +40,18 @@
                 username: '',
                 password: ''
             }
+        },
+        methods: {
+            onLoginButtonTap: function(e) {
+                // not implemented, should call api to authorize 
+            }
         }
     };
 </script>
 
 <style scoped lang="scss">
     @import '../app-variables';
-    
+
     .fa {
         color: $warning-light;
     }
@@ -77,7 +82,7 @@
         margin-top: 50;
     }
 
-    .loggingButton {
+    .logingButton {
         background-color: #4BD5DC;
         color: white;
         font-weight: bold;
