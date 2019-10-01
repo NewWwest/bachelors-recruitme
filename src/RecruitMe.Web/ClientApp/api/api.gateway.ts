@@ -1,11 +1,10 @@
-export class ApiGateway {
-    public accountLogin(email:string, password:string):any{
-        const requestOpt = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: { email, password }
-        };
+import axios from 'axios';
 
-        return new Promise(() => {});
+export class ApiGateway {
+    public accountLogin(email:string, password:string):any {
+        return axios.post('/Account/Login',{ email, password })
+    }
+    public accountRegister(email:string, password:string, confirmPassword: string):any{
+        return axios.post('/Account/Register',{ email, password, confirmPassword })
     }
 }

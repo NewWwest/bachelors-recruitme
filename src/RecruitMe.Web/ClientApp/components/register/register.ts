@@ -4,9 +4,11 @@ import { UserService } from '../../services/user.service';
 
 // @ts-ignore
 @Component
-export default class Login extends Vue {
+export default class Register extends Vue {
     email:string="";
     password: string="";
+    confirmPassword: string="";
+
     submitted:boolean=false;
     fetching: boolean=false;
 
@@ -16,7 +18,7 @@ export default class Login extends Vue {
         super();
     }
 
-    handleSubmit() {
-        this.userService.login(this.email, this.password)
+    handleSubmit(){
+        this.userService.register(this.email, this.password, this.confirmPassword);
     }
 }

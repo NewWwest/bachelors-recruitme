@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 const routes: any[] = [
     { path: '/', component: require('./components/home/home.vue.html') },
     { path: '/login', component: require('./components/login/login.vue.html') },
+    { path: '/register', component: require('./components/register/register.vue.html') },
 ];
 
 new Vue({
