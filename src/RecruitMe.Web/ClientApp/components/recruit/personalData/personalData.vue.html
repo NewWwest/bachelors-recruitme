@@ -1,0 +1,26 @@
+
+<script src="./personalData.ts"></script>
+<template>
+    <div>
+        <h2>personalData</h2>
+        <form @submit.prevent="handleSubmit">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" v-model="name" name="name" class="form-control" :class="{ 'is-invalid': submitted && !name }" />
+                <div v-show="submitted && !name" class="invalid-feedback">name is required</div>
+            </div>
+
+            <div class="form-group">
+                <label htmlFor="surname">Surname</label>
+                <input type="surname" v-model="surname" name="surname" class="form-control" :class="{ 'is-invalid': submitted && !surname }" />
+                <div v-show="submitted && !surname" class="invalid-feedback">Surname is required</div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary" :disabled="fetching">Submit</button>
+                <img v-show="fetching" />
+            </div>
+        </form>
+    </div>
+</template>

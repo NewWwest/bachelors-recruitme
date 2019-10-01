@@ -1,12 +1,12 @@
 import { ApiGateway } from "../api/api.gateway";
-import { LoggedInUser } from "../models/loggedInUser.model";
+import { LoggedInUser } from "../models/user.models";
 import { LocalStorageService } from "./localStorage.service";
 
 export class UserService {
     private _apiGateway: ApiGateway = new ApiGateway();
 
     public login(email: string, password: string) {
-        this._apiGateway.accountLogin(email, password).then(
+        this._apiGateway.login(email, password).then(
             (response: LoggedInUser) => {
                 if (response != null) {
                     LocalStorageService.setUserId(response.id);
@@ -18,7 +18,7 @@ export class UserService {
     }
 
     public register(email: string, password: string, cofirmPassword: string) {
-        this._apiGateway.accountRegister(email, password, cofirmPassword).then(
+        this._apiGateway.register(email, password, cofirmPassword).then(
             (response: any) => {
                 if (response != null) {
                     LocalStorageService.setUserId(response.id);
@@ -27,5 +27,11 @@ export class UserService {
                 }
             },
             (err: any) => console.error(err))
+    }
+
+    public isLoggedIn(): boolean {
+        return LocalStorageService.getUserId() != null &&
+            LocalStorageService.getEmail() != null &&
+            LocalStorageService.getJwtToken() != null;
     }
 }
