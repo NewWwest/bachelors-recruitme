@@ -1,6 +1,8 @@
 export class LocalStorageService {
 
     static setUserId(userId:string): void {
+        if(userId ==null || userId=="")
+            return;
         localStorage.setItem('userId', userId);
     }
 
@@ -9,6 +11,8 @@ export class LocalStorageService {
     }
     
     static setJwtToken(jwtToken:string): void {
+        if(jwtToken ==null || jwtToken=="")
+            return;
         localStorage.setItem('jwtToken', jwtToken) ;
     }
 
@@ -17,6 +21,8 @@ export class LocalStorageService {
     }
     
     static setEmail(email: string): void {
+        if(email ==null || email=="")
+            return;
         localStorage.setItem('email', email) ;
     }
 

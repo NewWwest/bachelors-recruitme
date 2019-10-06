@@ -7,4 +7,8 @@ export class RecruitmentService {
     updatePersonalData(request: IPersonalData) {
         this.apiGateway.updatePersonalData(request);
     }
+
+    getPersonalData() {
+        return this.apiGateway.getPersonalData();
+    }
 }

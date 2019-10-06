@@ -25,7 +25,11 @@ export default class PersonalData extends Vue {
             var router = new VueRouter();
             router.go(-1);
         }
-            
+        this.recruitmentService.getPersonalData().then((resp)=>{
+            console.log(resp);
+        }, (err)=>{
+            console.error(err);
+        })
     }
 
     handleSubmit() {
