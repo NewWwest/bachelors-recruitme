@@ -10,7 +10,7 @@
                 
                 <FlexBoxLayout row="1" justifyContent="space-between" alignItems="center">
                     <Button class="bottomButton" row="1" 
-                        @tap="$goto('login')" text="login" />
+                        @tap="$goto.Login()" text="login" />
                     <Button class="bottomButton" row="1"
                         @tap="onRegisterButtonTap" text="register" />
                 </FlexBoxLayout>
@@ -19,17 +19,15 @@
     </Page>
 </template>
 
-<script>
-    export default {
-        data() {
+<script lang="ts">
+    import { Component, Vue } from "vue-property-decorator";
 
-        },
-        methods: {
-            onRegisterButtonTap: function(e) {
+    @Component
+    export default class Home extends Vue {
+        // onRegisterButtonTap(): {
 
-            }
-        }
-    };
+        // }
+    }
 </script>
 
 <style scoped lang="scss">

@@ -33,18 +33,16 @@
     </Page>
 </template>
 
-<script>
-    export default {
-        data() {
-            return {
-                username: '',
-                password: ''
-            }
-        },
-        methods: {
-            onLoginButtonTap: function(e) {
-                // not implemented, should call api to authorize 
-            }
+<script lang="ts">
+    import {Component, Vue} from 'vue-property-decorator';
+
+    @Component
+    export default class Login extends Vue {
+        username: string;
+        password: string;
+        
+        onLoginButtonTap: {
+            // not implemented, should call api to authorize 
         }
     };
 </script>

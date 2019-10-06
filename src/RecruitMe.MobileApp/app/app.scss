@@ -1,9 +1,10 @@
-// Import app variables
-@import 'app-variables';
+// NativeScript core theme
+// @see https://docs.nativescript.org/ui/theme
+@import '~nativescript-theme-core/scss/blue';
 
-// Import the theme’s main ruleset - both index and platform specific.
+// Override variables here
+
 @import '~nativescript-theme-core/scss/index';
-@import '~nativescript-theme-core/scss/platforms/index.android';
 
-// Import common styles
-@import 'app-common';
+// Global SCSS styling
+// @see https://docs.nativescript.org/ui/styling
