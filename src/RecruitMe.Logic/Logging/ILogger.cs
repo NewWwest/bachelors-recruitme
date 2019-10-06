@@ -6,6 +6,7 @@ namespace RecruitMe.Logic.Logging
 {
     public interface ILogger
     {
+        void Log(object obj);
         void Log(string message);
     }
 }

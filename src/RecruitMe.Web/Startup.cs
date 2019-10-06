@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using RecruitMe.Web.Configuration;
 using RecruitMe.Web.Services.Data;
@@ -47,7 +48,7 @@ namespace RecruitMe.Web
             }).AddJwtBearer(options =>
             {
                 // base-address of your identityserver
-                options.Authority = "http://localhost:52718/";
+                options.Authority = "http://localhost:5000/";
 
                 // name of the API resource
                 options.Audience = "api1";
@@ -71,6 +72,7 @@ namespace RecruitMe.Web
         {
             if (env.IsDevelopment())
             {
+                IdentityModelEventSource.ShowPII = true;
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
@@ -82,7 +84,7 @@ namespace RecruitMe.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -99,8 +101,6 @@ namespace RecruitMe.Web
                     defaults: new { controller = "Home", action = "Index" });
             });
             app.UseStaticFiles();
-
-            //dbContext.Database.EnsureCreated();
         }
     }
 }
