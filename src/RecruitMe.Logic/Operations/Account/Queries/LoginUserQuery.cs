@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
@@ -20,9 +21,10 @@ namespace RecruitMe.Logic.Operations.Account.Queries
 
         public LoginUserQuery(ILogger logger, 
             LoginRequestValidator validator,
+            BaseDbContext dbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            JwtTokenHelper jwtTokenHelper) : base(logger, validator)
+            JwtTokenHelper jwtTokenHelper) : base(logger, validator, dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

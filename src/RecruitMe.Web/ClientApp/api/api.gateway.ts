@@ -14,11 +14,11 @@ export class ApiGateway {
     public updatePersonalData(data: IPersonalData) {
         return axios.post('/Recruitment/UpdatePersonalData', data, this.authHeader())
     }
-    public getPersonalData(){
+    public getPersonalData() {
         return axios.get('/Recruitment/GetPersonalData', this.authHeader())
     }
 
-    private authHeader(){
+    private authHeader() {
         return {
             headers: {
                 Authorization: `Bearer ${LocalStorageService.getJwtToken()}`

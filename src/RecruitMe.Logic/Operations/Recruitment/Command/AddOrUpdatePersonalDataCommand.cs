@@ -12,32 +12,30 @@ namespace RecruitMe.Logic.Operations.Recruitment.Command
 {
     public class AddOrUpdatePersonalDataCommand : BaseAsyncOperation<bool, AddOrUpdatePersonalDataCommandRequest, AddOrUpdatePersonalDataCommandRequestValidator>
     {
-        private readonly BaseDbContext _db;
-
-        public AddOrUpdatePersonalDataCommand(ILogger logger, AddOrUpdatePersonalDataCommandRequestValidator validator, BaseDbContext db) : base(logger, validator)
+        public AddOrUpdatePersonalDataCommand(ILogger logger, AddOrUpdatePersonalDataCommandRequestValidator validator, BaseDbContext dbContext) : base(logger, validator, dbContext)
         {
-            _db = db;
         }
 
         protected override async Task<bool> DoExecute(AddOrUpdatePersonalDataCommandRequest request)
         {
-            var entity = new PersonalData() {
-                UserId=request.UserId,
+            var entity = new PersonalData()
+            {
+                UserId = request.UserId,
                 Name = request.Data.Name,
                 Surname = request.Data.Surname
             };
 
             try
             {
-                _db.PersonalData.Add(entity);
-                await _db.SaveChangesAsync();
+                _dbContext.PersonalData.Add(entity);
+                await _dbContext.SaveChangesAsync();
                 return true;
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 _logger.Log(exc);
-                _db.PersonalData.Update(entity);
-                await _db.SaveChangesAsync();
+                _dbContext.PersonalData.Update(entity);
+                await _dbContext.SaveChangesAsync();
                 return true;
             }
         }

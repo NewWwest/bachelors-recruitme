@@ -5,15 +5,13 @@ import { LocalStorageService } from '../../services/localStorage.service';
 // @ts-ignore
 @Component
 export default class Navmenu extends Vue {
-    name:string="";
+    name: string = "";
 
-    constructor(){
+    constructor() {
         super();
     }
 
-    mounted(){
-        console.log('dipa');
-        console.log(LocalStorageService.getEmail())
-        this.name = (LocalStorageService.getEmail() != null ? LocalStorageService.getEmail() :  "") as string;
+    mounted() {
+        this.name = (LocalStorageService.getEmail() != null ? LocalStorageService.getEmail() : "") as string;
     }
 }

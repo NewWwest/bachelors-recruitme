@@ -12,16 +12,13 @@ namespace RecruitMe.Logic.Operations.Recruitment.Queries
 {
     public class GetPersonalDataQuery : BaseAsyncOperation<PersonalDataDto, int>
     {
-        public BaseDbContext _db;
-
-        public GetPersonalDataQuery(ILogger logger, BaseDbContext db) : base(logger)
+        public GetPersonalDataQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
-            _db = db;
         }
 
         protected override async Task<PersonalDataDto> DoExecute(int request)
         {
-            var entity = await _db.PersonalData.FirstOrDefaultAsync(pd => pd.UserId == request);
+            var entity = await _dbContext.PersonalData.FirstOrDefaultAsync(pd => pd.UserId == request);
 
             var result = new PersonalDataDto()
             {

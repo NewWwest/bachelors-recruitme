@@ -1,4 +1,4 @@
 export interface IPersonalData {
-    name:string;
+    name: string;
     surname: string;
 }

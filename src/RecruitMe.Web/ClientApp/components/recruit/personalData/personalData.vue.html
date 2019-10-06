@@ -1,4 +1,3 @@
-
 <script src="./personalData.ts"></script>
 <template>
     <div>
@@ -7,13 +6,15 @@
 
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" v-model="name" name="name" class="form-control" :class="{ 'is-invalid': submitted && !name }" />
+                <input type="text" v-model="name" name="name" class="form-control"
+                    :class="{ 'is-invalid': submitted && !name }" />
                 <div v-show="submitted && !name" class="invalid-feedback">name is required</div>
             </div>
 
             <div class="form-group">
                 <label htmlFor="surname">Surname</label>
-                <input type="surname" v-model="surname" name="surname" class="form-control" :class="{ 'is-invalid': submitted && !surname }" />
+                <input type="surname" v-model="surname" name="surname" class="form-control"
+                    :class="{ 'is-invalid': submitted && !surname }" />
                 <div v-show="submitted && !surname" class="invalid-feedback">Surname is required</div>
             </div>
 

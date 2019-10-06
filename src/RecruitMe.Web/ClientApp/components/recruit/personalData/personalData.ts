@@ -7,34 +7,34 @@ import { RecruitmentService } from '../../../services/recruitment.service';
 // @ts-ignore
 @Component
 export default class PersonalData extends Vue {
-    name:string="";
-    surname: string="";
+    name: string = "";
+    surname: string = "";
 
-    submitted:boolean=false;
-    fetching: boolean=false;
+    submitted: boolean = false;
+    fetching: boolean = false;
 
     userService: UserService = new UserService();
     recruitmentService: RecruitmentService = new RecruitmentService();
 
-    constructor(){
+    constructor() {
         super();
     }
 
-    mounted(){
-        if(!this.userService.isLoggedIn()) {
+    mounted() {
+        if (!this.userService.isLoggedIn()) {
             var router = new VueRouter();
             router.go(-1);
         }
-        this.recruitmentService.getPersonalData().then((resp)=>{
+        this.recruitmentService.getPersonalData().then((resp) => {
             console.log(resp);
-        }, (err)=>{
+        }, (err) => {
             console.error(err);
         })
     }
 
     handleSubmit() {
         let request = {
-            name:this.name,
+            name: this.name,
             surname: this.surname
         }
 

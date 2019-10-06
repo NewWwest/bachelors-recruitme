@@ -5,14 +5,14 @@ import { UserService } from '../../../services/user.service';
 // @ts-ignore
 @Component
 export default class Login extends Vue {
-    email:string="";
-    password: string="";
-    submitted:boolean=false;
-    fetching: boolean=false;
+    email: string = "";
+    password: string = "";
+    submitted: boolean = false;
+    fetching: boolean = false;
 
     userService: UserService = new UserService();
 
-    constructor(){
+    constructor() {
         super();
     }
 
