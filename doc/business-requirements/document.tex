@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+
+\title{Wielowarstwowy system rekrutacji dla szkół z interfejsem webowym i aplikacją mobilną - analiza wymagań}
+\author{Andrzej Westfalewicz, Filip Zyskowski}
+\date{24 października 2019}
+
+% zamienia nazwę Content na Spis treści
+\renewcommand*\contentsname{Spis treści} 
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\tableofcontents
+
+\section{Opis systemu}
+
+Celem projektu jest (zaliczenie inżynierki xd) utworzenie systemu służącego do rekrutacji uczniów do szkół średnich. Tworzony system ma za zadanie usprawnić proces przyjmowania kandydatów zarówno dla kadry nauczycielskiej jak i samych uczniów.
+
+Głównymi funkcjami programu będzie rejestracja kandydata do systemu, przyjęcie opłaty rekrutacyjnej oraz zapisanie kandydata na wybrany przez siebie egzamin.
+
+Dodatkowa funkcjonalność systemu będzie obejmowała dodanie zdjęcia kandydata, nadanie numeru egzaminacyjnego po poprawnym zapisaniu się na egzamin oraz pokazaniu stanu rekrutacji (przyjęty/odrzucony/w trakcie rozpatrywania)
+
+Uzytkownicy będą mieli dostęp do systemu zarówno z przeglądarki internetowej jak i z aplikacji mobilnej na telefonach z systemem Android.
+
+\section{Słownik pojęć}
+Aplikacja (webowa|mobilna), Architektura, System, Okres rekrutacyjny, Użytkownik|Kandydat, Rejestracja, Egzamin
+\section{Wymagania funkcjonalne}
+
+\section{Wymagania niefunkcjonalne}
+
+\begin{itemize}
+	\item Aplikacja będzie dostępna przez co najmniej dwadzieścia dwie godziny w ciągu doby w okresie rekrutacyjnym.
+	\item Architektura zapewnia bezproblemowe równoległe korzystanie z systemu przez co najmniej stu użytkowników.
+	\item Przy połączeniu szerokopasmowym, wywołany przez użytkownika interfejs otworzy się po czasie niedłuższym niż trzy sekundy. 
+	\item Aplikacja będzie działała bezproblemowo na przeglądarkach internetowych Google Chrome, Opera, Mozilla Firefox, Safari, Microsoft Edge oraz Internet Explorer od wesji odpowiednio 60, 50, 60, 10.1, 15 oraz 11. Aplikacja będzie działała bezproblemowo na telefonach komórkowych z systemem Android od wersji 4.1.
+	\item Aplikacja mobilna nie zadziała na telefonach, w których nie ma możliwości zainstalowania zewnętrznych aplikacji.
+	\item Aplikacja webowa i mobilna do poprawnego działania wymaga połączenia z Internetem. Na urządzeniach bez możliwości połączenia z Internetem, aplikacja webowa i mobilna nie zadziałają.
+\end{itemize}
+
+Aplikacja mobilna do swojego działania wykorzystuje możliwości przez obecne urządzenia mobilne. Aby zapewnić poprawne działanie aplikacji mobilnej, przy instalacji aplikacji mobilnej lub przy pierwszym użyciu funkcji aplikacji korzystającego z danego modułu telefonu, użytkownik będzie proszony o zgodę na:
+\begin{itemize}
+	\item \textbf{odbieranie danych z internetu i pełny dostęp do sieci} – na potrzeby prawidłowej rejestracji, dokonania płatności i zapisania na egzamin,
+	\item \textbf{wyświetlanie połączeń sieciowych} – na potrzeby sprawdzania dostępu do internetu przez aplikację,
+\end{itemize}
+
+\section{Harmonogram}
+
+Harmonogram przedstawia przewidywany plan działania dla projektu. Tabelka zawiera piętnaście, dwukolumnowych wierszy. W pierwszej kolumnie każdego wiersza poniższej tabelki znajdziemy numer tygodnia, który jest rozparywany. Druga kolumna natomiast zawiera listę zadań, które mają być wykonane w danym tygodniu.
+
+\begin{center}
+	\begin{tabular}{|c|c|}
+	\hline
+	Numer tygodnia & Lista zadań \\
+	\hline
+	Tydzień 1. & "" \\
+	\hline
+	Tydzień 2. & "" \\
+	\hline
+	Tydzień 3. & "" \\
+	\hline
+	Tydzień 4. & "" \\
+	\hline
+	Tydzień 5. & "" \\
+	\hline
+	Tydzień 6. & "" \\
+	\hline
+	Tydzień 7. & "" \\
+	\hline
+	Tydzień 8. & "" \\
+	\hline
+	Tydzień 9. & "" \\
+	\hline
+	Tydzień 10. & "" \\
+	\hline
+	Tydzień 11. & "" \\
+	\hline
+	Tydzień 12. & "" \\
+	\hline
+	Tydzień 13. & "" \\
+	\hline
+	Tydzień 14. & "" \\
+	\hline
+	Tydzień 15. & "" \\
+	\hline
+	\end{tabular}
+\end{center}
+
+\end{document}
