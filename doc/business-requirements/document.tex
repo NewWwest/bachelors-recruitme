@@ -41,17 +41,97 @@ Uzytkownicy będą mieli dostęp do systemu zarówno z przeglądarki internetowe
 	\item \textbf{Egzamin} - forma sprawdzenia wiedzy kandydatów po udanym procesie rejestracji, będąca podstawą do przyjęcia bądź odrzucenia kandydata do szkoły
 	\item \textbf{Kwota egzaminacyjna} - ustalona przez szkołę na okres rekrutacji kwota pieniężna, która musi być uiszczona przed ukończeniem procesu rejestracji
 	\item \textbf{Okres rekrutacyjny} - okres ustalony przez szkołę, w którym można się rejestrować
+	\item \textbf{ID kandydata} - unikalny identyfikator kandydata składający się z: 3 pierwszych liter imienia, 3 pierwszych liter nazwisk oraz 3 cyfr gwarantujących unikalność.
 \end{itemize}
 
 \section{Wymagania funkcjonalne}
 
+\subsection{Użytkownik}
+\begin{enumerate}
+  \item Jako Użytkownik mogę otworzyć stronę i przeglądać ogólnodostępny kontent.   
+      \begin{itemize}
+         \item Aplikacja jest ogólnodostępna - hostowana nie tylko na localhost.
+         \item Aplikacja nie rzuca błędów na konsolę.
+         \item Aplikacja ładuje się "szybko".
+       \end{itemize}
+  \item Jako Użytkownik mogę przeglądać informacje na stronie
+      \begin{itemize}
+         \item Regulamin rejestracji.
+         \item Mogę sprawdzić kontakt do Organizatorów Rejestracji.
+       \end{itemize}
+\end{enumerate}
+
+\subsection{Kandydat}
+\begin{enumerate}
+    \item Jako Kandydat mogę się zarejestrować.   
+        \begin{itemize}
+        \item Podaje: Imię, nazwisko, email, hasło, numer PESEL (jeśli ma).
+        \item Potwierdzenie maila?
+        \item W procesie rejestracji Kandydat otrzymuje swoje ID. 
+        \end{itemize}
+    \item Jako Kandydat mogę się zalogować.   
+        \begin{itemize}
+        \item Logowanie odbywa się za pomocą ID kandydata
+        \item Aplikacja rozpoznaje czy obecny Użytkownik jest zalogowany.
+        \item Część funkcjonalności jest dostępna tylko dla zalogowanych użytkowników.
+        \end{itemize}
+    \item Jako Kandydat mogę zresetować hasło.   
+        \begin{itemize}
+        \item TODO
+        \end{itemize}
+    \item Jako Kandydat przypomnieć ID Kandydata.   
+        \begin{itemize}
+        \item TODO
+        \end{itemize}
+    \item Jako zalogowany Kandydat otworzyć stronę swojego profilu aby edytować swoje dane.   
+        \begin{itemize}
+        \item Strona wyświetla dane podane przy rejestracji, jednak są one zablokowane do edycji.
+        \item Wyświetlane są pozostałe dane do podania/edycji: TUTAJ LISTA.
+        \item Zdjęcie
+        \end{itemize}
+    \item Jako zalogowany Kandydat mogę dokonać opłaty za rejestrację.   
+        \begin{itemize}
+        \item Strona profilu wyświetla obecny stan transakcji.
+        \item Transakcja odbywa się przez internetową bramkę płatniczą.
+        \end{itemize}
+    \item Jako zalogowany Kandydat po dokonaniu transakcji mam dostęp do funkcjonalności moje egzamin.   
+        \begin{itemize}
+        \item TODO
+        \end{itemize}
+\end{enumerate}
+
+\subsection{Organizator Rejestracji}
+\begin{enumerate}
+  \item Zalogować się do Aplikacji i rozpoznać że jest organizatorem
+      \begin{itemize}
+         \item TODO
+       \end{itemize}
+  \item Wyświetlić dane Profil kandydata na podstawie podanego ID
+      \begin{itemize}
+         \item TODO
+       \end{itemize}
+\end{enumerate}
+
+\subsection{Administrator}
+\begin{enumerate}
+  \item Zalogować się do Aplikacji i rozpoznać że jest Administratorem
+      \begin{itemize}
+         \item TODO
+       \end{itemize}
+  \item Pełen CRUD na Bazie
+      \begin{itemize}
+         \item TODO
+       \end{itemize}
+\end{enumerate}
+
 \section{Wymagania niefunkcjonalne}
 
 \begin{itemize}
+	\item todo: SECUTRITY.
 	\item Aplikacja będzie dostępna przez co najmniej dwadzieścia dwie godziny w ciągu doby w okresie rekrutacyjnym.
 	\item Architektura zapewnia bezproblemowe równoległe korzystanie z systemu przez co najmniej stu użytkowników.
-	\item Przy połączeniu szerokopasmowym, wywołany przez użytkownika interfejs otworzy się po czasie niedłuższym niż trzy sekundy. 
-	\item Aplikacja będzie działała bezproblemowo na przeglądarkach internetowych Google Chrome, Opera, Mozilla Firefox, Safari, Microsoft Edge oraz Internet Explorer od wesji odpowiednio 60, 50, 60, 10.1, 15 oraz 11. Aplikacja będzie działała bezproblemowo na telefonach komórkowych z systemem Android od wersji 4.1.
+	\item Przy połączeniu szerokopasmowym, wywołany przez użytkownika interfejs otworzy się po czasie nie dłuższym niż trzy sekundy. 
+	\item Aplikacja będzie działała bezproblemowo na przeglądarkach internetowych Google Chrome, Opera, Mozilla Firefox, Safari, Microsoft Edge oraz Internet Explorer od wersji odpowiednio 60, 50, 60, 10.1, 15 oraz 11. Aplikacja będzie działała bezproblemowo na telefonach komórkowych z systemem Android od wersji 4.1.
 	\item Aplikacja mobilna nie zadziała na telefonach, w których nie ma możliwości zainstalowania zewnętrznych aplikacji.
 	\item Aplikacja webowa i mobilna do poprawnego działania wymaga połączenia z Internetem. Na urządzeniach bez możliwości połączenia z Internetem, aplikacja webowa i mobilna nie zadziałają.
 \end{itemize}
