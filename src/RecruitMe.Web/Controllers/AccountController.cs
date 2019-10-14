@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Operations.Account.Commands;
 using RecruitMe.Logic.Operations.Account.Dto;
@@ -6,6 +7,7 @@ using RecruitMe.Logic.Operations.Account.Queries;
 
 namespace RecruitMe.Web.Controllers
 {
+    [AllowAnonymous]
     [Route("[controller]/[action]")]
     public class AccountController : RecruitMeBaseController
     {
@@ -14,8 +16,9 @@ namespace RecruitMe.Web.Controllers
 
         public AccountController(
             LoginUserQuery loginUserQuery,
-            RegisterUserCommand registerUserCommand
-            )
+            RegisterUserCommand registerUserCommand,
+            GetCurrentUserQuery getCurrentUserQuery) : base(getCurrentUserQuery)
+            
         {
             _loginUserQuery = loginUserQuery;
             _registerUserCommand = registerUserCommand;

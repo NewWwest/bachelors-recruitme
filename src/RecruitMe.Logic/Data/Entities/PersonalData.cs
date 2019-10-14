@@ -11,8 +11,6 @@ namespace RecruitMe.Logic.Data.Entities
         [Key]
         public int UserId { get; set; }
 
-        public string Name { get; set; }
-
-        public string Surname { get; set; }
+        public string Adress { get; set; }
     }
 }

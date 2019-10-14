@@ -38,31 +38,15 @@ namespace RecruitMe.Web
 
             services.AddMvc();
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            }).AddJwtBearer(options =>
-            {
-                // base-address of your identityserver
-                options.Authority = "http://localhost:5000/";
-
-                // name of the API resource
-                options.Audience = "api1";
-
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
                 {
-                    ValidIssuer = Configuration["JwtIssuer"],
-                    ValidAudience = Configuration["JwtIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-                    ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                };
-            });
+                    options.Authority = "http://localhost:5000";
+                    options.RequireHttpsMetadata = false;
+
+                    options.Audience = "api1";
+                });
 
             services.AddDependencInjection();
         }
@@ -84,7 +68,7 @@ namespace RecruitMe.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

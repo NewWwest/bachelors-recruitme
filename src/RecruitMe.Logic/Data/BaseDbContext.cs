@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RecruitMe.Logic.Data
 {
-    public abstract class BaseDbContext : IdentityDbContext
+    public abstract class BaseDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public DbSet<PersonalData> PersonalData { get; set; }
 

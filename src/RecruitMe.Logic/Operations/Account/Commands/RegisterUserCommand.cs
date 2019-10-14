@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
@@ -15,15 +16,15 @@ namespace RecruitMe.Logic.Operations.Account.Commands
 {
     public class RegisterUserCommand : BaseAsyncOperation<LoggedInUserDto, RegisterDto, RegisterRequestValidator>
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtTokenHelper _jwtTokenHelper;
 
         public RegisterUserCommand(ILogger logger, 
             RegisterRequestValidator validator,
             BaseDbContext dbContext,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             JwtTokenHelper jwtTokenHelper) : base(logger, validator, dbContext)
         {
             _userManager = userManager;
@@ -33,7 +34,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
 
         protected async override Task<LoggedInUserDto> DoExecute(RegisterDto request)
         {
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 UserName = request.Email,
                 Email = request.Email
