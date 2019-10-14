@@ -24,7 +24,7 @@ Głównymi funkcjami programu będzie rejestracja kandydata do systemu, przyjęc
 
 Dodatkowa funkcjonalność systemu będzie obejmowała dodanie zdjęcia kandydata, nadanie numeru egzaminacyjnego po poprawnym zapisaniu się na egzamin oraz pokazaniu stanu rekrutacji (przyjęty/odrzucony/w trakcie rozpatrywania)
 
-Uzytkownicy będą mieli dostęp do systemu zarówno z przeglądarki internetowej jak i z aplikacji mobilnej na telefonach z systemem Android.
+Użytkownicy będą mieli dostęp do systemu zarówno z przeglądarki internetowej jak i z aplikacji mobilnej na telefonach z systemem Android.
 
 \section{Słownik pojęć}
 
@@ -42,59 +42,69 @@ Uzytkownicy będą mieli dostęp do systemu zarówno z przeglądarki internetowe
 	\item \textbf{Kwota egzaminacyjna} - ustalona przez szkołę na okres rekrutacji kwota pieniężna, która musi być uiszczona przed ukończeniem procesu rejestracji
 	\item \textbf{Okres rekrutacyjny} - okres ustalony przez szkołę, w którym można się rejestrować
 	\item \textbf{ID kandydata} - unikalny identyfikator kandydata składający się z: 3 pierwszych liter imienia, 3 pierwszych liter nazwisk oraz 3 cyfr gwarantujących unikalność.
+	\item \textbf{Organizator} - TODO.
 \end{itemize}
 
 \section{Wymagania funkcjonalne}
 
 \subsection{Użytkownik}
 \begin{enumerate}
-  \item Jako Użytkownik mogę otworzyć stronę i przeglądać ogólnodostępny kontent.   
+  \item Jako Użytkownik mogę otworzyć stronę i przeglądać ogólnodostępną zawartość, aby zapoznać się ze szkołą i procesem rejestracji.   
       \begin{itemize}
-         \item Aplikacja jest ogólnodostępna - hostowana nie tylko na localhost.
+         \item Aplikacja jest dostępna z internetu.
          \item Aplikacja nie rzuca błędów na konsolę.
-         \item Aplikacja ładuje się "szybko".
-       \end{itemize}
-  \item Jako Użytkownik mogę przeglądać informacje na stronie
-      \begin{itemize}
-         \item Regulamin rejestracji.
-         \item Mogę sprawdzić kontakt do Organizatorów Rejestracji.
+         \item Aplikacja ładuje się "w rozsądnym czasie".
+         \item Dostępne są takie strony jak: Regulamin rejestracji, kontakt do Organizatorów.
        \end{itemize}
 \end{enumerate}
 
 \subsection{Kandydat}
+Funkcjonalności Kandydata działają również na aplikacji mobilnej.
 \begin{enumerate}
-    \item Jako Kandydat mogę się zarejestrować.   
+    \item Jako Kandydat mogę się zarejestrować, aby wziąć udział w procesie rekrutacji  
         \begin{itemize}
-        \item Podaje: Imię, nazwisko, email, hasło, numer PESEL (jeśli ma).
-        \item Potwierdzenie maila?
-        \item W procesie rejestracji Kandydat otrzymuje swoje ID. 
+        \item Podaje: Imię, nazwisko, email, hasło, numer PESEL (jeśli ma),
+        \item Mail jest potwierdzony za pomocą przesłanego na niego linku.
+        \item Dany email może być użyty maksymalnie 10 razy do utworzenia konta.
+        \item Po potwierdzeniu adresu email Użytkownik dostaje swoje ID i utrzymuje dostęp do rejestracji.
         \end{itemize}
-    \item Jako Kandydat mogę się zalogować.   
+    \item Jako Kandydat mogę się zalogować, aby sprawdzić spersonalizowane informacje dotyczące rekrutacji.
         \begin{itemize}
-        \item Logowanie odbywa się za pomocą ID kandydata
+        \item Logowanie odbywa się za pomocą ID kandydata oraz hasła.
         \item Aplikacja rozpoznaje czy obecny Użytkownik jest zalogowany.
         \item Część funkcjonalności jest dostępna tylko dla zalogowanych użytkowników.
         \end{itemize}
-    \item Jako Kandydat mogę zresetować hasło.   
+    \item Jako Kandydat mogę zresetować hasło, aby nie utrać dostępu do Systemu.    
         \begin{itemize}
-        \item TODO
+        \item Za pomocą maila przesyłanego na wskazany  podczas rejestracji email.
         \end{itemize}
-    \item Jako Kandydat przypomnieć ID Kandydata.   
+    \item Jako Kandydat przypomnieć ID Kandydata, aby nie utrać dostępu do Systemu. 
         \begin{itemize}
-        \item TODO
+        \item Poprzez podanie wszystkich informacji podanych podczas rejestracji.
         \end{itemize}
     \item Jako zalogowany Kandydat otworzyć stronę swojego profilu aby edytować swoje dane.   
         \begin{itemize}
         \item Strona wyświetla dane podane przy rejestracji, jednak są one zablokowane do edycji.
-        \item Wyświetlane są pozostałe dane do podania/edycji: TUTAJ LISTA.
-        \item Zdjęcie
+        \item Wyświetlane są pozostałe dane do podania/edycji: imiona i nazwiska rodziców, nazwa szkoły podstawowej, adres zamieszkania.
+        \item Zdjęcie.
+        \item Dodatkowe dokumenty.
         \end{itemize}
-    \item Jako zalogowany Kandydat mogę dokonać opłaty za rejestrację.   
+    \item Jako zalogowany Kandydat mogę dokonać opłaty za rejestrację, aby dokończyć rejestrację.
         \begin{itemize}
         \item Strona profilu wyświetla obecny stan transakcji.
         \item Transakcja odbywa się przez internetową bramkę płatniczą.
+        \item Po potwierdzeniu płatności Kandytat jest przypisany do Egzaminów.
         \end{itemize}
-    \item Jako zalogowany Kandydat po dokonaniu transakcji mam dostęp do funkcjonalności moje egzamin.   
+    \item Jako Kandydat, który dokonał płatności, mogę sprawdzić terminy swoich egzaminów, aby na nie pójść. XD
+        \begin{itemize}
+        \item Wyświetla się termin, miejsce, rodzaj egzaminu oraz typ.
+        \end{itemize}
+    \item Jako Kandydat, mogę zadać pytanie organizatorom poprzez stronę internetową, aby ułatwić komunikację ze Szkołą.
+        \begin{itemize}
+        \item Zadane pytania wyświetlają się w formie chatu. (Guest communication v2 :D)
+        \item Kiedy jest otwarta dana zakładka, strona wiadomości synchronizują się co 15 sekund.
+        \end{itemize}
+    \item Jako Kandydat, mogę sprawdzić stan rekrutacji - przyjęty, nieprzyjęty, w trakcie.
         \begin{itemize}
         \item TODO
         \end{itemize}
@@ -106,19 +116,25 @@ Uzytkownicy będą mieli dostęp do systemu zarówno z przeglądarki internetowe
       \begin{itemize}
          \item TODO
        \end{itemize}
-  \item Wyświetlić dane Profil kandydata na podstawie podanego ID
+  \item Pełen CRUD na Bazie
       \begin{itemize}
          \item TODO
+       \end{itemize}
+  \item Chat adminowy
+      \begin{itemize}
+         \item TODO
+       \end{itemize}
+  \item Zarządzanie Egzaminami
+      \begin{itemize}
+         \item Na egzamin składa się: rodzaj Egzaminu, Forma Egzaminu, Miejsce, data i godzina rozpoczęcia, czas trwania, limit kandydatów.
+         \item Po dokonaniu opłaty Kandydatowi jest przypisywany po jednym Egzaminie z każdego rodzaju. Jeśli egzamin jest pisemny, godziną egzaminu jest godzina rozpoczęcia, jeśli egzamin jest ustny to jest to  godzina rozpoczęcia + czas trwania * numer na liście.
+         \item Organizator może zmieniać Egzaminy Kandydata.
        \end{itemize}
 \end{enumerate}
 
-\subsection{Administrator}
+\subsection{Skanowanie kart odpowiedzi}
 \begin{enumerate}
-  \item Zalogować się do Aplikacji i rozpoznać że jest Administratorem
-      \begin{itemize}
-         \item TODO
-       \end{itemize}
-  \item Pełen CRUD na Bazie
+  \item TODO
       \begin{itemize}
          \item TODO
        \end{itemize}
