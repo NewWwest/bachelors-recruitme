@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
@@ -13,17 +14,17 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Queries
 {
-    public class LoginUserQuery : BaseAsyncOperation<LoggedInUserDto, LoginDto, LoginRequestValidator>
+    public class LoginUserQuery : BaseAsyncOperation<LoginResultDto, LoginDto, LoginRequestValidator>
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JwtTokenHelper _jwtTokenHelper;
 
         public LoginUserQuery(ILogger logger, 
             LoginRequestValidator validator,
             BaseDbContext dbContext,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             JwtTokenHelper jwtTokenHelper) : base(logger, validator, dbContext)
         {
             _userManager = userManager;
@@ -32,7 +33,7 @@ namespace RecruitMe.Logic.Operations.Account.Queries
         }
 
 
-        protected override async Task<LoggedInUserDto> DoExecute(LoginDto request)
+        protected override async Task<LoginResultDto> DoExecute(LoginDto request)
         {
             SignInResult result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
 
@@ -40,7 +41,7 @@ namespace RecruitMe.Logic.Operations.Account.Queries
             {
                 var appUser = await _userManager.Users.SingleOrDefaultAsync(r => r.Email == request.Email);
 
-                var loggedInUser = new LoggedInUserDto()
+                var loggedInUser = new LoginResultDto()
                 {
                     Email = appUser.Email,
                     Id = appUser.Id,

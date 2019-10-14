@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Account.Dto;
 
 namespace RecruitMe.Logic.Operations.Account.Helpers
@@ -22,13 +23,13 @@ namespace RecruitMe.Logic.Operations.Account.Helpers
             _configuration = configuration;
         }
 
-        public string GenerateJwtToken(string email, IdentityUser user)
+        public string GenerateJwtToken(string email, ApplicationUser user)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));

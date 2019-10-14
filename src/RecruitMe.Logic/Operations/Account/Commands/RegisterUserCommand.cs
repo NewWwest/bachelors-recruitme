@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Commands
 {
-    public class RegisterUserCommand : BaseAsyncOperation<LoggedInUserDto, RegisterDto, RegisterRequestValidator>
+    public class RegisterUserCommand : BaseAsyncOperation<LoginResultDto, RegisterDto, RegisterRequestValidator>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -32,7 +32,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
             _jwtTokenHelper = jwtTokenHelper;
         }
 
-        protected async override Task<LoggedInUserDto> DoExecute(RegisterDto request)
+        protected async override Task<LoginResultDto> DoExecute(RegisterDto request)
         {
             var user = new ApplicationUser
             {
@@ -46,7 +46,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
             {
                 var appUser = await _userManager.Users.SingleOrDefaultAsync(r => r.Email == request.Email);
 
-                var loggedInUser = new LoggedInUserDto()
+                var loggedInUser = new LoginResultDto()
                 {
                     Email = appUser.Email,
                     Id = appUser.Id,

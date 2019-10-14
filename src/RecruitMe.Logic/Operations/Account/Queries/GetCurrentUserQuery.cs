@@ -10,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Queries
 {
-    public class GetCurrentUserQuery : BaseAsyncOperation<LoggedInUserDto, ClaimsPrincipal>
+    public class GetCurrentUserQuery : BaseAsyncOperation<LoginResultDto, ClaimsPrincipal>
     {
         public GetCurrentUserQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
-        protected override Task<LoggedInUserDto> DoExecute(ClaimsPrincipal request)
+        protected override Task<LoginResultDto> DoExecute(ClaimsPrincipal request)
         {
             var xd = request.Identity;
             Claim xd1 = request.Claims.First();
-            var user = new LoggedInUserDto()
+            var user = new LoginResultDto()
             {
                 Email = request.Claims.Single(c=>c.Type == ClaimTypes.Email).Value,
-                Id = request.Claims.Single(c => xd1.Type == ClaimTypes.NameIdentifier).Value,
+                Id = int.Parse(request.Claims.Single(c => xd1.Type == ClaimTypes.NameIdentifier).Value),
                 Token = null
             };
 

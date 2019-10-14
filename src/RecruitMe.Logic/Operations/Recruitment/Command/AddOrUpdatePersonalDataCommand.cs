@@ -21,8 +21,6 @@ namespace RecruitMe.Logic.Operations.Recruitment.Command
             var entity = new PersonalData()
             {
                 UserId = request.UserId,
-                Name = request.Data.Name,
-                Surname = request.Data.Surname
             };
 
             try

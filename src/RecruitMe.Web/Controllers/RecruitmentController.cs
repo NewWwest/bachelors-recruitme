@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Queries;
 using RecruitMe.Logic.Operations.Recruitment.Command;
 using RecruitMe.Logic.Operations.Recruitment.Dto;
@@ -31,8 +32,7 @@ namespace RecruitMe.Web.Controllers
         //[Route("PersonalData")]
         public async Task<ActionResult> GetPersonalData()
         {
-            LoggedInUserDto user = await _getCurrentUserQuery.Execute(this.User);
-            int id = 1;
+            var user = await _getCurrentUserQuery.Execute(this.User);
             var result = await _getPersonalDataQuery.Execute(user.Id);
             return Json(result);
         }

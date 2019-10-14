@@ -4,9 +4,9 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Account.Dto
 {
-    public class LoggedInUserDto
+    public class LoginResultDto
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Email { get; set; }
 

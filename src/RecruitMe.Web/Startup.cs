@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Web.Configuration;
 using RecruitMe.Web.Services.Data;
 
@@ -32,7 +33,7 @@ namespace RecruitMe.Web
                 optionsBuilder.UseMySql("server=127.0.0.1;database=db1;user=app1;password=test-test-test")
             );
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

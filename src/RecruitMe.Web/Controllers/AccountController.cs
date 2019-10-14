@@ -25,17 +25,17 @@ namespace RecruitMe.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<LoggedInUserDto> Login([FromBody] LoginDto model)
+        public async Task<LoginResultDto> Login([FromBody] LoginDto model)
         {
-            LoggedInUserDto result = await _loginUserQuery.Execute(model);
+            LoginResultDto result = await _loginUserQuery.Execute(model);
 
             return result;
         }
 
         [HttpPost]
-        public async Task<LoggedInUserDto> Register([FromBody] RegisterDto model)
+        public async Task<LoginResultDto> Register([FromBody] RegisterDto model)
         {
-            LoggedInUserDto result = await _registerUserCommand.Execute(model);
+            LoginResultDto result = await _registerUserCommand.Execute(model);
 
             return result;
         }

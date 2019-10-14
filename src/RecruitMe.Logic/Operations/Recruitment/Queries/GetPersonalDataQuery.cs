@@ -22,8 +22,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.Queries
 
             var result = new PersonalDataDto()
             {
-                Name = entity?.Name,
-                Surname = entity?.Surname
+
             };
             return result;
         }
