@@ -25,11 +25,11 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
 
             services.AddTransient<RegisterUserCommand>();
-            services.AddTransient<JwtTokenHelper>();
+            services.AddTransient<PasswordHasher>();
             services.AddTransient<LoginUserQuery>();
             services.AddTransient<LoginRequestValidator>();
             services.AddTransient<RegisterRequestValidator>();
-            services.AddTransient<GetCurrentUserQuery>();
+            services.AddTransient<GetUserQuery>();
 
             services.AddTransient<AddOrUpdatePersonalDataCommandRequestValidator>();
             services.AddTransient<GetPersonalDataQuery>();

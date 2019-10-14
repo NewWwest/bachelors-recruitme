@@ -10,6 +10,7 @@ namespace RecruitMe.Logic.Operations.Account.Validators
     {
         public RegisterRequestValidator()
         {
+            //TODO Update
             RuleFor(a => a.Email).NotEmpty();
         }
     }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
@@ -14,49 +13,40 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Commands
 {
-    public class RegisterUserCommand : BaseAsyncOperation<LoginResultDto, RegisterDto, RegisterRequestValidator>
+    public class RegisterUserCommand : BaseAsyncOperation<User, RegisterDto, RegisterRequestValidator>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly PasswordHasher _passwordHasher;
 
-        public RegisterUserCommand(ILogger logger, 
+        public RegisterUserCommand(ILogger logger,
             RegisterRequestValidator validator,
             BaseDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            JwtTokenHelper jwtTokenHelper) : base(logger, validator, dbContext)
+            PasswordHasher passwordHasher) : base(logger, validator, dbContext)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtTokenHelper = jwtTokenHelper;
+            _passwordHasher = passwordHasher;
         }
 
-        protected async override Task<LoginResultDto> DoExecute(RegisterDto request)
+        protected async override Task<User> DoExecute(RegisterDto request)
         {
-            var user = new ApplicationUser
+            var user = new User
             {
-                UserName = request.Email,
-                Email = request.Email
+                Email = request.Email,
+                Name = request.Name,
+                Surname = request.Surname,
+                Pesel = request.Pesel,
+                CandidateId = null,
+                PasswordHash = _passwordHasher.HashPassword(request.Password),
+                EmailVerified = false
             };
 
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync();
 
-            if (result.Succeeded)
+            if (result.IsKeySet)
             {
-                var appUser = await _userManager.Users.SingleOrDefaultAsync(r => r.Email == request.Email);
-
-                var loggedInUser = new LoginResultDto()
-                {
-                    Email = appUser.Email,
-                    Id = appUser.Id,
-                    Token = _jwtTokenHelper.GenerateJwtToken(request.Email, appUser)
-                };
-                return loggedInUser;
+                return result.Entity;
             }
 
-            var errMessage = "Registration Failed: " + string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new Exception(errMessage);
+            throw new Exception("bad registration");
         }
     }
 }

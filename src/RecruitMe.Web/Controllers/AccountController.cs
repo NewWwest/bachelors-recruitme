@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Account.Commands;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Queries;
@@ -8,7 +9,7 @@ using RecruitMe.Logic.Operations.Account.Queries;
 namespace RecruitMe.Web.Controllers
 {
     [AllowAnonymous]
-    [Route("[controller]/[action]")]
+    [Route("api/Account")]
     public class AccountController : RecruitMeBaseController
     {
         private readonly LoginUserQuery _loginUserQuery;
@@ -16,8 +17,7 @@ namespace RecruitMe.Web.Controllers
 
         public AccountController(
             LoginUserQuery loginUserQuery,
-            RegisterUserCommand registerUserCommand,
-            GetCurrentUserQuery getCurrentUserQuery) : base(getCurrentUserQuery)
+            RegisterUserCommand registerUserCommand) : base()
             
         {
             _loginUserQuery = loginUserQuery;
@@ -25,17 +25,19 @@ namespace RecruitMe.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<LoginResultDto> Login([FromBody] LoginDto model)
+        [Route("Login")]
+        public async Task<User> Login([FromBody] LoginDto model)
         {
-            LoginResultDto result = await _loginUserQuery.Execute(model);
+            User result = await _loginUserQuery.Execute(model);
 
             return result;
         }
 
         [HttpPost]
-        public async Task<LoginResultDto> Register([FromBody] RegisterDto model)
+        [Route("Register")]
+        public async Task<User> Register([FromBody] RegisterDto model)
         {
-            LoginResultDto result = await _registerUserCommand.Execute(model);
+            User result = await _registerUserCommand.Execute(model);
 
             return result;
         }

@@ -14,43 +14,30 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Queries
 {
-    public class LoginUserQuery : BaseAsyncOperation<LoginResultDto, LoginDto, LoginRequestValidator>
+    public class LoginUserQuery : BaseAsyncOperation<User, LoginDto, LoginRequestValidator>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly PasswordHasher _passwordHasher;
 
         public LoginUserQuery(ILogger logger, 
             LoginRequestValidator validator,
             BaseDbContext dbContext,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            JwtTokenHelper jwtTokenHelper) : base(logger, validator, dbContext)
+            PasswordHasher passwordHasher) : base(logger, validator, dbContext)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtTokenHelper = jwtTokenHelper;
+            _passwordHasher = passwordHasher;
         }
 
 
-        protected override async Task<LoginResultDto> DoExecute(LoginDto request)
+        protected override async Task<User> DoExecute(LoginDto request)
         {
-            SignInResult result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
+            User user = await _dbContext.Users.SingleAsync(u => u.CandidateId == request.CandidateId);
+            var result = _passwordHasher.VerifyPassword(user, request.Password);
 
-            if (result.Succeeded)
+            if (result)
             {
-                var appUser = await _userManager.Users.SingleOrDefaultAsync(r => r.Email == request.Email);
-
-                var loggedInUser = new LoginResultDto()
-                {
-                    Email = appUser.Email,
-                    Id = appUser.Id,
-                    Token = _jwtTokenHelper.GenerateJwtToken(request.Email, appUser)
-                };
-                return loggedInUser;
+                return user;
             }
 
-            throw new Exception("Login Failed");
+            throw new UnauthorizedAccessException();
         }
     }
 }

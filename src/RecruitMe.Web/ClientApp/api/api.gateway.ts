@@ -5,17 +5,17 @@ import { LocalStorageService } from '../services/localStorage.service';
 export class ApiGateway {
 
     public login(email: string, password: string): any {
-        return axios.post('/Account/Login', { email, password })
+        return axios.post('/api/Account/Login', { email, password })
     }
     public register(email: string, password: string, confirmPassword: string): any {
-        return axios.post('/Account/Register', { email, password, confirmPassword })
+        return axios.post('/api/Account/Register', { email, password, confirmPassword })
     }
 
     public updatePersonalData(data: IPersonalData) {
-        return axios.post('/Recruitment/UpdatePersonalData', data, this.authHeader())
+        return axios.post('/api/Recruitment/PersonalData', data, this.authHeader())
     }
     public getPersonalData() {
-        return axios.get('/Recruitment/GetPersonalData', this.authHeader())
+        return axios.get('/api/Recruitment/PersonalData', this.authHeader())
     }
 
     private authHeader() {

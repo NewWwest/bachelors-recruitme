@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Web.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/Recruitment")]
     public class RecruitmentController : RecruitMeBaseController
     {
         private readonly GetPersonalDataQuery _getPersonalDataQuery;
@@ -21,24 +21,24 @@ namespace RecruitMe.Web.Controllers
 
 
         public RecruitmentController(GetPersonalDataQuery getPersonalDataQuery, 
-            AddOrUpdatePersonalDataCommand addOrUpdatePersonalDataCommand, 
-            GetCurrentUserQuery getCurrentUserQuery) : base(getCurrentUserQuery)
+            AddOrUpdatePersonalDataCommand addOrUpdatePersonalDataCommand
+            ) : base()
         {
             _getPersonalDataQuery = getPersonalDataQuery;
             _addOrUpdatePersonalDataCommand = addOrUpdatePersonalDataCommand;
         }
 
         [HttpGet]
-        //[Route("PersonalData")]
+        [Route("PersonalData")]
         public async Task<ActionResult> GetPersonalData()
         {
-            var user = await _getCurrentUserQuery.Execute(this.User);
-            var result = await _getPersonalDataQuery.Execute(user.Id);
+            var user = User;
+            var result = await _getPersonalDataQuery.Execute(1);
             return Json(result);
         }
 
         [HttpPost]
-        //[Route("PersonalData")]
+        [Route("PersonalData")]
         public async Task<ActionResult> UpdatePersonalData([FromBody] PersonalDataDto personalData)
         {
             var cmdResult = await _addOrUpdatePersonalDataCommand.Execute(new AddOrUpdatePersonalDataCommandRequest() { UserId = 1, Data = personalData });

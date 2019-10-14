@@ -11,11 +11,9 @@ namespace RecruitMe.Web.Controllers
     [Authorize]
     public class RecruitMeBaseController : Controller
     {
-        public readonly GetCurrentUserQuery _getCurrentUserQuery;
 
-        public RecruitMeBaseController(GetCurrentUserQuery getCurrentUserQuery)
+        public RecruitMeBaseController()
         {
-            _getCurrentUserQuery = getCurrentUserQuery;
         }
     }
 }

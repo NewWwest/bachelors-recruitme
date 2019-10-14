@@ -10,7 +10,8 @@ namespace RecruitMe.Logic.Operations.Account.Validators
     {
         public LoginRequestValidator() 
         {
-            RuleFor(a => a.Email).NotEmpty();
+            RuleFor(a => a.CandidateId).NotEmpty();
+            RuleFor(a => a.Password).NotEmpty();
         }
     }
 }
