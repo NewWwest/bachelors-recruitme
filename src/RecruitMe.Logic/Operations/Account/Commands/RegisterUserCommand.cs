@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Commands
 {
-    public class RegisterUserCommand : BaseAsyncOperation<User, RegisterDto, RegisterRequestValidator>
+    public class RegisterUserCommand : BaseAsyncOperation<int, RegisterDto, RegisterRequestValidator>
     {
         private readonly PasswordHasher _passwordHasher;
 
@@ -25,7 +25,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
             _passwordHasher = passwordHasher;
         }
 
-        protected async override Task<User> DoExecute(RegisterDto request)
+        protected async override Task<int> DoExecute(RegisterDto request)
         {
             var user = new User
             {
@@ -43,10 +43,10 @@ namespace RecruitMe.Logic.Operations.Account.Commands
 
             if (result.IsKeySet)
             {
-                return result.Entity;
+                return result.Entity.Id;
             }
 
-            throw new Exception("bad registration");
+            throw new Exception("Registration Failed");
         }
     }
 }

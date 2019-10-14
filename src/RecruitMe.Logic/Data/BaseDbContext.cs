@@ -18,6 +18,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<PersonalData> PersonalData { get; set; }
 
+        public DbSet<PasswordReset> PasswordResets { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }

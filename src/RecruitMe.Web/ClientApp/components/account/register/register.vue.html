@@ -4,26 +4,45 @@
         <h2>Login</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
-                <label for="email">Usernaemailme</label>
-                <input type="text" v-model="email" name="email" class="form-control"
-                    :class="{ 'is-invalid': submitted && !email }" />
+                <label for="name">name</label>
+                <input type="text" v-model="name" name="name" class="form-control"/>
+                <div v-show="submitted && !name" class="invalid-feedback">name is required</div>
+            </div>
+
+            <div class="form-group">
+                <label for="surname">surname</label>
+                <input type="text" v-model="surname" name="surname" class="form-control"/>
+                <div v-show="submitted && !surname" class="invalid-feedback">surname is required</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="pesel">pesel</label>
+                <input type="text" v-model="pesel" name="pesel" class="form-control"/>
+                <input type="checkbox" v-model="noPesel" name="noPesel" text="Nie mam pesela" class="form-control"/>
+            </div>
+
+            <div class="form-group">
+                <label for="email">email</label>
+                <input type="text" v-model="email" name="email" class="form-control"/>
                 <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
             </div>
+
             <div class="form-group">
                 <label htmlFor="password">Password</label>
-                <input type="password" v-model="password" name="password" class="form-control"
-                    :class="{ 'is-invalid': submitted && !password }" />
+                <input type="password" v-model="password" name="password" class="form-control"/>
                 <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
             </div>
+
             <div class="form-group">
                 <label htmlFor="confirmPassword">confirmPassword</label>
-                <input type="password" v-model="confirmPassword" name="confirmPassword" class="form-control"
-                    :class="{ 'is-invalid': submitted && password != confirmPassword }" />
+                <input type="password" v-model="confirmPassword" name="confirmPassword" class="form-control"/>
                 <div v-show="submitted && password != confirmPassword" class="invalid-feedback">Password is doesnt match
                 </div>
             </div>
+
             <div class="form-group">
                 <button class="btn btn-primary" :disabled="fetching">Register</button>
+                <div v-show="backendError"> {backendError} </div>
                 <img v-show="fetching" />
             </div>
         </form>

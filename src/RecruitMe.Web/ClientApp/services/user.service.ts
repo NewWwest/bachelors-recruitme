@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { LoggedInUser } from "../models/user.models";
+import { LoggedInUser, IRegistrationRequest } from "../models/user.models";
 import { LocalStorageService } from "./localStorage.service";
 import { AxiosResponse } from "axios";
 
@@ -19,16 +19,19 @@ export class UserService {
             (err: any) => console.error(err))
     }
 
-    public register(email: string, password: string, cofirmPassword: string) {
-        this._apiGateway.register(email, password, cofirmPassword).then(
+    public register(registrationModel: IRegistrationRequest): Promise<LoggedInUser> {
+        return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<LoggedInUser>) => {
                 if (response != null && response.data != null) {
                     LocalStorageService.setUserId(response.data.id);
                     LocalStorageService.setEmail(response.data.email);
                     LocalStorageService.setJwtToken(response.data.token);
+                    return response.data;
                 }
-            },
-            (err: any) => console.error(err))
+            },(err: any) => {
+                console.error(err);
+                return err;;
+            });
     }
 
     public isLoggedIn(): boolean {
