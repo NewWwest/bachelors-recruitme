@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { LoggedInUser, IRegistrationRequest } from "../models/user.models";
+import { IRegistrationRequest, IAuthenticationResult, IJwtClaims } from "../models/user.models";
 import { LocalStorageService } from "./localStorage.service";
 import { AxiosResponse } from "axios";
 
@@ -8,25 +8,22 @@ export class UserService {
 
     public login(email: string, password: string) {
         this._apiGateway.login(email, password).then(
-            (response: AxiosResponse<LoggedInUser>) => {
-                console.log(response);
+            (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response != null && response.data != null) {
-                    LocalStorageService.setUserId(response.data.id);
-                    LocalStorageService.setEmail(response.data.email);
-                    LocalStorageService.setJwtToken(response.data.token);
+                    let jwt = this.parseJwt(response.data.access_token);
+                    LocalStorageService.setEmail(jwt.email);
+                    LocalStorageService.setJwtToken(response.data.access_token);
+                    LocalStorageService.setUserId(jwt.userId);
                 }
             },
             (err: any) => console.error(err))
     }
 
-    public register(registrationModel: IRegistrationRequest): Promise<LoggedInUser> {
+    public register(registrationModel: IRegistrationRequest): Promise<number> {
         return this._apiGateway.register(registrationModel).then(
-            (response: AxiosResponse<LoggedInUser>) => {
+            (response: AxiosResponse<number>) => {
                 if (response != null && response.data != null) {
-                    LocalStorageService.setUserId(response.data.id);
-                    LocalStorageService.setEmail(response.data.email);
-                    LocalStorageService.setJwtToken(response.data.token);
-                    return response.data;
+                    console.log(`Registration succesfull, internal ID: ${response.data}`)
                 }
             },(err: any) => {
                 console.error(err);
@@ -39,4 +36,21 @@ export class UserService {
             LocalStorageService.getEmail() != null &&
             LocalStorageService.getJwtToken() != null;
     }
+
+    private parseJwt(token: string): IJwtClaims {
+        try {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+        }
+        catch (e) {
+            console.error(e);
+            throw e;
+        }
+    }
+
 }

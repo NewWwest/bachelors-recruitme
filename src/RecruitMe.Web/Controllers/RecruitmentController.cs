@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Queries;
 using RecruitMe.Logic.Operations.Recruitment.Command;
@@ -18,22 +19,24 @@ namespace RecruitMe.Web.Controllers
     {
         private readonly GetPersonalDataQuery _getPersonalDataQuery;
         private readonly AddOrUpdatePersonalDataCommand _addOrUpdatePersonalDataCommand;
-
+        private readonly GetUserFromClaimsQuery _getUserFromClaimsQuery;
 
         public RecruitmentController(GetPersonalDataQuery getPersonalDataQuery, 
-            AddOrUpdatePersonalDataCommand addOrUpdatePersonalDataCommand
+            AddOrUpdatePersonalDataCommand addOrUpdatePersonalDataCommand,
+            GetUserFromClaimsQuery getUserFromClaimsQuery
             ) : base()
         {
             _getPersonalDataQuery = getPersonalDataQuery;
             _addOrUpdatePersonalDataCommand = addOrUpdatePersonalDataCommand;
+            _getUserFromClaimsQuery = getUserFromClaimsQuery;
         }
 
         [HttpGet]
         [Route("PersonalData")]
         public async Task<ActionResult> GetPersonalData()
         {
-            var user = User;
-            var result = await _getPersonalDataQuery.Execute(1);
+            User user = await _getUserFromClaimsQuery.Execute(User.Claims);
+            PersonalDataDto result = await _getPersonalDataQuery.Execute(user.Id);
             return Json(result);
         }
 
@@ -41,11 +44,11 @@ namespace RecruitMe.Web.Controllers
         [Route("PersonalData")]
         public async Task<ActionResult> UpdatePersonalData([FromBody] PersonalDataDto personalData)
         {
-            var cmdResult = await _addOrUpdatePersonalDataCommand.Execute(new AddOrUpdatePersonalDataCommandRequest() { UserId = 1, Data = personalData });
+            User user = await _getUserFromClaimsQuery.Execute(User.Claims);
+            bool cmdResult = await _addOrUpdatePersonalDataCommand.Execute(new AddOrUpdatePersonalDataCommandRequest() { UserId = user.Id, Data = personalData });
             if (cmdResult)
             {
-                int id = 1;
-                var result = await _getPersonalDataQuery.Execute(id);
+                PersonalDataDto result = await _getPersonalDataQuery.Execute(user.Id);
                 return Json(result);
             }
             else

@@ -12,8 +12,6 @@ namespace RecruitMe.Logic.Operations.Recruitment.Validators
         {
             RuleFor(a => a.UserId).GreaterThan(0);
             RuleFor(a => a.Data).NotNull();
-            RuleFor(a => a.Data.Name).NotNull().NotEmpty();
-            RuleFor(a => a.Data.Surname).NotNull().NotEmpty();
         }
     }
 }

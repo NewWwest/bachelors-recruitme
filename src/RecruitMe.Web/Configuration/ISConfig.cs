@@ -13,7 +13,6 @@ namespace RecruitMe.Web.Configuration
         public static readonly string ResourceName = "API RECRUIT ME";
         public static readonly string ClientSecret = "123456789ABCDEF123456789ABCDEF123456789ABCDEF123456789ABCDEF";
 
-
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>

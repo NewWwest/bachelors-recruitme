@@ -1,4 +1,6 @@
 export interface IPersonalData {
-    name: string;
-    surname: string;
+    adress: string;
+    fatherName: string;
+    motherName: string;
+    primarySchool: string;
 }

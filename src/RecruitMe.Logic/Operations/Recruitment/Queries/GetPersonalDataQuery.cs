@@ -20,10 +20,8 @@ namespace RecruitMe.Logic.Operations.Recruitment.Queries
         {
             var entity = await _dbContext.PersonalData.FirstOrDefaultAsync(pd => pd.UserId == request);
 
-            var result = new PersonalDataDto()
-            {
+            var result = PersonalDataDto.FromPersonalDataEntity(entity);
 
-            };
             return result;
         }
     }

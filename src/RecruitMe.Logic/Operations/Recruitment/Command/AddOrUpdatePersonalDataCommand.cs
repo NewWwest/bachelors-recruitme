@@ -1,10 +1,12 @@
-﻿using RecruitMe.Logic.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Recruitment.Dto;
 using RecruitMe.Logic.Operations.Recruitment.Validators;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,24 +20,31 @@ namespace RecruitMe.Logic.Operations.Recruitment.Command
 
         protected override async Task<bool> DoExecute(AddOrUpdatePersonalDataCommandRequest request)
         {
-            var entity = new PersonalData()
+            var data = await _dbContext.PersonalData.FirstOrDefaultAsync(e => e.UserId == request.UserId);
+            if (data == null)
             {
-                UserId = request.UserId,
-            };
+                data = new PersonalData()
+                {
+                    Adress = request.Data.Adress,
+                    FatherName = request.Data.FatherName,
+                    MotherName = request.Data.MotherName,
+                    PrimarySchool = request.Data.PrimarySchool,
+                    UserId = request.UserId
+                };
+                _dbContext.PersonalData.Add(data);
+            }
+            else
+            {
+                data.Adress = request.Data.Adress;
+                data.FatherName = request.Data.FatherName;
+                data.MotherName = request.Data.MotherName;
+                data.PrimarySchool = request.Data.PrimarySchool;
+            }
 
-            try
-            {
-                _dbContext.PersonalData.Add(entity);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception exc)
-            {
-                _logger.Log(exc);
-                _dbContext.PersonalData.Update(entity);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
+            await _dbContext.SaveChangesAsync();
+
+
+            return true;
         }
     }
 }

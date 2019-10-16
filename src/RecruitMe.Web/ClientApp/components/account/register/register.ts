@@ -25,7 +25,6 @@ export default class Register extends Vue {
     }
 
     handleSubmit() {
-        console.log(this)
         this.submitted = true;
         this.fetching = true;
 

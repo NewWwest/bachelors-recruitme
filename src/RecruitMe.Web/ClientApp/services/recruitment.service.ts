@@ -8,7 +8,7 @@ export class RecruitmentService {
         this.apiGateway.updatePersonalData(request);
     }
 
-    getPersonalData() {
-        return this.apiGateway.getPersonalData();
+    getPersonalData(): Promise<IPersonalData> {
+        return this.apiGateway.getPersonalData().then((d) => d.data, (err) => console.error(err));
     }
 }

@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Account.Queries;
+using RecruitMe.Logic.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +29,11 @@ namespace RecruitMe.Web.Services
             User user = await _getUserQuery.Execute(id);
             var claims = new List<Claim>
             {
-                new Claim("id", user.Id.ToString()),
-                new Claim("name", user.Name.ToString()),
-                new Claim("surname", user.Surname.ToString()),
-                new Claim("email", user.Email.ToString()),
-                new Claim("pesel", user.Pesel?.ToString() ?? ""),
+                new Claim(JwtClaims.ClaimId, user.Id.ToString()),
+                new Claim(JwtClaims.ClaimName, user.Name.ToString()),
+                new Claim(JwtClaims.ClaimSurname, user.Surname.ToString()),
+                new Claim(JwtClaims.ClaimEmail, user.Email.ToString()),
+                new Claim(JwtClaims.ClaimPesel, user.Pesel?.ToString() ?? ""),
             };
 
             context.IssuedClaims = claims;

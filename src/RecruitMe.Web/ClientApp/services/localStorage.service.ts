@@ -1,13 +1,14 @@
 export class LocalStorageService {
 
-    static setUserId(userId: string): void {
-        if (userId == null || userId == "")
+    static setUserId(userId: number): void {
+        if (userId == null || userId == 0)
             return;
-        localStorage.setItem('userId', userId);
+        localStorage.setItem('userId', userId.toString());
     }
 
-    static getUserId(): string | null {
-        return localStorage.getItem('userId');
+    static getUserId(): number | null {
+        let data = localStorage.getItem('userId');
+        return data ? parseInt(data) : null;
     }
 
     static setJwtToken(jwtToken: string): void {

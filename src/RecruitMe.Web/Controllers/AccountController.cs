@@ -35,9 +35,9 @@ namespace RecruitMe.Web.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<User> Register([FromBody] RegisterDto model)
+        public async Task<int> Register([FromBody] RegisterDto model)
         {
-            User result = await _registerUserCommand.Execute(model);
+            var result = await _registerUserCommand.Execute(model);
 
             return result;
         }

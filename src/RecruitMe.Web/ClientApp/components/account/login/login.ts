@@ -7,6 +7,7 @@ import { UserService } from '../../../services/user.service';
 export default class Login extends Vue {
     email: string = "";
     password: string = "";
+
     submitted: boolean = false;
     fetching: boolean = false;
 

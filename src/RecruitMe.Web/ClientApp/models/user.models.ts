@@ -1,7 +1,8 @@
-export interface LoggedInUser {
-    id: string;
-    email: string;
-    token: string;
+export interface IAuthenticationResult {
+    access_token: string;
+    expires_in: number;
+    token_type: string;
+    scope: string;
 }
 export interface IRegistrationRequest {
     email: string;
@@ -12,3 +13,11 @@ export interface IRegistrationRequest {
     pesel: string | null;
     noPesel: boolean;
 }
+export interface IJwtClaims {
+    email: string;
+    userId: number;
+    name: string;
+    surname: string;
+    pesel: string;
+}
+

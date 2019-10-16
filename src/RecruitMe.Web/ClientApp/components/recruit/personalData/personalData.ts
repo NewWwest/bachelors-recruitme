@@ -7,8 +7,10 @@ import { RecruitmentService } from '../../../services/recruitment.service';
 // @ts-ignore
 @Component
 export default class PersonalData extends Vue {
-    name: string = "";
-    surname: string = "";
+    adress: string = "";
+    fatherName: string = "";
+    motherName: string = "";
+    primarySchool: string = "";
 
     submitted: boolean = false;
     fetching: boolean = false;
@@ -26,7 +28,10 @@ export default class PersonalData extends Vue {
             router.go(-1);
         }
         this.recruitmentService.getPersonalData().then((resp) => {
-            console.log(resp);
+            this.adress = resp.adress;
+            this.fatherName = resp.fatherName;
+            this.motherName = resp.motherName;
+            this.primarySchool = resp.primarySchool;
         }, (err) => {
             console.error(err);
         })
@@ -34,8 +39,10 @@ export default class PersonalData extends Vue {
 
     handleSubmit() {
         let request = {
-            name: this.name,
-            surname: this.surname
+            adress: this.adress,
+            fatherName: this.fatherName,
+            motherName: this.motherName,
+            primarySchool: this.primarySchool
         }
 
         this.recruitmentService.updatePersonalData(request)
