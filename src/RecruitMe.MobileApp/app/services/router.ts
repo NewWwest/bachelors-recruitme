@@ -4,6 +4,7 @@ import _Vue, { VueConstructor } from "vue";
 // Vues
 import Home from "~/components/Home.vue";
 import Login from "~/components/Login.vue";
+import Register from "~/components/Register.vue"
 
 //
 
@@ -43,6 +44,13 @@ export class Goto {
      */
     public Login() {
         this.navigate(Login);
+    }
+
+    /**
+     * Register
+     */
+    public Register() {
+        this.navigate(Register);
     }
 } 
 

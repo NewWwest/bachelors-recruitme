@@ -12,7 +12,7 @@
                     <Button class="bottomButton" row="1" 
                         @tap="$goto.Login()" text="login" />
                     <Button class="bottomButton" row="1"
-                        @tap="onRegisterButtonTap" text="register" />
+                        @tap="$goto.Register()" text="register" />
                 </FlexBoxLayout>
             </GridLayout>
         </StackLayout>
@@ -24,9 +24,7 @@
 
     @Component
     export default class Home extends Vue {
-        // onRegisterButtonTap(): {
 
-        // }
     }
 </script>
 

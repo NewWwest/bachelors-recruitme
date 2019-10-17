@@ -38,10 +38,10 @@
 
     @Component
     export default class Login extends Vue {
-        username: string;
-        password: string;
+        username: string = "";
+        password: string = "";
         
-        onLoginButtonTap: {
+        onLoginButtonTap(): {
             // not implemented, should call api to authorize 
         }
     };
