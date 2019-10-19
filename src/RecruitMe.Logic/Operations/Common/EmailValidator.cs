@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using RecruitMe.Logic.Operations.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;

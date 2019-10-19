@@ -3,7 +3,7 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Account.Queries;
-using RecruitMe.Logic.Configuration;
+using RecruitMe.Web.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;

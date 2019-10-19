@@ -2,6 +2,7 @@
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Recruitment.Dto;
 using RecruitMe.Logic.Operations.Recruitment.Validators;
 using System;
@@ -12,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Recruitment.Command
 {
-    public class AddOrUpdatePersonalDataCommand : BaseAsyncOperation<bool, AddOrUpdatePersonalDataCommandRequest, AddOrUpdatePersonalDataCommandRequestValidator>
+    public class AddOrUpdatePersonalDataCommand : BaseAsyncOperation<OperationResult, AddOrUpdatePersonalDataCommandRequest, AddOrUpdatePersonalDataCommandRequestValidator>
     {
         public AddOrUpdatePersonalDataCommand(ILogger logger, AddOrUpdatePersonalDataCommandRequestValidator validator, BaseDbContext dbContext) : base(logger, validator, dbContext)
         {
         }
 
-        protected override async Task<bool> DoExecute(AddOrUpdatePersonalDataCommandRequest request)
+        protected override async Task<OperationResult> DoExecute(AddOrUpdatePersonalDataCommandRequest request)
         {
             var data = await _dbContext.PersonalData.FirstOrDefaultAsync(e => e.UserId == request.UserId);
             if (data == null)
@@ -42,9 +43,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.Command
             }
 
             await _dbContext.SaveChangesAsync();
-
-
-            return true;
+            return new OperationSucceded();
         }
     }
 }

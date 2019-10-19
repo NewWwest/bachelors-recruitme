@@ -25,15 +25,6 @@ namespace RecruitMe.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Login")]
-        public async Task<User> Login([FromBody] LoginDto model)
-        {
-            User result = await _loginUserQuery.Execute(model);
-
-            return result;
-        }
-
-        [HttpPost]
         [Route("Register")]
         public async Task<int> Register([FromBody] RegisterDto model)
         {

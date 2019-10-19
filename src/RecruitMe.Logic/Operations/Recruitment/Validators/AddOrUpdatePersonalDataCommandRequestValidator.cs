@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FluentValidation;
+using RecruitMe.Logic.Operations.Abstractions;
 
 namespace RecruitMe.Logic.Operations.Recruitment.Validators
 {

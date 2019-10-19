@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Recruitment.Dto;
 using System;
 using System.Collections.Generic;

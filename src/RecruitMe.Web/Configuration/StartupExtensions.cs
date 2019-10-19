@@ -30,7 +30,6 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<LoginRequestValidator>();
             services.AddTransient<RegisterRequestValidator>();
             services.AddTransient<GetUserQuery>(); 
-            services.AddTransient<GetUserFromClaimsQuery>();
 
             services.AddTransient<AddOrUpdatePersonalDataCommandRequestValidator>();
             services.AddTransient<GetPersonalDataQuery>();

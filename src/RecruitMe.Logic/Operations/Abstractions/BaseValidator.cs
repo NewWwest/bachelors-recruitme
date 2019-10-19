@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RecruitMe.Logic.Operations
+namespace RecruitMe.Logic.Operations.Abstractions
 {
     public abstract class BaseValidator<TRequest> : AbstractValidator<TRequest>
     {

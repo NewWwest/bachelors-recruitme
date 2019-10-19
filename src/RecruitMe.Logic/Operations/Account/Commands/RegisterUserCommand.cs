@@ -2,6 +2,7 @@
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Operations.Account.Validators;

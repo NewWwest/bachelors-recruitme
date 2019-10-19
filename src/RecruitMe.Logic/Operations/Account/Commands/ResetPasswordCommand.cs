@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Operations.Account.Validators;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Commands
 {
-    public class ResetPasswordCommand : BaseAsyncOperation<bool, ResetPasswordDto, ResetPasswordValidator>
+    public class ResetPasswordCommand : BaseAsyncOperation<OperationResult, ResetPasswordDto, ResetPasswordValidator>
     {
         private readonly PasswordHasher _passwordHasher;
 
@@ -24,7 +25,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
             _passwordHasher = passwordHasher;
         }
 
-        protected override async Task<bool> DoExecute(ResetPasswordDto request)
+        protected override async Task<OperationResult> DoExecute(ResetPasswordDto request)
         {
             var reset = await _dbContext.PasswordResets
                 .Include(pr=>pr.User)
@@ -34,7 +35,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
 
             user.PasswordHash = _passwordHasher.HashPassword(request.NewPassword);
             await _dbContext.SaveChangesAsync();
-            return true;
+            return new OperationSucceded();
         }
     }
 }

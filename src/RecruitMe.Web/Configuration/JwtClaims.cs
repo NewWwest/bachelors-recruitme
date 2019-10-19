@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RecruitMe.Logic.Configuration
+namespace RecruitMe.Web.Configuration
 {
     public class JwtClaims
     {

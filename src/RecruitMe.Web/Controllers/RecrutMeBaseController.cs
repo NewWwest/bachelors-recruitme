@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Account.Queries;
+using RecruitMe.Logic.Utilities;
+using RecruitMe.Web.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +14,13 @@ namespace RecruitMe.Web.Controllers
     [Authorize]
     public class RecruitMeBaseController : Controller
     {
+        protected int UserId => int.Parse(User.Claims.Single(c => c.Type == JwtClaims.ClaimId).Value);
 
+        protected async Task<User> GetUser()
+        {
+            var query = HttpContext.RequestServices.Get<GetUserQuery>();
+             return await query.Execute(UserId);
+        }
         public RecruitMeBaseController()
         {
         }

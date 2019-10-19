@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace RecruitMe.Logic.Operations
+namespace RecruitMe.Logic.Operations.Abstractions
 {
     public class ValidationResult
     {

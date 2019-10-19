@@ -2,6 +2,7 @@
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using RecruitMe.Logic.Operations.Account.Dto;
+﻿using RecruitMe.Logic.Operations.Abstractions;
+using RecruitMe.Logic.Operations.Account.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
