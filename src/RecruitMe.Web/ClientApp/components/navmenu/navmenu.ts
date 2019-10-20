@@ -1,17 +1,24 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { LocalStorageService } from '../../services/localStorage.service';
+import { UserService } from '../../services/user.service';
 
 // @ts-ignore
 @Component
 export default class Navmenu extends Vue {
-    name: string = "";
+    displayName: string = "";
+    userService: UserService = new UserService();
 
     constructor() {
         super();
     }
 
     mounted() {
-        this.name = (LocalStorageService.getEmail() != null ? LocalStorageService.getEmail() : "") as string;
+        //TODO FIX this to work after login
+        this.displayName = this.userService.getDisplayName();
+    }
+
+    logout() {
+        this.userService.logout();
+        this.$forceUpdate();
     }
 }

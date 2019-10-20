@@ -6,7 +6,7 @@ import { RecruitmentService } from '../../../services/recruitment.service';
 
 // @ts-ignore
 @Component
-export default class PersonalData extends Vue {
+export default class ProfileComponent extends Vue {
     adress: string = "";
     fatherName: string = "";
     motherName: string = "";
@@ -26,6 +26,7 @@ export default class PersonalData extends Vue {
         if (!this.userService.isLoggedIn()) {
             var router = new VueRouter();
             router.go(-1);
+            alert("unathorized");
         }
         this.recruitmentService.getPersonalData().then((resp) => {
             this.adress = resp.adress;

@@ -17,7 +17,6 @@ export interface IJwtClaims {
     email: string;
     userId: number;
     name: string;
-    surname: string;
-    pesel: string;
+    surname: string
 }
 

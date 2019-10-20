@@ -6,24 +6,32 @@ import { AxiosResponse } from "axios";
 export class UserService {
     private _apiGateway: ApiGateway = new ApiGateway();
 
-    public login(email: string, password: string) {
-        this._apiGateway.login(email, password).then(
+    public login(email: string, password: string): Promise<boolean> {
+        return this._apiGateway.login(email, password).then(
             (response: AxiosResponse<IAuthenticationResult>) => {
-                if (response != null && response.data != null) {
-                    let jwt = this.parseJwt(response.data.access_token);
-                    LocalStorageService.setEmail(jwt.email);
-                    LocalStorageService.setJwtToken(response.data.access_token);
-                    LocalStorageService.setUserId(jwt.userId);
+                if (response == null || response.data == null) {
+                    return false;
                 }
+
+                let jwt = this.parseJwt(response.data.access_token);
+                LocalStorageService.setEmail(jwt.email);
+                LocalStorageService.setJwtToken(response.data.access_token);
+                LocalStorageService.setUserId(jwt.userId);
+                LocalStorageService.setName(jwt.name);
+                LocalStorageService.setSurname(jwt.surname);
+                return true;
             },
-            (err: any) => console.error(err))
+            (err: any) => {
+                console.error(err);
+                return false;
+            })
     }
 
     public register(registrationModel: IRegistrationRequest): Promise<number> {
         return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<number>) => {
                 if (response != null && response.data != null) {
-                    console.log(`Registration succesfull, internal ID: ${response.data}`)
+                    alert(`Registration succesfull, internal ID: ${response.data}`)
                 }
             },(err: any) => {
                 console.error(err);
@@ -31,7 +39,25 @@ export class UserService {
             });
     }
 
+    public logout(): void {
+        LocalStorageService.resetEmail();
+        LocalStorageService.resetJwtToken();
+        LocalStorageService.resetUserId();
+        LocalStorageService.resetName();
+        LocalStorageService.resetSurname();
+    }
+
+    public getDisplayName(): string {
+        let name = LocalStorageService.getName();
+        let surname = LocalStorageService.getSurname();
+        //User should have both or neither
+        return name ? name + surname : "";
+    }
+
     public isLoggedIn(): boolean {
+        console.log(LocalStorageService.getUserId())
+        console.log(LocalStorageService.getEmail())
+        console.log(LocalStorageService.getJwtToken())
         return LocalStorageService.getUserId() != null &&
             LocalStorageService.getEmail() != null &&
             LocalStorageService.getJwtToken() != null;

@@ -8,10 +8,8 @@ const routes: any[] = [
     { path: '/', component: require('./components/home/home.vue.html') },
     { path: '/login', component: require('./components/account/login/login.vue.html') },
     { path: '/register', component: require('./components/account/register/register.vue.html') },
-    { path: '/recruit/personalData', component: require('./components/recruit/personalData/personalData.vue.html') },
-    { path: '/recruit/image', component: require('./components/recruit/personalData/personalData.vue.html') },
-    { path: '/recruit/payment', component: require('./components/recruit/personalData/personalData.vue.html') },
-    { path: '/recruit/pickDate', component: require('./components/recruit/personalData/personalData.vue.html') },
+
+    { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html') },
 ];
 
 new Vue({

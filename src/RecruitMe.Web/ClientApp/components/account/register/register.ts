@@ -16,6 +16,7 @@ export default class Register extends Vue {
 
     submitted: boolean = false;
     fetching: boolean = false;
+    registrationCompleted: boolean = false;
     backendError: string = "";
 
     userService: UserService = new UserService();
@@ -41,6 +42,7 @@ export default class Register extends Vue {
         this.userService.register(registrationModel).then(
             (data) => {
                 this.fetching = false;
+                this.registrationCompleted = true;
             }, (err) => {
                 this.fetching = false;
                 this.backendError = "Something went wrong";

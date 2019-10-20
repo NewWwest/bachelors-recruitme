@@ -29,11 +29,10 @@ namespace RecruitMe.Web.Services
             User user = await _getUserQuery.Execute(id);
             var claims = new List<Claim>
             {
-                new Claim(JwtClaims.ClaimId, user.Id.ToString()),
+                new Claim(JwtClaims.ClaimUserId, user.Id.ToString()),
                 new Claim(JwtClaims.ClaimName, user.Name.ToString()),
                 new Claim(JwtClaims.ClaimSurname, user.Surname.ToString()),
-                new Claim(JwtClaims.ClaimEmail, user.Email.ToString()),
-                new Claim(JwtClaims.ClaimPesel, user.Pesel?.ToString() ?? ""),
+                new Claim(JwtClaims.ClaimEmail, user.Email.ToString())
             };
 
             context.IssuedClaims = claims;

@@ -14,7 +14,7 @@ namespace RecruitMe.Web.Controllers
     [Authorize]
     public class RecruitMeBaseController : Controller
     {
-        protected int UserId => int.Parse(User.Claims.Single(c => c.Type == JwtClaims.ClaimId).Value);
+        protected int UserId => int.Parse(User.Claims.Single(c => c.Type == JwtClaims.ClaimUserId).Value);
 
         protected async Task<User> GetUser()
         {

@@ -18,6 +18,10 @@ export default class Login extends Vue {
     }
 
     handleSubmit() {
-        this.userService.login(this.email, this.password)
+        this.userService.login(this.email, this.password).then((r) => {
+            this.$router.push('/');
+        }, (err) => {
+                console.log(err);
+        })
     }
 }
