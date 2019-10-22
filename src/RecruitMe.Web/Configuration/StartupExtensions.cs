@@ -1,19 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
-using RecruitMe.Logic.Operations.Account.Commands;
+using RecruitMe.Logic.Operations.Account;
 using RecruitMe.Logic.Operations.Account.Helpers;
-using RecruitMe.Logic.Operations.Account.Queries;
-using RecruitMe.Logic.Operations.Account.Validators;
+using RecruitMe.Logic.Operations.Account.Login;
+using RecruitMe.Logic.Operations.Account.Registration;
 using RecruitMe.Logic.Operations.Email;
 using RecruitMe.Logic.Operations.Recruitment.Command;
 using RecruitMe.Logic.Operations.Recruitment.Queries;
 using RecruitMe.Logic.Operations.Recruitment.Validators;
 using RecruitMe.Web.Services.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RecruitMe.Web.Configuration
 {

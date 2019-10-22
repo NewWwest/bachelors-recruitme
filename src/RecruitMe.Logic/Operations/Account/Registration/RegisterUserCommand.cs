@@ -1,20 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
-using RecruitMe.Logic.Operations.Account.Validators;
 using RecruitMe.Logic.Operations.Email;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Account.Commands
+namespace RecruitMe.Logic.Operations.Account.Registration
 {
     public class RegisterUserCommand : BaseAsyncOperation<int, RegisterDto, RegisterRequestValidator>
     {

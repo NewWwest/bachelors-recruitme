@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Account.Queries
+namespace RecruitMe.Logic.Operations.Account
 {
     public class GetUserQuery : BaseAsyncOperation<User, int>
     {

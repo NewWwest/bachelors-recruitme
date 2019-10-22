@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RecruitMe.Logic.Operations.Account.Dto
+namespace RecruitMe.Logic.Operations.Account.ResetPassword
 {
-    public class ResetPasswordDto
+    public class SetNewPasswordDto
     {
         public Guid PasswordResetId { get; set; }
 

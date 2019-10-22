@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Account.Commands
+namespace RecruitMe.Logic.Operations.Account.Registration
 {
     public class ConfirmEmailCommand : BaseAsyncOperation<string, Guid>
     {

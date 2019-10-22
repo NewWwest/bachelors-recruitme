@@ -1,17 +1,14 @@
 ﻿using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Email
 {
     public class SendEmailCommand : BaseOperation<OperationResult, EmailDto>
     {
+
         public SendEmailCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }

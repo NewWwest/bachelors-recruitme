@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace RecruitMe.Logic.Operations.Account.Dto
+namespace RecruitMe.Logic.Operations.Account.Login
 {
     public class LoginDto
     {

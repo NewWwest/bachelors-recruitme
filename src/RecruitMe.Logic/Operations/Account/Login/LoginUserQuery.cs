@@ -1,19 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
-using RecruitMe.Logic.Operations.Account.Validators;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Account.Queries
+namespace RecruitMe.Logic.Operations.Account.Login
 {
     public class LoginUserQuery : BaseAsyncOperation<User, LoginDto, LoginRequestValidator>
     {

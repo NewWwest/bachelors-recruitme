@@ -1,16 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Account.Dto;
-using RecruitMe.Logic.Operations.Account.Queries;
 using RecruitMe.Logic.Operations.Recruitment.Command;
 using RecruitMe.Logic.Operations.Recruitment.Dto;
 using RecruitMe.Logic.Operations.Recruitment.Queries;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Web.Controllers

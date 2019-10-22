@@ -2,22 +2,16 @@
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
-using RecruitMe.Logic.Operations.Account.Validators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Account.Commands
+namespace RecruitMe.Logic.Operations.Account.ResetPassword
 {
-    public class ResetPasswordCommand : BaseAsyncOperation<OperationResult, ResetPasswordDto, ResetPasswordValidator>
+    public class SetNewPasswordCommand : BaseAsyncOperation<OperationResult, SetNewPasswordDto, ResetPasswordValidator>
     {
         private readonly PasswordHasher _passwordHasher;
 
-        public ResetPasswordCommand(ILogger logger, 
+        public SetNewPasswordCommand(ILogger logger, 
             ResetPasswordValidator validator, 
             BaseDbContext dbContext,
             PasswordHasher passwordHasher) : base(logger, validator, dbContext)
@@ -25,7 +19,7 @@ namespace RecruitMe.Logic.Operations.Account.Commands
             _passwordHasher = passwordHasher;
         }
 
-        protected override async Task<OperationResult> DoExecute(ResetPasswordDto request)
+        protected override async Task<OperationResult> DoExecute(SetNewPasswordDto request)
         {
             var reset = await _dbContext.PasswordResets
                 .Include(pr=>pr.User)

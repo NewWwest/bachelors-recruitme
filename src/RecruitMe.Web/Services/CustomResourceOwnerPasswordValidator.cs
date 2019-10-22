@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using RecruitMe.Logic.Data.Entities;
-using RecruitMe.Logic.Operations.Account.Queries;
+using RecruitMe.Logic.Operations.Account.Login;
 
 namespace RecruitMe.Web.Services
 {
@@ -24,7 +22,7 @@ namespace RecruitMe.Web.Services
             User user = null;
             try
             {
-                user = await _loginUserQuery.Execute(new Logic.Operations.Account.Dto.LoginDto() { CandidateId = context.UserName, Password = context.Password });
+                user = await _loginUserQuery.Execute(new LoginDto() { CandidateId = context.UserName, Password = context.Password });
                 context.Result = new GrantValidationResult(user.Id.ToString(), OidcConstants.AuthenticationMethods.Password);
                 return;
             }
