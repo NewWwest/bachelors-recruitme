@@ -5,6 +5,7 @@ using RecruitMe.Logic.Operations.Account.Commands;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Operations.Account.Queries;
 using RecruitMe.Logic.Operations.Account.Validators;
+using RecruitMe.Logic.Operations.Email;
 using RecruitMe.Logic.Operations.Recruitment.Command;
 using RecruitMe.Logic.Operations.Recruitment.Queries;
 using RecruitMe.Logic.Operations.Recruitment.Validators;
@@ -24,7 +25,10 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<ILogger,ConsoleLogger>();
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
 
+            services.AddTransient<SendEmailCommand>();
+
             services.AddTransient<RegisterUserCommand>();
+            services.AddTransient<ConfirmEmailCommand>();
             services.AddTransient<PasswordHasher>();
             services.AddTransient<LoginUserQuery>();
             services.AddTransient<LoginRequestValidator>();

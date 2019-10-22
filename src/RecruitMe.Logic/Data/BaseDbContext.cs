@@ -20,6 +20,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<PasswordReset> PasswordResets { get; set; }
 
+        public DbSet<ConfirmationEmail> ConfirmationEmails { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }
