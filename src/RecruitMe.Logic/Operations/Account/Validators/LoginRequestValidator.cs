@@ -3,6 +3,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RecruitMe.Logic.Operations.Abstractions;
 
 namespace RecruitMe.Logic.Operations.Account.Validators
 {
@@ -10,7 +11,8 @@ namespace RecruitMe.Logic.Operations.Account.Validators
     {
         public LoginRequestValidator() 
         {
-            RuleFor(a => a.Email).NotEmpty();
+            RuleFor(a => a.CandidateId).NotEmpty();
+            RuleFor(a => a.Password).NotEmpty();
         }
     }
 }

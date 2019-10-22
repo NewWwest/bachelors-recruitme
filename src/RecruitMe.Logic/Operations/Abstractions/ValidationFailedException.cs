@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RecruitMe.Logic.Operations
+namespace RecruitMe.Logic.Operations.Abstractions
 {
     public class ValidationFailedException : Exception
     {

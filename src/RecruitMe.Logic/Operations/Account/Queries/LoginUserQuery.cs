@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Data;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Operations.Account.Validators;
@@ -12,35 +15,30 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Queries
 {
-    public class LoginUserQuery : BaseAsyncOperation<string, LoginDto, LoginRequestValidator>
+    public class LoginUserQuery : BaseAsyncOperation<User, LoginDto, LoginRequestValidator>
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly PasswordHasher _passwordHasher;
 
         public LoginUserQuery(ILogger logger, 
             LoginRequestValidator validator,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            JwtTokenHelper jwtTokenHelper) : base(logger, validator)
+            BaseDbContext dbContext,
+            PasswordHasher passwordHasher) : base(logger, validator, dbContext)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtTokenHelper = jwtTokenHelper;
+            _passwordHasher = passwordHasher;
         }
 
 
-        protected override async Task<string> DoExecute(LoginDto request)
+        protected override async Task<User> DoExecute(LoginDto request)
         {
-            SignInResult result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
+            User user = await _dbContext.Users.SingleAsync(u => u.CandidateId == request.CandidateId);
+            var result = _passwordHasher.VerifyPassword(user, request.Password);
 
-            if (result.Succeeded)
+            if (result)
             {
-                var appUser = await _userManager.Users.SingleOrDefaultAsync(r => r.Email == request.Email);
-                return _jwtTokenHelper.GenerateJwtToken(request.Email, appUser);
+                return user;
             }
 
-            throw new Exception("Login Failed");
+            throw new UnauthorizedAccessException();
         }
     }
 }

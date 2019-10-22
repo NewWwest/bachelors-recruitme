@@ -1,24 +1,27 @@
-﻿using RecruitMe.Logic.Logging;
+﻿using RecruitMe.Logic.Data;
+using RecruitMe.Logic.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations
+namespace RecruitMe.Logic.Operations.Abstractions
 {
     public abstract class BaseOperation
     {
         protected readonly ILogger _logger;
+        protected readonly BaseDbContext _dbContext;
 
-        public BaseOperation(ILogger logger)
+        public BaseOperation(ILogger logger, BaseDbContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
     }
 
     public abstract class BaseOperation<TResult, TRequest> : BaseOperation
     {
-        public BaseOperation(ILogger logger) : base(logger)
+        public BaseOperation(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
@@ -32,7 +35,7 @@ namespace RecruitMe.Logic.Operations
 
     public abstract class BaseAsyncOperation<TResult, TRequest> : BaseOperation
     {
-        public BaseAsyncOperation(ILogger logger) : base(logger)
+        public BaseAsyncOperation(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
@@ -48,7 +51,7 @@ namespace RecruitMe.Logic.Operations
     {
         private readonly TValidator _validator;
 
-        public BaseOperation(ILogger logger, TValidator validator) : base(logger)
+        public BaseOperation(ILogger logger, TValidator validator, BaseDbContext dbContext) : base(logger, dbContext)
         {
             _validator = validator;
         }
@@ -74,7 +77,7 @@ namespace RecruitMe.Logic.Operations
     {
         private readonly TValidator _validator;
 
-        public BaseAsyncOperation(ILogger logger, TValidator validator) : base(logger)
+        public BaseAsyncOperation(ILogger logger, TValidator validator, BaseDbContext dbContext) : base(logger, dbContext)
         {
             _validator = validator;
         }

@@ -4,10 +4,12 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-const routes = [
+const routes: any[] = [
     { path: '/', component: require('./components/home/home.vue.html') },
-    { path: '/counter', component: require('./components/counter/counter.vue.html') },
-    { path: '/fetchdata', component: require('./components/fetchdata/fetchdata.vue.html') }
+    { path: '/login', component: require('./components/account/login/login.vue.html') },
+    { path: '/register', component: require('./components/account/register/register.vue.html') },
+
+    { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html') },
 ];
 
 new Vue({

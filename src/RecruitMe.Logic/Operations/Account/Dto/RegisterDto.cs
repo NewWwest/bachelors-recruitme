@@ -8,11 +8,16 @@ namespace RecruitMe.Logic.Operations.Account.Dto
 
     public class RegisterDto
     {
-        [Required]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "PASSWORD_MIN_LENGTH", MinimumLength = 10)]
         public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
+
+        public string Pesel { get; set; }
     }
 }

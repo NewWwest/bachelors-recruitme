@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Text;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,8 +12,11 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Web.Configuration;
+using RecruitMe.Web.Services;
 using RecruitMe.Web.Services.Data;
 
 namespace RecruitMe.Web
@@ -27,41 +33,34 @@ namespace RecruitMe.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = "server=127.0.0.1;database=db1;user=app1;password=test-test-test";
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
             services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
-                optionsBuilder.UseMySql("server=127.0.0.1;database=db1;user=app1;password=test-test-test")
+                optionsBuilder.UseMySql(connectionString)
             );
-
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
+            services.AddCors();
             services.AddMvc();
+            services.AddMvcCore().AddAuthorization();
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential(true, "IdentityServer.rsa.json")
+                .AddInMemoryIdentityResources(ISConfig.GetIdentityResources())
+                .AddInMemoryApiResources(ISConfig.GetApiResources())
+                .AddInMemoryClients(ISConfig.GetClients())
+                .AddProfileService<CustomProfileService>()
+                .AddResourceOwnerValidator<CustomResourceOwnerPasswordValidator>()
+                .AddJwtBearerClientAuthentication();
 
-            }).AddJwtBearer(options =>
-            {
-                // base-address of your identityserver
-                options.Authority = "http://localhost:52718/";
-
-                // name of the API resource
-                options.Audience = "api1";
-
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
                 {
-                    ValidIssuer = Configuration["JwtIssuer"],
-                    ValidAudience = Configuration["JwtIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-                    ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                };
-            });
+                    options.Authority = @"http://localhost:5000/";
+                    options.ApiName =ISConfig.AuthScope;
+                    options.RequireHttpsMetadata = false;
+                    options.SupportedTokens = SupportedTokens.Jwt;
+                });
+
 
             services.AddDependencInjection();
         }
@@ -71,6 +70,7 @@ namespace RecruitMe.Web
         {
             if (env.IsDevelopment())
             {
+                IdentityModelEventSource.ShowPII = true;
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
@@ -82,13 +82,22 @@ namespace RecruitMe.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+
+            List<string> origins = new List<string> { "" };
+
+            app.UseCors(
+                options => options.WithOrigins(origins.ToArray()).AllowAnyMethod().WithHeaders("authorization", "accept", "content-type", "origin")
+            );
+
+            app.UseIdentityServer();
             app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
+                //routes.MapRoute(
+                //    name: "areas",
+                //    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                //);
 
                 routes.MapRoute(
                     name: "default",
@@ -98,9 +107,9 @@ namespace RecruitMe.Web
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            app.UseStaticFiles();
 
-            //dbContext.Database.EnsureCreated();
+            //THIS IS NOT IN EUZ
+            app.UseStaticFiles();
         }
     }
 }

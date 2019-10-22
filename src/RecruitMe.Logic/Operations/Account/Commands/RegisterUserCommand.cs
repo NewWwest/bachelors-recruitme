@@ -1,48 +1,67 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Data;
+using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Dto;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Operations.Account.Validators;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.Commands
 {
-    public class RegisterUserCommand : BaseAsyncOperation<string, RegisterDto, RegisterRequestValidator>
+    public class RegisterUserCommand : BaseAsyncOperation<int, RegisterDto, RegisterRequestValidator>
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly PasswordHasher _passwordHasher;
 
-        public RegisterUserCommand(ILogger logger, 
+        public RegisterUserCommand(ILogger logger,
             RegisterRequestValidator validator,
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            JwtTokenHelper jwtTokenHelper) : base(logger, validator)
+            BaseDbContext dbContext,
+            PasswordHasher passwordHasher) : base(logger, validator, dbContext)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtTokenHelper = jwtTokenHelper;
+            _passwordHasher = passwordHasher;
         }
 
-        protected async override Task<string> DoExecute(RegisterDto request)
+        protected async override Task<int> DoExecute(RegisterDto request)
         {
-            var user = new IdentityUser
-            {
-                UserName = request.Email,
-                Email = request.Email
-            };
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var candidateprefix = request.Name.Substring(0, request.Name.Length > 3 ? 3 : request.Name.Length) +
+                request.Surname.Substring(0, request.Surname.Length > 3 ? 3 : request.Surname.Length);
+            var candidadateIds = _dbContext.Users
+                .Where(u => u.CandidateId.StartsWith(candidateprefix))
+                .Select(u=>u.CandidateId).ToList();
 
-            if (result.Succeeded)
+            string candidateId = null;
+            for (int i = 0; i < 1000; i++)
             {
-                await _signInManager.SignInAsync(user, false);
-                return _jwtTokenHelper.GenerateJwtToken(request.Email, user);
+                candidateId = candidateprefix + i.ToString("000");
+                if (!candidadateIds.Contains(candidateId))
+                    break;
             }
 
-            throw new Exception("Login Failed");
+            var user = new User
+            {
+                Email = request.Email,
+                Name = request.Name,
+                Surname = request.Surname,
+                Pesel = request.Pesel,
+                CandidateId = candidateId,
+                PasswordHash = _passwordHasher.HashPassword(request.Password),
+                EmailVerified = false
+            };
+
+            var result = _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync();
+
+            if (result.IsKeySet)
+            {
+                return result.Entity.Id;
+            }
+
+            throw new Exception("Registration Failed");
         }
     }
 }

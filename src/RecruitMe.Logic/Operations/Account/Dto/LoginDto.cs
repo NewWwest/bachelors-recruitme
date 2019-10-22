@@ -5,14 +5,10 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Account.Dto
 {
-
     public class LoginDto
     {
-        [Required]
-        public string Email { get; set; }
+        public string CandidateId { get; set; }
 
-        [Required]
         public string Password { get; set; }
-
     }
 }
