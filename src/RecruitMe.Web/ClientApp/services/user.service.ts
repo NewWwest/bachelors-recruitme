@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { IRegistrationRequest, IAuthenticationResult, IJwtClaims } from "../models/user.models";
+import { IRegistrationRequest, IAuthenticationResult, IJwtClaims, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from "../models/user.models";
 import { LocalStorageService } from "./localStorage.service";
 import { AxiosResponse } from "axios";
 
@@ -33,9 +33,39 @@ export class UserService {
                 if (response != null && response.data != null) {
                     alert(`Registration succesfull, internal ID: ${response.data}`)
                 }
-            },(err: any) => {
+            }, (err: any) => {
                 console.error(err);
                 return err;;
+            });
+    }
+
+    public resetPassword(resetmodel: IResetPasswordRequest): Promise<void> {
+        return this._apiGateway.resetPassword(resetmodel).then(
+            (response: AxiosResponse<number>) => {
+                
+            }, (err: any) => {
+                console.error(err);
+                throw err;;
+            });
+    }
+
+    public setNewPassword(resetModel: ISetNewPassword): Promise<void> {
+        return this._apiGateway.setNewPassword(resetModel).then(
+            (response: AxiosResponse<number>) => {
+
+            }, (err: any) => {
+                console.error(err);
+                throw err;;
+            });
+    }
+
+    public remindLogin(remindModel: IRemindLoginRequest): Promise<void> {
+        return this._apiGateway.remindLogin(remindModel).then(
+            (response: AxiosResponse<string>) => {
+
+            }, (err: any) => {
+                console.error(err);
+                throw err;;
             });
     }
 

@@ -5,7 +5,7 @@ import { UserService } from '../../../services/user.service';
 // @ts-ignore
 @Component
 export default class Login extends Vue {
-    email: string = "";
+    login: string = "";
     password: string = "";
 
     submitted: boolean = false;
@@ -18,10 +18,12 @@ export default class Login extends Vue {
     }
 
     handleSubmit() {
-        this.userService.login(this.email, this.password).then((r) => {
+        this.userService.login(this.login, this.password).then((r) => {
             this.$router.push('/');
+            //TODO
+            //FIRE EVENT
         }, (err) => {
-                console.log(err);
+            console.log(err);
         })
     }
 }
