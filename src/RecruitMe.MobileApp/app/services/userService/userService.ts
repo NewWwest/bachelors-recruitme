@@ -27,7 +27,7 @@ export class UserService {
                 }
             },(err: any) => {
                 console.error(err);
-                return err;;
+                return err;
             });
     }
 

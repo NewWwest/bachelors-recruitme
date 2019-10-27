@@ -26,7 +26,7 @@
                     <TextField v-model="password" hint="Password" secure="true" class="form-input" />
                 </FlexboxLayout>
 
-                <Button text="Login" @tap="onLoginButtonTap" class="logingButton" />
+                <Button text="Login" @tap="onLoginButtonTap" class="my-button" />
             </StackLayout>
         </StackLayout>
         
@@ -34,15 +34,24 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import { UserService } from '../services/userService/userService';
+    import { Component, Vue } from 'vue-property-decorator';
+import ConnectionService from '../services/common/connection';
 
     @Component
     export default class Login extends Vue {
         username: string = "";
         password: string = "";
-        
-        onLoginButtonTap(): {
-            // not implemented, should call api to authorize 
+        userService: UserService = new UserService();
+
+        onLoginButtonTap() {
+            if (ConnectionService.IsConnectedToNetwork()) {
+                this.userService.login(this.username, this.password);
+                // check localStorage
+            }
+            else {
+                // dialog
+            }
         }
     };
 </script>
@@ -60,6 +69,10 @@
         border-bottom-width: 1;
         border-bottom-color: white;
         width: 90%;
+    }
+
+    .form-group {
+        margin-top: 15;
     }
 
     .inputLoginMargin {
@@ -80,7 +93,7 @@
         margin-top: 50;
     }
 
-    .logingButton {
+    .my-button {
         background-color: $login-button-color;
         color: white;
         font-weight: bold;

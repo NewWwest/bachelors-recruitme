@@ -7,21 +7,16 @@
         <!-- <StackLayout class="pageBack"> -->
             <ScrollView>
                 <StackLayout class="pageBack"> <!-- scrollView can have only one child :c -->
-                    <StackLayout>
-                        <Label class="form-label">Imię</Label>
-                        <TextField v-model="userData.name" class="form-input" />
-                    </StackLayout>
-                    <StackLayout>
-                        <Label class="form-label">Nazwisko</Label>
-                        <TextField v-model="userData.surname" class="form-input" />
+                    <StackLayout class="form-group">
+                        <TextField v-model="userData.name" hint="Imię" class="form-input" />
+                        <TextField v-model="userData.surname" hint="Nazwisko" class="form-input" />
                     </StackLayout>
         
-                    <StackLayout>
-                        <Label class="form-label">PESEL</Label>
-                        <TextField v-model="userData.pesel" class="form-input" :editable="!userData.noPesel" />
+                    <StackLayout class="form-group">
+                        <TextField v-model="userData.pesel" class="form-input" hint="Numer PESEL" :editable="!userData.noPesel" />
                         
                         <FlexboxLayout justifyContent="space-between" alignItems="center">
-                            <Label>Zaznacz, jeżeli brak numeru PESEL</Label> 
+                            <Label>Kliknij, gdy brak numeru PESEL</Label> 
                             <Switch v-model="userData.noPesel" @checkedChange="switchChange()"/>
                         </FlexboxLayout>
                     </StackLayout>
@@ -46,18 +41,14 @@
                         <TextField v-model="userForm.schoolName" class="form-input" />
                     </StackLayout> -->
         
-                    <StackLayout>
-                        <Label class="form-label">Hasło</Label>
-                        <TextField v-model="userData.password" class="form-input" :secure="true" />
+                    <StackLayout class="form-group">
+                        <TextField v-model="userData.email" class="form-input" hint="Adres e-mail" />
+                        <TextField v-model="userData.password" class="form-input" hint="Hasło" :secure="true" />
+                        <TextField v-model="userData.confirmPassword" class="form-input" hint="Powtórz hasło" :secure="true" />
                     </StackLayout>
-
-                    <StackLayout>
-                        <Label class="form-label">Powtórz hasło</Label>
-                        <TextField v-model="userData.confirmPassword" class="form-input" :secure="true" />
-                    </StackLayout>
-
+                        
                     <FlexboxLayout justifyContent="flex-end">
-                        <Button text="Zarejestruj się" @tap="onRegisterTap()"></Button>
+                        <Button class="my-button" text="Zarejestruj się" @tap="onRegisterTap()"></Button>
                     </FlexboxLayout> 
                 </StackLayout>
             </ScrollView>
@@ -71,17 +62,11 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { UserService } from '../services/userService/userService';
     import { AxiosResponse } from 'axios';
+    import ConnectionService from "../services/common/connection";
+    import { action } from "tns-core-modules/ui/dialogs";
 
     @Component
     export default class Register extends Vue {
-        email = "";
-        password = "";
-        confirmPassword = "";
-        name = "";
-        surname = "";
-        pesel = "";
-        noPesel = false; 
-        
         userData: IRegistrationRequest = {
            email: "",
            password: "",
@@ -94,9 +79,14 @@
         userService: UserService = new UserService();
 
         onRegisterTap() {
-            this.userService.register(this.userData).then((data) => {
-                console.log("ok");
-            }).catch(error => console.log(error));
+            if (ConnectionService.IsConnectedToNetwork()) {
+                this.userService.register(this.userData).then((data) => {
+                    console.log("register ok");
+                }).catch(error => console.log(error));
+            }
+            else {
+                // action
+            }
         }
 
         switchChange() {
@@ -108,18 +98,34 @@
 <style scoped lang="scss">
     @import '../app-variables';
 
-    .form-input {
-        color: white;
-        placeholder-color: white;
-        border-bottom-width: 1;
-        border-bottom-color: white;
-        margin-bottom: 50px;
-    }
-
     .pageBack {
         background-image: linear-gradient(to right, $login-left-color, $login-right-color);
-        padding: 30;
+        padding-left: 30;
+        padding-right: 30;
     }
+
+.form-input {
+   color: white;
+   placeholder-color: white;
+   border-bottom-width: 1;
+   border-bottom-color: white;
+   margin-bottom: 50px;
+}
+
+.form-group {
+   margin-top: 15;
+}
+
+.my-button {
+   background-color: $login-button-color;
+   color: white;
+   font-weight: bold;
+   border-radius: 25;
+   padding-top: 14;
+   padding-bottom: 14;
+   text-transform: uppercase;
+   letter-spacing: 0.1;
+}
 
     Label {
         color: #E3E3E3;
