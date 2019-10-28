@@ -15,7 +15,6 @@ if(TNS_ENV !== 'production') {
 Vue.config.silent = (TNS_ENV === 'production')
 
 Vue.use(Router);
-//Vue.use(RadDataForm);
 
 new Vue({
   store: store,

@@ -34,9 +34,10 @@
 </template>
 
 <script lang="ts">
-    import { UserService } from '../services/userService/userService';
-    import { Component, Vue } from 'vue-property-decorator';
+import { UserService } from '../services/userService/userService';
+import { Component, Vue } from 'vue-property-decorator';
 import ConnectionService from '../services/common/connection';
+import PopupFactory from '@/services/popupFactory';
 
     @Component
     export default class Login extends Vue {
@@ -48,9 +49,10 @@ import ConnectionService from '../services/common/connection';
             if (ConnectionService.IsConnectedToNetwork()) {
                 this.userService.login(this.username, this.password);
                 // check localStorage
+
             }
             else {
-                // dialog
+                PopupFactory.ConnectionError();
             }
         }
     };
