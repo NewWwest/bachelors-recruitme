@@ -21,11 +21,11 @@ export class ApiGateway {
     }
 
     public resetPassword(resetPasswordRequest: IResetPasswordRequest): any {
-        return axios.post('/api/Account/resetPassword', resetPasswordRequest)
+        return axios.post('/api/Account/ResetPassword', resetPasswordRequest)
     }
 
     public setNewPassword(resetPasswordRequest: ISetNewPassword): any {
-        return axios.post('/api/Account/setNewPassword', resetPasswordRequest)
+        return axios.post('/api/Account/SetNewPassword', resetPasswordRequest)
     }
 
     public remindLogin(remindModel: IRemindLoginRequest): any {

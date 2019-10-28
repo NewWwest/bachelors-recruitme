@@ -10,6 +10,7 @@ export default class Login extends Vue {
 
     submitted: boolean = false;
     fetching: boolean = false;
+    failed: boolean = false;
 
     userService: UserService = new UserService();
 
@@ -23,7 +24,7 @@ export default class Login extends Vue {
             //TODO
             //FIRE EVENT
         }, (err) => {
-            console.log(err);
+            this.failed = true;
         })
     }
 }

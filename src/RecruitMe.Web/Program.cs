@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RecruitMe.Logic.Configuration;
 
 namespace RecruitMe.Web
 {
@@ -19,7 +20,7 @@ namespace RecruitMe.Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://localhost:5000/")
+                .UseUrls(EndpointConfig.BaseAddress)
                 .UseStartup<Startup>()
                 .Build();
     }

@@ -10,7 +10,7 @@ export class UserService {
         return this._apiGateway.login(email, password).then(
             (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response == null || response.data == null) {
-                    return false;
+                    throw new Error();
                 }
 
                 let jwt = this.parseJwt(response.data.access_token);
@@ -23,19 +23,20 @@ export class UserService {
             },
             (err: any) => {
                 console.error(err);
-                return false;
+                throw new Error();
             })
     }
 
     public register(registrationModel: IRegistrationRequest): Promise<number> {
         return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<number>) => {
-                if (response != null && response.data != null) {
-                    alert(`Registration succesfull, internal ID: ${response.data}`)
+                if (response == null || response.data == null) {
+                    throw new Error();
                 }
+
             }, (err: any) => {
                 console.error(err);
-                return err;;
+                throw err;
             });
     }
 

@@ -5,6 +5,7 @@ using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Operations.Email;
+using RecruitMe.Logic.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace RecruitMe.Logic.Operations.Account.Registration
         public RegisterUserCommand(ILogger logger,
             RegisterRequestValidator validator,
             BaseDbContext dbContext,
-            PasswordHasher passwordHasher, 
+            PasswordHasher passwordHasher,
             SendEmailCommand sendEmailCommand) : base(logger, validator, dbContext)
         {
             _passwordHasher = passwordHasher;
@@ -42,20 +43,19 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             await _dbContext.SaveChangesAsync();
 
 
-            if (result.IsKeySet)
+            if (!result.IsKeySet)
             {
-                Guid token = await GenerateEmailConfirmationToken(result.Entity.Id);
-
-                _sendEmailCommand.Execute(new EmailDto()
-                {
-                    Body = $"http://localhost:5000/api/account/confirmEmail/{token}",
-                    Title = "Complete Recruit Me registration",
-                    To = user.Email
-                });
-                return result.Entity.Id;
+                throw new Exception("Registration Failed");
             }
 
-            throw new Exception("Registration Failed");
+            Guid token = await GenerateEmailConfirmationToken(result.Entity.Id);
+            _sendEmailCommand.Execute(new EmailDto()
+            {
+                Body = url(token),
+                Title = "Complete Recruit Me registration",
+                To = user.Email
+            });
+            return result.Entity.Id;
         }
 
         private async Task<Guid> GenerateEmailConfirmationToken(int userId)
@@ -67,8 +67,13 @@ namespace RecruitMe.Logic.Operations.Account.Registration
                 UserId = userId,
                 Used = false
             });
-            await  _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return token;
+        }
+
+        private string url(Guid token)
+        {
+            return EndpointConfig.BaseAddress + EndpointConfig.ConfirmEmail + "/" + token.ToString();
         }
     }
 }

@@ -7,8 +7,11 @@ namespace RecruitMe.Logic.Operations.Account.Registration
     {
         public RegisterRequestValidator()
         {
-            //TODO Update
-            RuleFor(a => a.Email).NotEmpty();
+            RuleFor(a => a.Email).EmailAddress();
+            RuleFor(a => a.Password).MinimumLength(10);
+            RuleFor(a => a.ConfirmPassword).Must((a, _) => a.ConfirmPassword == a.Password);
+            RuleFor(a => a.Name).NotEmpty();
+            RuleFor(a => a.Surname).NotEmpty();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace RecruitMe.Logic.Operations.Account
+namespace RecruitMe.Logic.Operations.Account.Registration
 {
     public class EmailVerificationTokenNotFoundException : Exception
     {

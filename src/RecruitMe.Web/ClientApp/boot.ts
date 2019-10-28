@@ -10,9 +10,9 @@ const routes: any[] = [
     { path: '/account/register', component: require('./components/account/register/register.vue.html') },
     { path: '/account/EmailVerified', component: require('./components/account/emailverified/emailverified.vue.html') },
 
-    { path: '/account/resetPassword', component: require('./components/account/register/register.vue.html') },
-    { path: '/account/setnewPassword', component: require('./components/account/register/register.vue.html') },
-    { path: '/account/remindMyLogin', component: require('./components/account/register/register.vue.html') },
+    { path: '/account/resetPassword', component: require('./components/account/resetPassword/resetPassword.vue.html') },
+    { path: '/account/setnewPassword', component: require('./components/account/setNewPassword/setNewPassword.vue.html') },
+    { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html') },
     
     { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html') },
 ];

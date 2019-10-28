@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Common;
 using RecruitMe.Logic.Operations.Email;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Account.ResetPassword
@@ -24,7 +21,10 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
 
         protected override async Task<OperationResult> DoExecute(ResetPasswordDto request)
         {
-            var user = await _dbContext.Users.SingleAsync(u => u.EmailVerified && u.CandidateId == request.Login);
+            if (string.IsNullOrWhiteSpace(request.Login))
+                return new OperationSucceded();
+
+            User user = await _dbContext.Users.SingleAsync(u => u.EmailVerified && u.CandidateId == request.Login);
             var passwordReset = new PasswordReset()
             {
                 UserId = user.Id,
@@ -38,7 +38,7 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
             {
                 To=user.Email,
                 Title="Reset Password",
-                Body = "http://localhost:5000/resetpassword?token={token}"
+                Body = EndpointConfig.BaseAddress + EndpointConfig.SetNewPassword + $"?token={passwordReset.Id}"
             });
 
             return new OperationSucceded();

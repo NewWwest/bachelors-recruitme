@@ -5,14 +5,14 @@ using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Account.ResetPassword
+namespace RecruitMe.Logic.Operations.Account.SetNewPassword
 {
-    public class SetNewPasswordCommand : BaseAsyncOperation<OperationResult, SetNewPasswordDto, ResetPasswordValidator>
+    public class SetNewPasswordCommand : BaseAsyncOperation<OperationResult, SetNewPasswordDto, SetNewPasswordValidator>
     {
         private readonly PasswordHasher _passwordHasher;
 
-        public SetNewPasswordCommand(ILogger logger, 
-            ResetPasswordValidator validator, 
+        public SetNewPasswordCommand(ILogger logger,
+            SetNewPasswordValidator validator, 
             BaseDbContext dbContext,
             PasswordHasher passwordHasher) : base(logger, validator, dbContext)
         {
@@ -23,11 +23,11 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
         {
             var reset = await _dbContext.PasswordResets
                 .Include(pr=>pr.User)
-                .SingleAsync(pr => pr.Id == request.PasswordResetId);
+                .SingleAsync(pr => pr.Id == request.Token);
 
             var user = reset.User;
 
-            user.PasswordHash = _passwordHasher.HashPassword(request.NewPassword);
+            user.PasswordHash = _passwordHasher.HashPassword(request.Password);
             await _dbContext.SaveChangesAsync();
             return new OperationSucceded();
         }
