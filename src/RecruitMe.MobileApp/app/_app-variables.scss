@@ -4,9 +4,9 @@
 @import '~nativescript-theme-core/scss/light';
 
 // Login page colors
-$login-left-color: #39B994;
-$login-right-color: #337FC7;
-$login-button-color: #4BD5DC;
+$login-left-color: #DFD5A5;
+$login-right-color: #628395;
+$login-button-color: #DBAD6A;
 
 // Custom colors
 $background-dark: #F8F8F8 !default;
@@ -52,7 +52,7 @@ $background: #fff;
 $primary: lighten(#000, 13%);
 $secondary: lighten(#000, 46%);
 $disabled: lighten(#000, 62%);
-$accent: $accent-dark;
+$accent: #7e99a8;
 $error: $error-light;
 
 // SideDrawer

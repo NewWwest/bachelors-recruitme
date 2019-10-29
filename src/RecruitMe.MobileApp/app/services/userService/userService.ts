@@ -7,7 +7,7 @@ export class UserService {
     private _apiGateway: ApiGateway = new ApiGateway();
 
     public login(email: string, password: string) {
-        this._apiGateway.login(email, password).then(
+        return this._apiGateway.login(email, password).then(
             (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response != null && response.data != null) {
                     let jwt = this.parseJwt(response.data.access_token);
@@ -16,7 +16,10 @@ export class UserService {
                     LocalStorageService.setUserId(jwt.userId);
                 }
             },
-            (err: any) => console.error(err))
+            (err: any) => {
+                console.error(err);
+                throw new Error(JSON.stringify(err));
+            })
     }
 
     public register(registrationModel: IRegistrationRequest): Promise<number> {
@@ -27,7 +30,7 @@ export class UserService {
                 }
             },(err: any) => {
                 console.error(err);
-                return err;
+                throw new Error(JSON.stringify(err));
             });
     }
 

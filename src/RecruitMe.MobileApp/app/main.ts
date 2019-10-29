@@ -1,11 +1,10 @@
 import Vue from 'nativescript-vue'
-import VueDevtools from 'nativescript-vue-devtools'
 import store from './store'
 
 import Home from './components/Home.vue'
 import Router from './services/router'
 
-//import RadDataForm from "nativescript-ui-dataform/vue";
+const VueDevtools = require('nativescript-vue-devtools')
 
 if(TNS_ENV !== 'production') {
   Vue.use(VueDevtools)

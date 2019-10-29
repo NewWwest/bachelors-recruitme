@@ -59,10 +59,11 @@ import PopupFactory from '@/services/popupFactory';
 </script>
 
 <style scoped lang="scss">
+    @import '../app-common';
     @import '../app-variables';
 
     .fa {
-        color: $warning-light;
+        color: #cf995f;
     }
 
     .form-input {
@@ -93,17 +94,6 @@ import PopupFactory from '@/services/popupFactory';
         height: 150em;
         margin-bottom: 30;
         margin-top: 50;
-    }
-
-    .my-button {
-        background-color: $login-button-color;
-        color: white;
-        font-weight: bold;
-        border-radius: 25;
-        padding-top: 14;
-        padding-bottom: 14;
-        text-transform: uppercase;
-        letter-spacing: 0.1;
     }
 
     .loginPageBack {

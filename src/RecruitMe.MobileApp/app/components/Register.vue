@@ -74,6 +74,7 @@
 </script>
 
 <style scoped lang="scss">
+    @import '../app-common';
     @import '../app-variables';
 
     .pageBack {
@@ -82,28 +83,17 @@
         padding-right: 30;
     }
 
-.form-input {
-   color: white;
-   placeholder-color: white;
-   border-bottom-width: 1;
-   border-bottom-color: white;
-   margin-bottom: 50px;
-}
+    .form-input {
+        color: white;
+        placeholder-color: white;
+        border-bottom-width: 1;
+        border-bottom-color: white;
+        margin-bottom: 50px;
+    }
 
-.form-group {
-   margin-top: 15;
-}
-
-.my-button {
-   background-color: $login-button-color;
-   color: white;
-   font-weight: bold;
-   border-radius: 25;
-   padding-top: 14;
-   padding-bottom: 14;
-   text-transform: uppercase;
-   letter-spacing: 0.1;
-}
+    .form-group {
+        margin-top: 15;
+    }
 
     Label {
         color: #E3E3E3;
