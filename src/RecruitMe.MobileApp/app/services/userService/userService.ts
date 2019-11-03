@@ -35,9 +35,9 @@ export class UserService {
     }
 
     public isLoggedIn(): boolean {
-        return LocalStorageService.getUserId() != null &&
-            LocalStorageService.getEmail() != null &&
-            LocalStorageService.getJwtToken() != null;
+        return LocalStorageService.getUserId() ? true : false &&
+            LocalStorageService.getEmail() ? true : false  &&
+            LocalStorageService.getJwtToken() ? true : false;
     }
 
     private parseJwt(token: string): IJwtClaims {

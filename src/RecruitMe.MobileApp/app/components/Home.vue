@@ -1,9 +1,5 @@
 <template>
     <Page actionBarHidden="true" class="page">
-        <ActionBar class="action-bar">
-            <Label class="action-bar-title" text="Home"></Label>
-        </ActionBar>
-
         <StackLayout class="loginPageBack">
             <GridLayout rows="*, 200" class="container">
                 <Image class="logoImage" row="0"/>

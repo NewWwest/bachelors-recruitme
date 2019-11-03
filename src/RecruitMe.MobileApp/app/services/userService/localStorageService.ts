@@ -1,33 +1,32 @@
+import store from '@/store';
+
 export class LocalStorageService {
     static setUserId(userId: number): void {
-        if (userId == null || userId == 0)
-            return;
-        localStorage.setItem('userId', userId.toString());
+        // if (userId == null || userId == 0)
+        //     return;
+        // localStorage.setItem('userId', userId.toString());
+
+        store.commit('setUserId', userId);
     }
 
-    static getUserId(): number | null {
-        let data = localStorage.getItem('userId');
-        return data ? parseInt(data) : null;
+    static getUserId(): number {
+        return store.getters.getUserId;
     }
 
     static setJwtToken(jwtToken: string): void {
-        if (jwtToken == null || jwtToken == "")
-            return;
-        localStorage.setItem('jwtToken', jwtToken);
+        store.commit('setToken', jwtToken);
     }
 
-    static getJwtToken(): string | null {
-        return localStorage.getItem('jwtToken');
+    static getJwtToken(): string {
+        return store.getters.getToken;
     }
 
     static setEmail(email: string): void {
-        if (email == null || email == "")
-            return;
-        localStorage.setItem('email', email);
+        store.commit('setEmail', email);
     }
 
-    static getEmail(): string | null {
-        return localStorage.getItem('email');
+    static getEmail(): string {
+        return store.getters.getEmail;
     }
 
 }
