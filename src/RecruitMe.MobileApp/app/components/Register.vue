@@ -1,7 +1,7 @@
 <template>
     <Page class="page">
         <ActionBar class="action-bar">
-            <Label class="action-bar-title" text="Register"></Label>
+            <Label class="action-bar-title" text="Zarejestruj się"></Label>
         </ActionBar>
 
         <ScrollView>

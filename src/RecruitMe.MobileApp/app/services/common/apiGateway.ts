@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { LocalStorageService } from '../userService/localStorageService';
-import { IRegistrationRequest } from '../../models/userFormModel';
+import { IRegistrationRequest, IResetPasswordRequest,
+     ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
 
 export class ApiGateway {
     private baseURL = "192.168.0.2"; // base url
@@ -32,6 +33,21 @@ export class ApiGateway {
 
     public register(registrationModel: IRegistrationRequest): any {
         return this.makeRequest(RequestType.POST, '/api/Account/Register', registrationModel)
+    }
+
+    public resetPassword(resetPasswordRequest: IResetPasswordRequest): any {
+        return this.makeRequest(RequestType.POST, 
+            '/api/Account/ResetPassword', resetPasswordRequest)
+    }
+
+    public setNewPassword(resetPasswordRequest: ISetNewPassword): any {
+        return this.makeRequest(RequestType.POST, 
+            '/api/Account/SetNewPassword', resetPasswordRequest)
+    }
+
+    public remindLogin(remindModel: IRemindLoginRequest): any {
+        return this.makeRequest(RequestType.POST, 
+            '/api/Account/RemindLogin', remindModel)
     }
 
     /// private helpers

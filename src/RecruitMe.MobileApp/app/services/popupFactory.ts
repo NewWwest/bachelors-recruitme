@@ -6,6 +6,10 @@ export default class PopupFactory {
         return this.privCreatePopup(FeedbackType.Error, "Brak połączenia z internetem!",
             "Proszę połączyć się z siecią WiFi lub włączyć transfer danych")
     }
+
+    public static GenericSuccessPopup(message: string) {
+        return this.privCreatePopup(FeedbackType.Success, "Sukces!", message);
+    }
     
     public static createPopup(type: string, title: string, message: string) {
         switch(type) {

@@ -14,7 +14,7 @@
                             <Span class="fa" text.decode="&#xf007; "/>
                         </FormattedString>
                     </Label>
-                    <TextField v-model="username" hint="Email" class="form-input" />
+                    <TextField v-model="username" hint="Login" class="form-input" />
                 </FlexboxLayout>
 
                 <FlexboxLayout alignItems="center" class="inputPasswordMargin">
@@ -27,6 +27,11 @@
                 </FlexboxLayout>
 
                 <Button text="Login" @tap="onLoginButtonTap" class="my-button" />
+
+                <FlexBoxLayout class="form-group" justifyContent="space-between" alignItems="center">
+                    <Label @tap="$goto.RemindLogin()" text="Przypomnij login" />
+                    <Label @tap="$goto.ResetPassword()" text="Zresetuj hasło" />
+                </FlexBoxLayout>
             </StackLayout>
         </StackLayout>
         

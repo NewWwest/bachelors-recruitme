@@ -20,4 +20,17 @@ export interface IJwtClaims {
     surname: string;
     pesel: string;
 }
-
+export interface IResetPasswordRequest {
+    login: string
+}
+export interface ISetNewPassword {
+    password: string;
+    confirmPassword: string;
+    token: string;
+}
+export interface IRemindLoginRequest {
+    email: string;
+    name: string | null;
+    surname: string | null;
+    pesel: string | null;
+}

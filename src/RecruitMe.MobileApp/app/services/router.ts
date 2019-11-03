@@ -5,6 +5,8 @@ import _Vue, { VueConstructor } from "vue";
 import Home from "~/components/Home.vue";
 import Login from "~/components/Login.vue";
 import Register from "~/components/Register.vue"
+import RemindLogin from "~/components/RemindLogin.vue"
+import ResetPassword from "~/components/ResetPassword.vue"
 
 //
 
@@ -51,6 +53,20 @@ export class Goto {
      */
     public Register() {
         this.navigate(Register);
+    }
+
+    /**
+     * ResetPassword
+     */
+    public ResetPassword() {
+        this.navigate(ResetPassword);
+    }
+
+    /**
+     * RemindLogin
+     */
+    public RemindLogin() {
+        this.navigate(RemindLogin);
     }
 } 
 
