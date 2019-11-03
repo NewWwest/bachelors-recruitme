@@ -32,7 +32,6 @@ export default class ResetPassword extends Vue {
     };
     userService: UserService = new UserService();
 
-
     onResetTap() {
         if (ConnectionService.IsConnectedToNetwork()) {
             this.userService.resetPassword(this.resetData);

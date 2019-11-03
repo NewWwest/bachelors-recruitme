@@ -12,7 +12,7 @@
 
             <StackLayout class="form-group">
                 <TextField v-model="remindData.pesel" class="form-input" hint="Numer PESEL"
-                 :editable="!noPesel" />
+                 keyboardType="number" :editable="!noPesel" />
                 
                 <FlexboxLayout justifyContent="space-between" alignItems="center">
                     <Label>Kliknij, gdy brak numeru PESEL</Label> 

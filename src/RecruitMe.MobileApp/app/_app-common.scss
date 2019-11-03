@@ -24,3 +24,14 @@ ActionBar {
    -moz-box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 75);
    box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 75);
 }
+
+.error-input {
+   color: white;
+   placeholder-color: white;
+   border-bottom-color: #A50000;
+   border-bottom-width: 1;
+}
+
+.error-label {
+   color: rgb(165, 0, 0);
+}

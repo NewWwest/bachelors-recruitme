@@ -8,23 +8,33 @@
             <Image class="logoImage"/>
 
             <StackLayout class="container">
-                <FlexboxLayout alignItems="center" class="inputLoginMargin"> 
-                    <Label class="info">
-                        <FormattedString>
-                            <Span class="fa" text.decode="&#xf007; "/>
-                        </FormattedString>
-                    </Label>
-                    <TextField v-model="username" hint="Login" class="form-input" />
-                </FlexboxLayout>
+                <StackLayout class="inputLoginMargin">
+                    <FlexboxLayout alignItems="center"> 
+                        <Label class="info">
+                            <FormattedString>
+                                <Span class="fa" text.decode="&#xf007; "/>
+                            </FormattedString>
+                        </Label>
+                        <TextField v-model="username" hint="Login"
+                         :class="[!validUserName() ? 'form-input' : 'error-input', 'input-width']"/>
+                    </FlexboxLayout>
+                    <Label v-show="validUserName()" class="error-label"
+                     text="Login jest wymagany" /> 
+                </StackLayout>
 
-                <FlexboxLayout alignItems="center" class="inputPasswordMargin">
-                    <Label class="info">
-                        <FormattedString>
-                            <Span class="fa" text.decode="&#xf023; "/>
-                        </FormattedString>
-                    </Label>
-                    <TextField v-model="password" hint="Password" secure="true" class="form-input" />
-                </FlexboxLayout>
+                <StackLayout class="inputPasswordMargin">
+                    <FlexboxLayout alignItems="center">
+                        <Label class="info">
+                            <FormattedString>
+                                <Span class="fa" text.decode="&#xf023; "/>
+                            </FormattedString>
+                        </Label>
+                        <TextField v-model="password" hint="Password" secure="true" 
+                         v-bind:class="[!validPassword() ? 'form-input' : 'error-input', 'input-width']" />
+                    </FlexboxLayout>
+                    <Label v-show="validPassword()" class="error-label"
+                     text="Hasło jest wymagane" />
+                </StackLayout>
 
                 <Button text="Login" @tap="onLoginButtonTap" class="my-button" />
 
@@ -48,17 +58,30 @@ import PopupFactory from '@/services/popupFactory';
     export default class Login extends Vue {
         username: string = "";
         password: string = "";
+        submitted: boolean = false;
         userService: UserService = new UserService();
 
         onLoginButtonTap() {
-            if (ConnectionService.IsConnectedToNetwork()) {
-                this.userService.login(this.username, this.password);
-                // check localStorage
+            //if (ConnectionService.IsConnectedToNetwork()) {
+                this.submitted = true;
+                
+                if (!this.username || !this.password)
+                    return;
 
-            }
-            else {
-                PopupFactory.ConnectionError();
-            }
+                this.userService.login(this.username, this.password).then(() => {
+                    // go to user dashboard
+                })
+            //}
+            //else {
+                //PopupFactory.ConnectionError();
+            //}
+        }
+
+        validPassword() {
+            return this.submitted && !this.password;
+        }
+        validUserName() {
+            return this.submitted && !this.username;
         }
     };
 </script>
@@ -76,11 +99,14 @@ import PopupFactory from '@/services/popupFactory';
         placeholder-color: white;
         border-bottom-width: 1;
         border-bottom-color: white;
-        width: 90%;
     }
 
     .form-group {
         margin-top: 15;
+    }
+
+    .input-width {
+        width: 90%;
     }
 
     .inputLoginMargin {
