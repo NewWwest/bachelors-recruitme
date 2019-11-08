@@ -3,9 +3,12 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import VueRouter from 'vue-router';
 import { RecruitmentService } from '../../../services/recruitment.service';
+import PictureInput from '../../shared/pictureInput/pictureInput'
 
-// @ts-ignore
-@Component
+@Component({components: {
+    "PictureInput": PictureInput
+  }
+})
 export default class ProfileComponent extends Vue {
     adress: string = "";
     fatherName: string = "";

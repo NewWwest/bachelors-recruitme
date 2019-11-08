@@ -9,9 +9,8 @@ using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
 using RecruitMe.Logic.Operations.Account.SetNewPassword;
 using RecruitMe.Logic.Operations.Email;
-using RecruitMe.Logic.Operations.Recruitment.Command;
-using RecruitMe.Logic.Operations.Recruitment.Queries;
-using RecruitMe.Logic.Operations.Recruitment.Validators;
+using RecruitMe.Logic.Operations.Recruitment.ProfileData;
+using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using RecruitMe.Web.Services.Data;
 
 namespace RecruitMe.Web.Configuration
@@ -22,6 +21,7 @@ namespace RecruitMe.Web.Configuration
         {
             services.AddTransient<ILogger,ConsoleLogger>();
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
+            services.AddTransient<IFileStorage, LocalFileStorage>();
 
             //Email
             services.AddTransient<SendEmailCommand>();
@@ -46,11 +46,11 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<RemindLoginValidator>();
 
             //Recrutiment
-            services.AddTransient<AddOrUpdatePersonalDataCommandRequestValidator>();
-            services.AddTransient<GetPersonalDataQuery>();
-            services.AddTransient<AddOrUpdatePersonalDataCommand>(); 
+            services.AddTransient<AddOrUpdateProfileDataCommandRequestValidator>();
+            services.AddTransient<GetProfileDataQuery>();
+            services.AddTransient<AddOrUpdateProfileDataCommand>();
 
-
+            services.AddTransient<SetNewProfilePictureCommand>();
 
         }
     }

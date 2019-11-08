@@ -17,7 +17,7 @@ namespace RecruitMe.Web.Controllers
         protected async Task<User> GetUser()
         {
             var query = HttpContext.RequestServices.Get<GetUserQuery>();
-             return await query.Execute(UserId);
+            return await query.Execute(UserId);
         }
         public RecruitMeBaseController()
         {

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Recruitment.Command;
-using RecruitMe.Logic.Operations.Recruitment.Dto;
-using RecruitMe.Logic.Operations.Recruitment.Queries;
+using RecruitMe.Logic.Operations.Recruitment.ProfileData;
+using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Web.Controllers
@@ -11,15 +11,18 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Recruitment")]
     public class RecruitmentController : RecruitMeBaseController
     {
-        private readonly GetPersonalDataQuery _getPersonalDataQuery;
-        private readonly AddOrUpdatePersonalDataCommand _addOrUpdatePersonalDataCommand;
+        private readonly GetProfileDataQuery _GetProfileDataQuery;
+        private readonly AddOrUpdateProfileDataCommand _AddOrUpdateProfileDataCommand;
+        private readonly SetNewProfilePictureCommand _SetNewProfilePictureCommand;
 
-        public RecruitmentController(GetPersonalDataQuery getPersonalDataQuery, 
-            AddOrUpdatePersonalDataCommand addOrUpdatePersonalDataCommand
+        public RecruitmentController(GetProfileDataQuery GetProfileDataQuery, 
+            AddOrUpdateProfileDataCommand AddOrUpdateProfileDataCommand,
+            SetNewProfilePictureCommand SetNewProfilePictureCommand
             ) : base()
         {
-            _getPersonalDataQuery = getPersonalDataQuery;
-            _addOrUpdatePersonalDataCommand = addOrUpdatePersonalDataCommand;
+            _GetProfileDataQuery = GetProfileDataQuery;
+            _AddOrUpdateProfileDataCommand = AddOrUpdateProfileDataCommand;
+            _SetNewProfilePictureCommand = SetNewProfilePictureCommand;
         }
 
         [HttpGet]
@@ -27,25 +30,42 @@ namespace RecruitMe.Web.Controllers
         public async Task<ActionResult> GetPersonalData()
         {
             User user = await GetUser();
-            PersonalDataDto result = await _getPersonalDataQuery.Execute(user.Id);
+            ProfileDataDto result = await _GetProfileDataQuery.Execute(user.Id);
             return Json(result);
         }
 
         [HttpPost]
         [Route("PersonalData")]
-        public async Task<ActionResult> UpdatePersonalData([FromBody] PersonalDataDto personalData)
+        public async Task<ActionResult> UpdatePersonalData([FromBody] ProfileDataDto personalData)
         {
             User user = await GetUser();
-            OperationResult cmdResult = await _addOrUpdatePersonalDataCommand.Execute(new AddOrUpdatePersonalDataCommandRequest() { UserId = user.Id, Data = personalData });
+            OperationResult cmdResult = await _AddOrUpdateProfileDataCommand.Execute(new AddOrUpdateProfileDataCommandRequest() { UserId = user.Id, Data = personalData });
             if (cmdResult.Success)
             {
-                PersonalDataDto result = await _getPersonalDataQuery.Execute(user.Id);
+                ProfileDataDto result = await _GetProfileDataQuery.Execute(user.Id);
                 return Json(result);
             }
             else
             {
                 return BadRequest();
             }
+        }
+
+
+        [HttpPost]
+        [Route("ProfilePicture")]
+        public async Task<ActionResult> ProfilePicture(IFormFile picture)
+        {
+            User user = await GetUser();
+
+            using (var stream = picture.OpenReadStream())
+            {
+                var result = await _SetNewProfilePictureCommand.Execute(new SetNewProfilePictureCommandRequest() { 
+                    PictureStream = stream, 
+                    UserId = user.Id 
+                });
+            }
+            return Ok();
         }
     }
 }

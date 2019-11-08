@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\components\account\login\" />
+    <Folder Include="wwwroot\recruitment\" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

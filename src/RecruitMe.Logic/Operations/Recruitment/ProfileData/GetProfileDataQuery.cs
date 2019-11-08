@@ -2,26 +2,25 @@
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Recruitment.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Recruitment.Queries
+namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 {
-    public class GetPersonalDataQuery : BaseAsyncOperation<PersonalDataDto, int>
+    public class GetProfileDataQuery : BaseAsyncOperation<ProfileDataDto, int>
     {
-        public GetPersonalDataQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        public GetProfileDataQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
-        protected override async Task<PersonalDataDto> DoExecute(int request)
+        protected override async Task<ProfileDataDto> DoExecute(int request)
         {
             var entity = await _dbContext.PersonalData.FirstOrDefaultAsync(pd => pd.UserId == request);
 
-            var result = PersonalDataDto.FromPersonalDataEntity(entity);
+            var result = ProfileDataDto.FromPersonalDataEntity(entity);
 
             return result;
         }

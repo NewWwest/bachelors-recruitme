@@ -1,0 +1,13 @@
+.picture-container {
+    width: 300px;
+    height: 300px;
+}
+
+.picture-container.picture-container-desc {
+    visibility: hidden;
+}
+
+.picture-container:hover .picture-container-desc {
+    opacity: 0.5;
+    visibility: visible;
+}

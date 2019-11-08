@@ -3,23 +3,17 @@ using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
-using RecruitMe.Logic.Operations.Recruitment.Dto;
-using RecruitMe.Logic.Operations.Recruitment.Validators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace RecruitMe.Logic.Operations.Recruitment.Command
+namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 {
-    public class AddOrUpdatePersonalDataCommand : BaseAsyncOperation<OperationResult, AddOrUpdatePersonalDataCommandRequest, AddOrUpdatePersonalDataCommandRequestValidator>
+    public class AddOrUpdateProfileDataCommand : BaseAsyncOperation<OperationResult, AddOrUpdateProfileDataCommandRequest, AddOrUpdateProfileDataCommandRequestValidator>
     {
-        public AddOrUpdatePersonalDataCommand(ILogger logger, AddOrUpdatePersonalDataCommandRequestValidator validator, BaseDbContext dbContext) : base(logger, validator, dbContext)
+        public AddOrUpdateProfileDataCommand(ILogger logger, AddOrUpdateProfileDataCommandRequestValidator validator, BaseDbContext dbContext) : base(logger, validator, dbContext)
         {
         }
 
-        protected override async Task<OperationResult> DoExecute(AddOrUpdatePersonalDataCommandRequest request)
+        protected override async Task<OperationResult> DoExecute(AddOrUpdateProfileDataCommandRequest request)
         {
             var data = await _dbContext.PersonalData.FirstOrDefaultAsync(e => e.UserId == request.UserId);
             if (data == null)

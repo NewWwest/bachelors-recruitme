@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RecruitMe.Logic.Operations.Recruitment.Dto
+namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 {
-    public class PersonalDataDto
+    public class ProfileDataDto
     {
         public string Adress { get; set; }
 
@@ -15,9 +15,9 @@ namespace RecruitMe.Logic.Operations.Recruitment.Dto
 
         public string PrimarySchool { get; set; }
 
-        public static PersonalDataDto FromPersonalDataEntity(PersonalData entity)
+        public static ProfileDataDto FromPersonalDataEntity(PersonalData entity)
         {
-            var result = new PersonalDataDto()
+            var result = new ProfileDataDto()
             {
                 Adress = entity?.Adress,
                 FatherName = entity?.FatherName,
