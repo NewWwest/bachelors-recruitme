@@ -1,8 +1,11 @@
 import Vue from 'nativescript-vue'
 import store from './store'
 
-import Home from './components/Home.vue'
 import Router from './services/router'
+
+import App from './components/App.vue'
+import Home from './components/Home.vue'
+import DrawerContent from './components/common/DrawerContent.vue'
 
 const VueDevtools = require('nativescript-vue-devtools')
 
@@ -17,5 +20,8 @@ Vue.use(Router);
 
 new Vue({
   store: store,
-  render: h => h('frame', [h(Home)])
+  render: h => h(App, [
+    h(DrawerContent, { slot: 'drawerContent' }),
+    h(Home, { slot: 'mainContent' })
+  ])
 }).$start()

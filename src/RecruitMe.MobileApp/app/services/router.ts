@@ -10,7 +10,6 @@ import ResetPassword from "~/components/ResetPassword.vue"
 
 //
 
-
 export default function Router<RouterOptions>(Vue: typeof _Vue, options? : RouterOptions) {
     let goto : Goto;
 
@@ -29,7 +28,7 @@ export class Goto {
         this.options = _options || new RouterOptions(false, true, new Transition("slide", 380, "easeIn"));
     }
 
-    navigate(component : VueConstructor) {
+    private navigate(component : VueConstructor) {
         // it's a private object, but it's there
         topmost().currentPage.__vuePageRef__.$navigateTo(component, this.options);
     }
