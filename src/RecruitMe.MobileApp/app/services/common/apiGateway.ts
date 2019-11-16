@@ -4,7 +4,7 @@ import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
 
 export class ApiGateway {
-    private baseURL = "192.168.0.2"; // base url
+    private baseURL = "http://192.168.0.2:5000"; // base url
 
     private makeRequest(type: RequestType, url: string, data: any, headers?: any): Promise<AxiosResponse> {
         url = this.baseURL + url;
