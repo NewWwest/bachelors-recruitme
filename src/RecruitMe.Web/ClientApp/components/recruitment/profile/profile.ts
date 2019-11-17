@@ -42,7 +42,7 @@ export default class ProfileComponent extends Vue {
     }
 
     PictureConfirmed(a: PictureConfirmedEvent): void {
-        this.recruitmentService.setNewProfilePicture(a.pictureName, a.pictureData);
+        this.recruitmentService.setNewProfilePicture(a.pictureName, a.pictureFile);
     }
 
     handleSubmit() {

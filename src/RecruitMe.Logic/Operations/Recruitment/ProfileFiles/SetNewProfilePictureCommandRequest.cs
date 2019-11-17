@@ -9,6 +9,8 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
     {
         public int UserId { get; set; }
 
-        public Stream PictureStream { get; set; }
+        public string FileName { get; set; }
+
+        public Stream File { get; set; }
     }
 }

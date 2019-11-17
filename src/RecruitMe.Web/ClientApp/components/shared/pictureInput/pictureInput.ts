@@ -5,7 +5,7 @@ import { PictureConfirmedEvent } from './PictureConfirmedEvent';
 @Component({})
 export default class PictureInput extends Vue {
     filesrc: string = "/defaultProfilePicture.jpg";
-    filename: string | null = null;
+    file: any = null;
     processing: boolean = false;
 
     constructor() {
@@ -20,23 +20,22 @@ export default class PictureInput extends Vue {
             return;
 
         this.processing = true;
-        let file = evt.target.files[0];
-        this.filename = file.name
-        if (file) {
+        this.file = evt.target.files[0];
+        if (this.file) {
             var reader = new FileReader();
             reader.onload = this.loadImage.bind(this);
             reader.onerror = this.handleError.bind(this);
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(this.file);
         }
-        this.$emit("picture-selected", file);
+        this.$emit("picture-selected", this.file);
     }
 
     PictureConfirmed(evt: any) {
-        if (this.processing || this.filename == null) {
+        if (this.processing || this.file == null) {
             return;
         }
 
-        let evtData = new PictureConfirmedEvent(this.filesrc, this.filename)
+        let evtData = new PictureConfirmedEvent(this.file, this.file.name)
         this.$emit("picture-confirmed", evtData);
     }
 

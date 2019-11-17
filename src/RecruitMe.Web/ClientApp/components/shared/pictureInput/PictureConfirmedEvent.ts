@@ -1,6 +1,6 @@
 ﻿export class PictureConfirmedEvent
 {
     public constructor(
-        public pictureData: string,
+        public pictureFile: any,
         public pictureName: string) { }
 }

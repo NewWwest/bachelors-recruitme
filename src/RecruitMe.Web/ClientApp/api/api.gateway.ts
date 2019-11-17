@@ -40,8 +40,9 @@ export class ApiGateway {
         return axios.get('/api/Recruitment/PersonalData', this.authHeader())
     }
 
-    public setNewProfilePicture(fileName:string, file:any) {
-        let data: string = `picture=${file}`;
+    public setNewProfilePicture(fileName: string, file: any) {
+        let data: FormData = new FormData();
+        data.append('picture', file, fileName);
 
         return axios.post('/api/Recruitment/ProfilePicture', data, this.authHeader());
     }
