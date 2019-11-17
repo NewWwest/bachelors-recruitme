@@ -8,7 +8,7 @@ export class ApiGateway {
 
     private makeRequest(type: RequestType, url: string, data: any, headers?: any): Promise<AxiosResponse> {
         url = this.baseURL + url;
-        
+
         switch(type) {
             case RequestType.GET: 
                return axios.get(url, data);

@@ -21,7 +21,8 @@ export class UserService {
             },
             (err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             })
     }
 
@@ -33,7 +34,8 @@ export class UserService {
                 }
             },(err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             });
     }
 
@@ -43,7 +45,8 @@ export class UserService {
                 PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji została wyslana wiadomosc z linkiem do zmiany hasla");
             }, (err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             });
     }
 
@@ -53,7 +56,8 @@ export class UserService {
 
             }, (err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             });
     }
 

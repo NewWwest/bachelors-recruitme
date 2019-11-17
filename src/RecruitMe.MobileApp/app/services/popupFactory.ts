@@ -10,6 +10,10 @@ export default class PopupFactory {
     public static GenericSuccessPopup(message: string) {
         return this.privCreatePopup(FeedbackType.Success, "Sukces!", message);
     }
+
+    public static GenericErrorPopup(message: string) {
+        return this.privCreatePopup(FeedbackType.Error, "Błąd!", message);
+    }
     
     public static createPopup(type: string, title: string, message: string) {
         switch(type) {
