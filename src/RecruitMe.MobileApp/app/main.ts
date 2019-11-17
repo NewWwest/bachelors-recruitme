@@ -2,6 +2,7 @@ import Vue from 'nativescript-vue'
 import store from './store'
 
 import Router from './services/router'
+import RadSideDrawer from 'nativescript-ui-sidedrawer/vue'
 
 import App from './components/App.vue'
 import Home from './components/Home.vue'
@@ -17,6 +18,7 @@ if(TNS_ENV !== 'production') {
 Vue.config.silent = (TNS_ENV === 'production')
 
 Vue.use(Router);
+Vue.use(RadSideDrawer);
 
 new Vue({
   store: store,

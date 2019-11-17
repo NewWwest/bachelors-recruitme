@@ -1,5 +1,5 @@
 <template>
-  <RadSideDrawer ref="drawer" drawerLocation="Left" gesturesEnabled="true"
+  <RadSideDrawer ref="drawer" drawerLocation="Left" :gesturesEnabled="areGesturesEnabled"
     :drawerTransition="transition">
     <StackLayout ~drawerContent backgroundColor="#ffffff">
       <slot name="drawerContent"></slot>
@@ -13,14 +13,14 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
+import { UserService } from '../services/userService/userService';
 
 @Component
 export default class App extends Vue {
   transition = new SlideInOnTopTransition();
+
+  get areGesturesEnabled() {
+    return UserService.isLoggedIn();
+  }
 }
-
 </script>
-
-<style scoped>
-
-</style>

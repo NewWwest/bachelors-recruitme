@@ -72,7 +72,7 @@ export class UserService {
             });
     }
 
-    public isLoggedIn(): boolean {
+    public static isLoggedIn(): boolean {
         return LocalStorageService.getUserId() ? true : false &&
             LocalStorageService.getEmail() ? true : false  &&
             LocalStorageService.getJwtToken() ? true : false;

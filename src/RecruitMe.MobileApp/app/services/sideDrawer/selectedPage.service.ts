@@ -3,7 +3,7 @@ import { BehaviorSubject } from "rxjs"
 export default class SelectedPageService {
     static _instance = new SelectedPageService();
 
-    _selectedPageSource = new BehaviorSubject(""); // observable selectedPage source
+    _selectedPageSource = new BehaviorSubject("Home"); // observable selectedPage source
     selectedPage$ = this._selectedPageSource.asObservable();
 
     constructor() {

@@ -8,7 +8,8 @@ import Register from "~/components/Register.vue"
 import RemindLogin from "~/components/RemindLogin.vue"
 import ResetPassword from "~/components/ResetPassword.vue"
 
-//
+// Drawer Selected Page Service
+import SelectedPageService from "@/services/sideDrawer/selectedPage.service"
 
 export default function Router<RouterOptions>(Vue: typeof _Vue, options? : RouterOptions) {
     let goto : Goto;
@@ -29,6 +30,8 @@ export class Goto {
     }
 
     private navigate(component : VueConstructor) {
+        SelectedPageService.getInstance().updateSelectedPage(component.name);
+
         // it's a private object, but it's there
         topmost().currentPage.__vuePageRef__.$navigateTo(component, this.options);
     }
