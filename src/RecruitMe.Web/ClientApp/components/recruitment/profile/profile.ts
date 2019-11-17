@@ -3,10 +3,9 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import VueRouter from 'vue-router';
 import { RecruitmentService } from '../../../services/recruitment.service';
-import PictureInput from '../../shared/pictureInput/pictureInput'
 
 @Component({components: {
-    "PictureInput": PictureInput
+    "PictureInput": require('../../shared/pictureInput/pictureInput.vue.html').default
   }
 })
 export default class ProfileComponent extends Vue {

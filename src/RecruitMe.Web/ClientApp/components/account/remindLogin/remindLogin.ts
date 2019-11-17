@@ -3,8 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest, IRemindLoginRequest } from '../../../models/user.models';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class RemindLogin extends Vue {
     email: string = "";
     name: string = "";

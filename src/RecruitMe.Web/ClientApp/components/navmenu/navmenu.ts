@@ -2,8 +2,7 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../services/user.service';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class Navmenu extends Vue {
     displayName: string = "";
     userService: UserService = new UserService();

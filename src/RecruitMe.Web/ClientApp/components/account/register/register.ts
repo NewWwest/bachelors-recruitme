@@ -3,8 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest } from '../../../models/user.models';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class Register extends Vue {
     email: string = "";
     password: string = "";

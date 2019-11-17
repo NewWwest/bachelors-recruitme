@@ -3,8 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword } from '../../../models/user.models';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class SetNewPassword extends Vue {
     newPassword: string = "";
     confirmPassword: string = "";
@@ -24,8 +23,10 @@ export default class SetNewPassword extends Vue {
         this.submitted = true;
         this.fetching = true;
 
+        let tokenTemp = this.$route.query.token[0];
+
         let resetModel: ISetNewPassword = {
-            token: this.$route.query.token,
+            token: tokenTemp ? tokenTemp : "",
             password: this.newPassword,
             confirmPassword: this.confirmPassword
         }

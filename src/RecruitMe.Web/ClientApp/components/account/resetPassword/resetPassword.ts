@@ -3,8 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest, IResetPasswordRequest } from '../../../models/user.models';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class ResetPassword extends Vue {
     login: string = "";
 

@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class PictureInput extends Vue {
     filesrc: string ="/defaultProfilePicture.jpg";
 
