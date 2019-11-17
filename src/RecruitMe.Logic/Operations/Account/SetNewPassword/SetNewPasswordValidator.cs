@@ -10,7 +10,7 @@ namespace RecruitMe.Logic.Operations.Account.SetNewPassword
     {
         public SetNewPasswordValidator()
         {
-            RuleFor(a => a.Password).MinimumLength(10);
+            RuleFor(a => a.Password).MinimumLength(7);
             RuleFor(a => a.ConfirmPassword).Must((a, _) => a.ConfirmPassword == a.Password);
             RuleFor(a => a.Token).NotEmpty();
         }

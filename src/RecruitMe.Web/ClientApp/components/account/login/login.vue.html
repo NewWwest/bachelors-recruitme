@@ -18,7 +18,7 @@
                 <router-link to="/account/resetpassword" class="btn btn-link">Reset Password</router-link>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary" v-disabled="fetching">Login</button>
+                <button class="btn btn-primary" :disabled="fetching">Login</button>
                 <span v-show="failed"> Logowanie sie nie udalo - sprawdz podany login i haslo</span>
                 <img v-show="fetching" />
                 <router-link to="/account/register" class="btn btn-link">Register</router-link>

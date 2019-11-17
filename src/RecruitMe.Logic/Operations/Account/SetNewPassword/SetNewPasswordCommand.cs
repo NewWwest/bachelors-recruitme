@@ -28,6 +28,8 @@ namespace RecruitMe.Logic.Operations.Account.SetNewPassword
             var user = reset.User;
 
             user.PasswordHash = _passwordHasher.HashPassword(request.Password);
+            _dbContext.PasswordResets.Remove(reset);
+
             await _dbContext.SaveChangesAsync();
             return new OperationSucceded();
         }

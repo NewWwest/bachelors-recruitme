@@ -3,6 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import VueRouter from 'vue-router';
 import { RecruitmentService } from '../../../services/recruitment.service';
+import { PictureConfirmedEvent } from '../../shared/pictureInput/PictureConfirmedEvent';
 
 @Component({components: {
     "PictureInput": require('../../shared/pictureInput/pictureInput.vue.html').default
@@ -38,6 +39,10 @@ export default class ProfileComponent extends Vue {
         }, (err) => {
             console.error(err);
         })
+    }
+
+    PictureConfirmed(a: PictureConfirmedEvent): void {
+        this.recruitmentService.setNewProfilePicture(a.pictureName, a.pictureData);
     }
 
     handleSubmit() {

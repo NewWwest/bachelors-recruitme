@@ -54,17 +54,17 @@ namespace RecruitMe.Web.Controllers
 
         [HttpPost]
         [Route("ProfilePicture")]
-        public async Task<ActionResult> ProfilePicture(IFormFile picture)
+        public async Task<ActionResult> ProfilePicture(string picture)
         {
             User user = await GetUser();
 
-            using (var stream = picture.OpenReadStream())
-            {
-                var result = await _SetNewProfilePictureCommand.Execute(new SetNewProfilePictureCommandRequest() { 
-                    PictureStream = stream, 
-                    UserId = user.Id 
-                });
-            }
+            //using (var stream = picture.OpenReadStream())
+            //{
+            //    var result = await _SetNewProfilePictureCommand.Execute(new SetNewProfilePictureCommandRequest() { 
+            //        PictureStream = stream, 
+            //        UserId = user.Id 
+            //    });
+            //}
             return Ok();
         }
     }

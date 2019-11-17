@@ -1,16 +1,15 @@
 <template>
-    <form mothod="post" @submit.prevent="PictureConfirmed">
-    <row class="col-md-12">  
-        <div class ="picture-container">
-            <img width="300" height="300" v-bind:src="filesrc" @click="$refs.profilePicInput.click()"/>
-            <input type="file" @change="PictureSelected" accept="image/*" style="display: none;" ref="profilePicInput">
-            <p class="picture-container-desc"> Kliknij na zdjęcie aby załadować nowe.</p>
-        </div>
-    </row>
-    <row> 
-        <input class="col-md-3" type="submit" value="Zapisz zdjęcie"/>
-        <input class="col-md-3" type="submit" value="TODO: zrób zdjęcie kamerką"/>
-    </row>
+    <form mothod="post" @submit.prevent="doNothing">
+        <row class="col-md-12">
+            <div class="picture-container" v-bind:style="{ background: 'url('+filesrc+')' }" @click="$refs.PicInput.click()">
+                <input type="file" @change="PictureSelected" accept="image/*" style="display: none;" ref="PicInput">
+                <div class="overlay">Kliknij na zdjęcie aby załadować nowe.</div>
+            </div>
+        </row>
+        <row>
+            <input class="col-md-3" type="submit" value="Zapisz zdjęcie" @click="PictureConfirmed" />
+            <input class="col-md-3" type="submit" value="Zrób zdjęcie teraz" @click="TakePhoto" />
+        </row>
     </form>
 </template>
 

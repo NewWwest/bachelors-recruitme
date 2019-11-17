@@ -11,4 +11,8 @@ export class RecruitmentService {
     getPersonalData(): Promise<IPersonalData> {
         return this.apiGateway.getPersonalData().then((d) => d.data, (err) => console.error(err));
     }
+
+    setNewProfilePicture(fileName: string, file: any) {
+        this.apiGateway.setNewProfilePicture(fileName, file);
+    }
 }

@@ -23,7 +23,7 @@ export default class SetNewPassword extends Vue {
         this.submitted = true;
         this.fetching = true;
 
-        let tokenTemp = this.$route.query.token[0];
+        let tokenTemp = this.$route.query.token as string;
 
         let resetModel: ISetNewPassword = {
             token: tokenTemp ? tokenTemp : "",
