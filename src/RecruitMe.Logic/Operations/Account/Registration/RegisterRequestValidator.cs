@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Operations.Abstractions;
 
 namespace RecruitMe.Logic.Operations.Account.Registration
@@ -12,6 +13,8 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             RuleFor(a => a.ConfirmPassword).Must((a, _) => a.ConfirmPassword == a.Password);
             RuleFor(a => a.Name).NotEmpty();
             RuleFor(a => a.Surname).NotEmpty();
+            RuleFor(a => a.BirthDate).NotNull()
+                .InclusiveBetween(BusinessConfiguration.LowestRegistrationDate, BusinessConfiguration.HighestRegistrationDate);
         }
     }
 }

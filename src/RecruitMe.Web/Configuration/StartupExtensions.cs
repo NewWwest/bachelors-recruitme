@@ -52,6 +52,7 @@ namespace RecruitMe.Web.Configuration
 
             services.AddTransient<SetNewProfilePictureCommand>();
 
+            services.AddTransient<GetFileQuery>();
         }
     }
 }

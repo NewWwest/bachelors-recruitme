@@ -21,6 +21,12 @@ namespace RecruitMe.Logic.Data.Entities
 
         public string PasswordHash { get; set; }
 
+        public DateTime BirthDate { get; set; }
+
         public bool EmailVerified { get; set; }
+
+        public virtual PersonalData PersonalData { get; set; }
+
+        public virtual IEnumerable<PersonalDocument> PersonalDocuments { get; set; }
     }
 }

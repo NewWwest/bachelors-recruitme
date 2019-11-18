@@ -5,7 +5,6 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Account.Registration
 {
-
     public class RegisterDto
     {
         public string Email { get; set; }
@@ -19,5 +18,7 @@ namespace RecruitMe.Logic.Operations.Account.Registration
         public string Surname { get; set; }
 
         public string Pesel { get; set; }
+
+        public DateTime? BirthDate { get; set; }
     }
 }

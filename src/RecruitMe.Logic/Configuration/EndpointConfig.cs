@@ -10,5 +10,6 @@ namespace RecruitMe.Logic.Configuration
         
         public static string ConfirmEmail => "/api/account/confirmEmail";
         public static string SetNewPassword => "/account/SetNewPassword";
+        public static string EmailVerified(string candidateId) => $"/account/EmailVerified?candidateId={candidateId}";
     }
 }

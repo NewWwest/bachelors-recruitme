@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Account.Registration;
@@ -53,14 +54,12 @@ namespace RecruitMe.Web.Controllers
             {
                 string candidateId = await _confirmEmailCommand.Execute(token);
                 if (!string.IsNullOrWhiteSpace(candidateId))
-                    return Redirect($"/EmailVerified?candidateId={candidateId}");
+                    return Redirect(EndpointConfig.EmailVerified(candidateId));
                 else
                     return BadRequest();
             }
             catch
             {
-                //todo: remove throw
-                throw;
                 return BadRequest();
             }
 

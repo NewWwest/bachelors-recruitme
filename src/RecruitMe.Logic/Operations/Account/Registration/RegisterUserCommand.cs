@@ -36,7 +36,8 @@ namespace RecruitMe.Logic.Operations.Account.Registration
                 Pesel = request.Pesel,
                 CandidateId = null,
                 PasswordHash = _passwordHasher.HashPassword(request.Password),
-                EmailVerified = false
+                EmailVerified = false,
+                BirthDate = request.BirthDate.Value
             };
 
             EntityEntry<User> result = _dbContext.Users.Add(user);

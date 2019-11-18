@@ -22,6 +22,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<ConfirmationEmail> ConfirmationEmails { get; set; }
 
+        public DbSet<PersonalDocument> PersonalDocuments { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }

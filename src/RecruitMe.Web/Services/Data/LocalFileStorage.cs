@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using RecruitMe.Logic.Data;
+using RecruitMe.Web.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,8 +11,6 @@ namespace RecruitMe.Web.Services.Data
 {
     public class LocalFileStorage : IFileStorage
     {
-        private string directory = "wwwroot/recruitment/";
-        
         public void Delete(string url)
         {
             File.Delete(url);
@@ -24,7 +23,7 @@ namespace RecruitMe.Web.Services.Data
         
         public async Task<string> SaveAsync(Stream stream, string name)
         {
-            var url = directory + Guid.NewGuid().ToString() + name;
+            var url = FileStorageConfiguration.ProfilePictures + Guid.NewGuid().ToString() + name;
 
             using (var file = new FileStream(url, FileMode.Create))
             {
