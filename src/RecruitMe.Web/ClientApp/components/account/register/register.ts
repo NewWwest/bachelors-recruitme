@@ -12,6 +12,7 @@ export default class Register extends Vue {
     surname: string = "";
     pesel: string = "";
     noPesel: boolean = false;
+    birthDate: Date | null = null;
 
     submitted: boolean = false;
     fetching: boolean = false;
@@ -35,7 +36,8 @@ export default class Register extends Vue {
             name: this.name,
             surname: this.surname,
             pesel: this.noPesel ? null : this.pesel,
-            noPesel: this.noPesel
+            noPesel: this.noPesel,
+            birthDate: this.birthDate as Date
         }
 
         this.userService.register(registrationModel).then(

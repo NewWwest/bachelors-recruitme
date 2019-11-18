@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { IPersonalData } from "../models/recruit.models";
+import { IPersonalData, IProfileData } from "../models/recruit.models";
 
 export class RecruitmentService {
     private apiGateway: ApiGateway = new ApiGateway();
@@ -8,7 +8,7 @@ export class RecruitmentService {
         this.apiGateway.updatePersonalData(request);
     }
 
-    getPersonalData(): Promise<IPersonalData> {
+    getPersonalData(): Promise<IProfileData> {
         return this.apiGateway.getPersonalData().then((d) => d.data, (err) => console.error(err));
     }
 

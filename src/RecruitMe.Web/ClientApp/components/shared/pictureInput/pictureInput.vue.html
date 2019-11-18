@@ -1,7 +1,8 @@
 <template>
     <form mothod="post" @submit.prevent="doNothing">
         <row class="col-md-12">
-            <div class="picture-container" v-bind:style="{ background: 'url('+filesrc+')' }" @click="$refs.PicInput.click()">
+            <div class="picture-container" :style="getdisplayedImage()" @click="$refs.PicInput.click()">
+                <div class="picture-name">{{getdisplayedName()}}</div>
                 <input type="file" @change="PictureSelected" accept="image/*" style="display: none;" ref="PicInput">
                 <div class="overlay">Kliknij na zdjęcie aby załadować nowe.</div>
             </div>

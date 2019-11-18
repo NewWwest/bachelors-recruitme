@@ -47,6 +47,20 @@ export class ApiGateway {
         return axios.post('/api/Recruitment/ProfilePicture', data, this.authHeader());
     }
 
+    public getFile(fileId: number) {
+        let options = this.authHeader();
+        let xdxd = {
+            headers: {
+                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`,
+                responseType: "arraybuffer"
+            },
+        }
+        
+        return axios.get(`/api/asset/${fileId}`, xdxd).then(resp => {
+            return Buffer.from(resp.data, 'binary').toString('base64')
+        });
+    }
+
     private authHeader() {
         return {
             headers: {

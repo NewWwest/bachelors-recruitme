@@ -1,19 +1,64 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import { PictureConfirmedEvent } from './PictureConfirmedEvent';
+import { ApiGateway } from '../../../api/api.gateway';
 
 @Component({})
 export default class PictureInput extends Vue {
-    filesrc: string = "/defaultProfilePicture.jpg";
+    defaultProfilePic: string = "/defaultProfilePicture.jpg";
+    apiGateway: ApiGateway = new ApiGateway();
+
+    @Prop()
+    fileId: number | undefined;
+    @Prop()
+    fileName: string | undefined
+    filesrc: string | undefined;
+
+    displayedName: string = "";
+    displayedImage: string = "";
+    touched: boolean = false;
+
     file: any = null;
+    fileBase64: string = "";
     processing: boolean = false;
+
 
     constructor() {
         super();
     }
 
-    mounted() {
+    updated() {
+        if (this.fileId != null && this.filesrc == null) {
+            this.apiGateway.getFile(this.fileId).then(d => {
+                this.filesrc = "data:image/jpeg;base64," + d;
+                console.log(this.filesrc);
+                this.$forceUpdate();
+            });
+        }
+
     }
+
+
+    getdisplayedName(): string {
+        if (this.touched) {
+            return this.file.name;
+        }
+        else {
+            return this.fileName != null ? this.fileName : "";
+        }
+    }
+
+    getdisplayedImage() {
+        let src: string;
+        if (this.touched) {
+            src = this.fileBase64;
+        }
+        else {
+            src = this.filesrc != null ? this.filesrc : this.defaultProfilePic;
+        }
+        return { background: `url(${src})` };
+    }
+
 
     PictureSelected(evt: any) {
         if (this.processing)
@@ -46,8 +91,11 @@ export default class PictureInput extends Vue {
 
     loadImage(e: any) {
         this.processing = false;
-        if (e && e.target)
-            this.filesrc = e.target.result;
+        if (e && e.target) {
+            this.fileBase64 = e.target.result;
+            this.touched = true;
+            this.$forceUpdate();
+        }
     }
     TakePhoto() {
         alert("integrate webcam");

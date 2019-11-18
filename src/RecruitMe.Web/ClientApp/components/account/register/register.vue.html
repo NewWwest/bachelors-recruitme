@@ -24,6 +24,12 @@
             </div>
 
             <div class="form-group">
+                <label for="name">Data urodzenia</label>
+                <input type="date" v-model="birthDate" name="birthDate" class="form-control" />
+                <div v-show="submitted && !birthDate" class="invalid-feedback">Podaj datę urodzenia</div>
+            </div>
+
+            <div class="form-group">
                 <label for="email">Adress email</label>
                 <input type="text" v-model="email" name="email" class="form-control" />
                 <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
@@ -43,12 +49,12 @@
                 </div>
             </div>
 
-        <div class="form-group">
-            <button class="btn btn-primary" :disabled="fetching">Zarejestruj sie</button>
-            <div v-show="backendError"> {{backendError}} </div>
-            <img v-show="fetching" />
-        </div>
-    </form>
+            <div class="form-group">
+                <button class="btn btn-primary" :disabled="fetching">Zarejestruj sie</button>
+                <div v-show="backendError"> {{backendError}} </div>
+                <img v-show="fetching" />
+            </div>
+        </form>
     </div>
         <div v-if="registrationCompleted">
             Zostałeś pomyślnie zarejestrowany.

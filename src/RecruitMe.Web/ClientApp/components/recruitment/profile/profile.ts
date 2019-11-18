@@ -14,6 +14,8 @@ export default class ProfileComponent extends Vue {
     fatherName: string = "";
     motherName: string = "";
     primarySchool: string = "";
+    profilePicName: string = "";
+    profilePictureFileId: number | undefined;
 
     submitted: boolean = false;
     fetching: boolean = false;
@@ -36,6 +38,8 @@ export default class ProfileComponent extends Vue {
             this.fatherName = resp.fatherName;
             this.motherName = resp.motherName;
             this.primarySchool = resp.primarySchool;
+            this.profilePicName = resp.profilePictureName;
+            this.profilePictureFileId = resp.profilePictureFileId;
         }, (err) => {
             console.error(err);
         })
@@ -50,7 +54,7 @@ export default class ProfileComponent extends Vue {
             adress: this.adress,
             fatherName: this.fatherName,
             motherName: this.motherName,
-            primarySchool: this.primarySchool
+            primarySchool: this.primarySchool,
         }
 
         this.recruitmentService.updatePersonalData(request)
