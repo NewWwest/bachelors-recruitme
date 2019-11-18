@@ -30,7 +30,8 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
                 {
                     FileUrl = d.FileUrl,
                     Id = d.Id,
-                    Name = d.Name
+                    Name = d.Name,
+                    ContentType = d.ContentType
                 }).ToList() ?? new List<DocumentDto>();
 
             var result = new ProfileDataDto()

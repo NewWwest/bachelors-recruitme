@@ -10,13 +10,18 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
 {
-    public class GetFileQueryRequest 
+    public class GetFileQueryResult :IDisposable
     {
-        public int UserId { get; set; }
-        public int FileId { get; set; }
+        public Stream Data { get; set; }
+        public string ContentType { get; set; }
+
+        public void Dispose()
+        {
+            Data.Dispose();
+        }
     }
 
-    public class GetFileQuery : BaseAsyncOperation<Stream, GetFileQueryRequest>
+    public class GetFileQuery : BaseAsyncOperation<GetFileQueryResult, (int UserId, int FileId)>
     {
         private readonly IFileStorage _fileStorage;
 
@@ -25,12 +30,16 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
             _fileStorage = fileStorage;
         }
 
-        protected override async Task<Stream> DoExecute(GetFileQueryRequest request)
+        protected override async Task<GetFileQueryResult> DoExecute((int UserId, int FileId) request)
         {
             var doc = await _dbContext.PersonalDocuments
                 .FirstOrDefaultAsync(d => d.UserId == request.UserId && d.Id == request.FileId);
 
-            return _fileStorage.Get(doc.FileUrl);
+            return new GetFileQueryResult()
+            {
+                Data = _fileStorage.Get(doc.FileUrl),
+                ContentType = doc.ContentType,
+            };
         }
     }
 }

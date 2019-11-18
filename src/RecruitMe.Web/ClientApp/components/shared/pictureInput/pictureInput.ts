@@ -30,8 +30,7 @@ export default class PictureInput extends Vue {
     updated() {
         if (this.fileId != null && this.filesrc == null) {
             this.apiGateway.getFile(this.fileId).then(d => {
-                this.filesrc = "data:image/jpeg;base64," + d;
-                console.log(this.filesrc);
+                this.filesrc = `data:${d.contentType};${d.contentEncoding},` + d.file;
                 this.$forceUpdate();
             });
         }

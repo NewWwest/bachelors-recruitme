@@ -48,16 +48,8 @@ export class ApiGateway {
     }
 
     public getFile(fileId: number) {
-        let options = this.authHeader();
-        let xdxd = {
-            headers: {
-                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`,
-                responseType: "arraybuffer"
-            },
-        }
-        
-        return axios.get(`/api/asset/${fileId}`, xdxd).then(resp => {
-            return Buffer.from(resp.data, 'binary').toString('base64')
+        return axios.get(`/api/asset/${fileId}`, this.authHeader()).then(resp => {
+            return resp.data
         });
     }
 

@@ -75,6 +75,8 @@ namespace RecruitMe.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ContentType");
+
                     b.Property<string>("FileUrl");
 
                     b.Property<string>("Name");

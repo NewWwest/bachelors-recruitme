@@ -15,6 +15,8 @@ namespace RecruitMe.Logic.Data.Entities
 
         public string FileUrl { get; set; }
 
+        public string ContentType { get; set; }
+
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
 

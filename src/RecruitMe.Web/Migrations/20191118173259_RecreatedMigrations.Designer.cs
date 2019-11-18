@@ -9,7 +9,7 @@ using RecruitMe.Web.Services.Data;
 namespace RecruitMe.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191117235743_RecreatedMigrations")]
+    [Migration("20191118173259_RecreatedMigrations")]
     partial class RecreatedMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,8 @@ namespace RecruitMe.Web.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ContentType");
 
                     b.Property<string>("FileUrl");
 

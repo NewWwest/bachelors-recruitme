@@ -3,6 +3,7 @@ using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -26,12 +27,22 @@ namespace RecruitMe.Web.Controllers
         public async Task<ActionResult> GetProfilePicture(int fileid)
         {
             User user = await GetUser();
-            var stream = await _getFileQuery.Execute(new GetFileQueryRequest()
+
+            using (GetFileQueryResult stream = await _getFileQuery.Execute((user.Id, fileid)))
+            using (Image image = Image.FromStream(stream.Data))
+            using (MemoryStream m = new MemoryStream())
             {
-                FileId = fileid,
-                UserId = user.Id,
-            });
-            return File(stream,"image/jpg");
+                image.Save(m, image.RawFormat);
+                byte[] imageBytes = m.ToArray();
+                string base64String = Convert.ToBase64String(imageBytes);
+
+                return Ok(new
+                {
+                    file = base64String,
+                    contentType = stream.ContentType,
+                    contentEncoding = "base64"
+                });
+            }
         }
     }
 }
