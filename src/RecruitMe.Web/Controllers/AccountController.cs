@@ -39,11 +39,17 @@ namespace RecruitMe.Web.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<int> Register([FromBody] RegisterDto model)
+        public async Task<ActionResult> Register([FromBody] RegisterDto model)
         {
-            var result = await _registerUserCommand.Execute(model);
-
-            return result;
+            try
+            {
+                var result = await _registerUserCommand.Execute(model);
+                return Ok(result);
+            }
+            catch(ValidationFailedException e)
+            {
+                return BadRequest(string.Join("\n", e.ValidationResult.Errors));
+            }
         }
 
         [HttpGet]

@@ -36,7 +36,7 @@ export class UserService {
 
             }, (err: any) => {
                 console.error(err);
-                throw err;
+                throw err.response;
             });
     }
 

@@ -1,19 +1,37 @@
 <template>
-    <div class="">
-        <div class="row">
+    <v-toolbar app class="blue">
+        <div class="row col-md-12">
             <div class="left-menu">
-                <router-link to="/" class="">RecruitMe.Web</router-link>
+                <router-link to="/">
+                    <v-toolbar-title class="cyan lighten-3 black--text display-2">RecruitMe.Web</v-toolbar-title>
+                </router-link>
             </div>
-            <div class="right-menu float-right" v-if="!displayName">
-                <router-link to="/account/register" class="btn btn-link">Register</router-link>
-                <router-link to="/account/login" class="btn btn-link">Login</router-link>
+            <div v-if="!displayName" class="right-menu float-right">
+                <router-link to="/account/register">
+                    <v-btn class="cyan  lighten-3">
+                        <span>Zarejestruj się   <v-icon>exit_to_app</v-icon></span>
+                    </v-btn>
+                </router-link>
+                <router-link to="/account/login">
+                    <v-btn class="cyan  lighten-3">
+                        <span>Zaloguj   <v-icon>account_circle</v-icon></span>
+                    </v-btn>
+            </router-link>
             </div>
             <div class="right-menu float-right" v-if="displayName">
-                <router-link to="/recruitment/profile" class="btn btn-link">Profile</router-link>
-                <button class="btn btn-link" v-on:click="logout()">Logout</button>
-            </div> 
+                <router-link to="/recruitment/profile">
+                    <v-btn class="cyan  lighten-3">
+                        <span>Profil   <v-icon>account_circle</v-icon></span>
+                    </v-btn>
+                    </router-link>
+                <button v-on:click="logout()">
+                    <v-btn class="cyan  lighten-3">
+                        <span>Wyloguj   <v-icon>lock</v-icon></span>
+                    </v-btn>
+                </button>
+            </div>
         </div>
-    </div>
+    </v-toolbar>
 </template>
 
 <script src="./navmenu.ts" />

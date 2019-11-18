@@ -5,6 +5,11 @@ import { IRegistrationRequest } from '../../../models/user.models';
 
 @Component({})
 export default class Register extends Vue {
+    notEmptyRule:any = [(v:string) => v!="" || "Musisz podać to pole"]
+    peselHas11digit:any = [
+        (v:string) => v.length==11 || "Pesel musi mieć 11 cyfr",
+        (v:string) => /^\d+$/.test(v) || "Pesel może zawierać tylko cyfry",
+    ]
     email: string = "";
     password: string = "";
     confirmPassword: string = "";
@@ -46,7 +51,10 @@ export default class Register extends Vue {
                 this.registrationCompleted = true;
             }, (err) => {
                 this.fetching = false;
-                this.backendError = "Something went wrong";
+                console.log(err);
+                let lines = err.data.split('\n');
+
+                this.backendError = lines.map((line:string)=>`<p>${line}</p>`).join('');
             }
         )
     }

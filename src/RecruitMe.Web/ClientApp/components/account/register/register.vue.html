@@ -1,64 +1,46 @@
 ﻿<script src="./register.ts"></script>
 <template>
-    <div>
-        <h2>Rejestracja</h2>
+    <v-container fluid >
     <div v-if="!registrationCompleted">
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-                <label for="name">Imie</label>
-                <input type="text" v-model="name" name="name" class="form-control" />
-                <div v-show="submitted && !name" class="invalid-feedback">name is required</div>
-            </div>
+        <h2>Rejestracja</h2>
+        <form>
+            <v-text-field label="Imię" v-model="name" name="name" :rules="notEmptyRule"></v-text-field>
+            <v-text-field label="Nazwisko" v-model="surname" name="surname" :rules="notEmptyRule"></v-text-field>
+
+            <v-checkbox v-model="noPesel" label="Nie mam numeru PESEL"></v-checkbox>
+            <v-text-field v-if="!noPesel" label="Nr PESEL" v-model="pesel" name="pesel" :rules="peselHas11digit"></v-text-field>
+
+            <v-menu>
+                <v-text-field :value="birthDate" slot="activator" label="Data urodzenia"></v-text-field>
+                <v-date-picker label="Data urodzenia" v-model="birthDate" name="birthDate"></v-date-picker>
+            </v-menu>
+            
+            <v-text-field label="Adres email" v-model="email" name="email" :rules="notEmptyRule"></v-text-field>
+
+            <v-text-field label="Hasło" v-model="password" name="password" type="password" :rules="notEmptyRule"></v-text-field>
+            <v-text-field label="Powtórz hasło" v-model="confirmPassword" name="confirmPassword" type="password" :rules="notEmptyRule"></v-text-field>
 
             <div class="form-group">
-                <label for="surname">Nazwisko</label>
-                <input type="text" v-model="surname" name="surname" class="form-control" />
-                <div v-show="submitted && !surname" class="invalid-feedback">surname is required</div>
-            </div>
-
-            <div class="form-group">
-                <label for="pesel">Pesel</label>
-                <input type="text" v-model="pesel" name="pesel" class="form-control" />
-                <label for="noPesel">Nie mam numeru PESEL</label>
-                <input type="checkbox" v-model="noPesel" name="noPesel" text="Nie mam pesela" class="form-control" />
-            </div>
-
-            <div class="form-group">
-                <label for="name">Data urodzenia</label>
-                <input type="date" v-model="birthDate" name="birthDate" class="form-control" />
-                <div v-show="submitted && !birthDate" class="invalid-feedback">Podaj datę urodzenia</div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Adress email</label>
-                <input type="text" v-model="email" name="email" class="form-control" />
-                <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
-            </div>
-
-            <div class="form-group">
-                <label htmlFor="password">Haslo</label>
-                <input type="password" v-model="password" name="password" class="form-control" />
-                <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
-            </div>
-
-            <div class="form-group">
-                <label htmlFor="confirmPassword">Potwierdz Haslo</label>
-                <input type="password" v-model="confirmPassword" name="confirmPassword" class="form-control" />
-                <div v-show="submitted && password != confirmPassword" class="invalid-feedback">
-                    Password is doesnt match
-                </div>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-primary" :disabled="fetching">Zarejestruj sie</button>
-                <div v-show="backendError"> {{backendError}} </div>
+                <v-btn class="cyan lighten-3" :disabled="fetching" @click="handleSubmit">Zarejestruj się</v-btn>
+                <div class="red--text"v-show="backendError" v-html="backendError"></div>
                 <img v-show="fetching" />
             </div>
         </form>
     </div>
-        <div v-if="registrationCompleted">
-            Zostałeś pomyślnie zarejestrowany.
-            Aby uzyskać dostęp do platformy potwierdź swój adres email linkiem przesłanym na wskazany adres.
-        </div>
+    <div v-if="registrationCompleted">
+        <v-card class="col-md-3" max-width="344px">
+        <v-card-text>
+                Zostałeś pomyślnie zarejestrowany.
+                Aby uzyskać dostęp do platformy potwierdź swój adres email linkiem przesłanym na wskazany adres.
+            </v-card-text>
+            <v-card-actions>
+                    <router-link to="/" >
+              <v-btn>
+                Strona główna
+              </v-btn>
+            </router-link>
+            </v-card-actions>
+        </v-card>
     </div>
+    </v-container>
 </template>
