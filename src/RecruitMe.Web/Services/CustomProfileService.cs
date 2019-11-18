@@ -1,12 +1,12 @@
 ﻿using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Data.Entities;
-using RecruitMe.Logic.Operations.Account.Queries;
+using RecruitMe.Logic.Operations.Account;
 using RecruitMe.Web.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -15,10 +15,12 @@ namespace RecruitMe.Web.Services
     public class CustomProfileService : IProfileService
     {
         private readonly GetUserQuery _getUserQuery;
+        private readonly ILogger _logger;
 
-        public CustomProfileService(GetUserQuery getUserQuery)
+        public CustomProfileService(GetUserQuery getUserQuery, ILogger logger)
         {
             _getUserQuery = getUserQuery;
+            _logger = logger;
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -49,7 +51,7 @@ namespace RecruitMe.Web.Services
             }
             catch (Exception e)
             {
-                //log e
+                _logger.Log(e);
                 context.IsActive = false;
             }
         }

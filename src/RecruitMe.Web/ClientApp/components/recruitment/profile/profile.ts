@@ -3,14 +3,19 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import VueRouter from 'vue-router';
 import { RecruitmentService } from '../../../services/recruitment.service';
+import { PictureConfirmedEvent } from '../../shared/pictureInput/PictureConfirmedEvent';
 
-// @ts-ignore
-@Component
+@Component({components: {
+    "PictureInput": require('../../shared/pictureInput/pictureInput.vue.html').default
+  }
+})
 export default class ProfileComponent extends Vue {
     adress: string = "";
     fatherName: string = "";
     motherName: string = "";
     primarySchool: string = "";
+    profilePicName: string = "";
+    profilePictureFileId: number | undefined;
 
     submitted: boolean = false;
     fetching: boolean = false;
@@ -33,9 +38,15 @@ export default class ProfileComponent extends Vue {
             this.fatherName = resp.fatherName;
             this.motherName = resp.motherName;
             this.primarySchool = resp.primarySchool;
+            this.profilePicName = resp.profilePictureName;
+            this.profilePictureFileId = resp.profilePictureFileId;
         }, (err) => {
             console.error(err);
         })
+    }
+
+    PictureConfirmed(a: PictureConfirmedEvent): void {
+        this.recruitmentService.setNewProfilePicture(a.pictureName, a.pictureFile);
     }
 
     handleSubmit() {
@@ -43,7 +54,7 @@ export default class ProfileComponent extends Vue {
             adress: this.adress,
             fatherName: this.fatherName,
             motherName: this.motherName,
-            primarySchool: this.primarySchool
+            primarySchool: this.primarySchool,
         }
 
         this.recruitmentService.updatePersonalData(request)

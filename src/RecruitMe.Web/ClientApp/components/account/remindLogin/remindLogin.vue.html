@@ -1,0 +1,44 @@
+﻿<template>
+    <div>
+    <div v-if="!loginReminded">
+        <h2>Przypomnij login</h2>
+        <form @submit.prevent="handleSubmit">
+            <div class="form-group">
+                <label for="email">email</label>
+                <input type="text" v-model="email" name="email" class="form-control" />
+                <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
+            </div>
+            <div class="form-group">
+                <label for="pesel">pesel</label>
+                <input type="text" v-model="pesel" name="pesel" class="form-control" />
+                <label for="noPesel">noPesel</label>
+                <input type="checkbox" v-model="noPesel" name="noPesel" text="Nie mam pesela" class="form-control" />
+            </div>
+
+            <div class="form-group" v-show="noPesel">
+                <label for="name">name</label>
+                <input type="text" v-model="name" name="name" class="form-control" />
+                <div v-show="submitted && !name" class="invalid-feedback">name is required</div>
+            </div>
+
+            <div class="form-group" v-show="noPesel">
+                <label for="surname">surname</label>
+                <input type="text" v-model="surname" name="surname" class="form-control" />
+                <div v-show="submitted && !surname" class="invalid-feedback">surname is required</div>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn btn-primary" :disabled="fetching">Sprawdz moj login</button>
+                <div v-show="backendError"> {{backendError}} </div>
+                <img v-show="fetching" />
+            </div>
+        </form>
+    </div>
+
+    <div v-if="loginReminded">
+        Jesli wskazane dane zgadzaja sie z uzytkowniekiem w bazie, na adres email podany przy rejestracji został wyslany Twoj login
+    </div>
+    </div>
+</template>
+
+<script src="./remindLogin.ts"></script>

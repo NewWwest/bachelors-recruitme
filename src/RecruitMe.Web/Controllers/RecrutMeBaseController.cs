@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Data.Entities;
-using RecruitMe.Logic.Operations.Account.Queries;
+using RecruitMe.Logic.Operations.Account;
 using RecruitMe.Logic.Utilities;
 using RecruitMe.Web.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +17,7 @@ namespace RecruitMe.Web.Controllers
         protected async Task<User> GetUser()
         {
             var query = HttpContext.RequestServices.Get<GetUserQuery>();
-             return await query.Execute(UserId);
+            return await query.Execute(UserId);
         }
         public RecruitMeBaseController()
         {

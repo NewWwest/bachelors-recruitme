@@ -3,8 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest } from '../../../models/user.models';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class Register extends Vue {
     email: string = "";
     password: string = "";
@@ -13,6 +12,7 @@ export default class Register extends Vue {
     surname: string = "";
     pesel: string = "";
     noPesel: boolean = false;
+    birthDate: Date | null = null;
 
     submitted: boolean = false;
     fetching: boolean = false;
@@ -36,7 +36,8 @@ export default class Register extends Vue {
             name: this.name,
             surname: this.surname,
             pesel: this.noPesel ? null : this.pesel,
-            noPesel: this.noPesel
+            noPesel: this.noPesel,
+            birthDate: this.birthDate as Date
         }
 
         this.userService.register(registrationModel).then(

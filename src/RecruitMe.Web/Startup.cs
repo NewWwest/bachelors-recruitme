@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Web.Configuration;
 using RecruitMe.Web.Services;
@@ -55,8 +56,8 @@ namespace RecruitMe.Web
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = @"http://localhost:5000/";
-                    options.ApiName =ISConfig.AuthScope;
+                    options.Authority = EndpointConfig.BaseAddress;
+                    options.ApiName = ISConfig.AuthScope;
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = SupportedTokens.Jwt;
                 });
@@ -108,7 +109,6 @@ namespace RecruitMe.Web
                     defaults: new { controller = "Home", action = "Index" });
             });
 
-            //THIS IS NOT IN EUZ
             app.UseStaticFiles();
         }
     }
