@@ -9,8 +9,8 @@ using RecruitMe.Web.Services.Data;
 namespace RecruitMe.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191016204318_AddResetEmail")]
-    partial class AddResetEmail
+    [Migration("20191117235743_RecreatedMigrations")]
+    partial class RecreatedMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,22 @@ namespace RecruitMe.Web.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.ConfirmationEmail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Used");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ConfirmationEmails");
+                });
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PasswordReset", b =>
                 {
@@ -47,15 +63,39 @@ namespace RecruitMe.Web.Migrations
 
                     b.Property<string>("PrimarySchool");
 
+                    b.Property<int?>("ProfilePictureFileId");
+
                     b.HasKey("UserId");
 
+                    b.HasIndex("ProfilePictureFileId");
+
                     b.ToTable("PersonalData");
+                });
+
+            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PersonalDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FileUrl");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PersonalDocuments");
                 });
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("BirthDate");
 
                     b.Property<string>("CandidateId");
 
@@ -76,6 +116,14 @@ namespace RecruitMe.Web.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.ConfirmationEmail", b =>
+                {
+                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PasswordReset", b =>
                 {
                     b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
@@ -86,8 +134,20 @@ namespace RecruitMe.Web.Migrations
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PersonalData", b =>
                 {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
+                    b.HasOne("RecruitMe.Logic.Data.Entities.PersonalDocument", "ProfilePictureFile")
                         .WithMany()
+                        .HasForeignKey("ProfilePictureFileId");
+
+                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
+                        .WithOne("PersonalData")
+                        .HasForeignKey("RecruitMe.Logic.Data.Entities.PersonalData", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PersonalDocument", b =>
+                {
+                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
+                        .WithMany("PersonalDocuments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
