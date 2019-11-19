@@ -2,18 +2,36 @@ import axios, { AxiosResponse } from 'axios';
 import { LocalStorageService } from '../userService/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
+import { LoadingIndicator, Mode, OptionsCommon } from "nativescript-loading-indicator";
 
 export class ApiGateway {
     private baseURL = "http://192.168.0.2:5000"; // base url
+    // private indicator = new LoadingIndicator();
+    // private options: OptionsCommon = {
+    //     message: 'Ladowanie...',
+    //     details: 'aaa',
+    //     mode: Mode.AnnularDeterminate,
+    //     android: {
+    //         dimBackground: true,
+    //         cancelable: false, 
+    //     } 
+    // }
 
     private makeRequest(type: RequestType, url: string, data: any, headers?: any): Promise<AxiosResponse> {
         url = this.baseURL + url;
+        //this.indicator.show(this.options);
 
         switch(type) {
             case RequestType.GET: 
-               return axios.get(url, data);
+               return axios.get(url, data).then( (response) => {
+                   //this.indicator.hide();
+                   return response;
+               });
             case RequestType.POST:
-               return axios.post(url, data, headers);
+               return axios.post(url, data, headers).then( (response) => {
+                   //this.indicator.hide();
+                   return response;
+               });
             default: throw new Error("something bad has happened");
         }
     }

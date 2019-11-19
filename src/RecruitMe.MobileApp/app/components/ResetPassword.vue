@@ -46,13 +46,7 @@ export default class ResetPassword extends Vue {
 <style scoped lang="scss">
     @import '../app-common';
     @import '../app-variables';
-
-    .pageBack {
-        background-image: linear-gradient(to right, $login-left-color, $login-right-color);
-        padding-left: 30;
-        padding-right: 30;
-    }
-
+    
     .form-input {
         color: white;
         placeholder-color: white;

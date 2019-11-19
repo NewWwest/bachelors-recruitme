@@ -4,12 +4,13 @@ import _Vue, { VueConstructor } from "vue";
 // Vues
 import Home from "~/components/Home.vue";
 import Login from "~/components/Login.vue";
-import Register from "~/components/Register.vue"
-import RemindLogin from "~/components/RemindLogin.vue"
-import ResetPassword from "~/components/ResetPassword.vue"
+import Register from "~/components/Register.vue";
+import RemindLogin from "~/components/RemindLogin.vue";
+import ResetPassword from "~/components/ResetPassword.vue";
+import CandidateDashboard from "~/components/CandidateDashboard.vue";
 
 // Drawer Selected Page Service
-import SelectedPageService from "@/services/sideDrawer/selectedPage.service"
+import SelectedPageService from "@/services/sideDrawer/selectedPage.service";
 
 export default function Router<RouterOptions>(Vue: typeof _Vue, options? : RouterOptions) {
     let goto : Goto;
@@ -69,6 +70,13 @@ export class Goto {
      */
     public RemindLogin() {
         this.navigate(RemindLogin);
+    }
+
+    /**
+     * CandidateDashboard
+     */
+    public CandidateDashboard() {
+        this.navigate(CandidateDashboard);
     }
 } 
 

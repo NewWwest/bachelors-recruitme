@@ -62,19 +62,19 @@ import PopupFactory from '@/services/popupFactory';
         userService: UserService = new UserService();
 
         onLoginButtonTap() {
-            //if (ConnectionService.IsConnectedToNetwork()) {
-                this.submitted = true;
-                
-                if (!this.username || !this.password)
+            this.submitted = true;
+            if (!this.username || !this.password)
                     return;
 
+            if (ConnectionService.IsConnectedToNetwork()) {    
                 this.userService.login(this.username, this.password).then(() => {
                     // go to user dashboard
+                    this.$goto().CandidateDashboard();
                 })
-            //}
-            //else {
-                //PopupFactory.ConnectionError();
-            //}
+            }
+            else {
+                PopupFactory.ConnectionError();
+            }
         }
 
         validPassword() {
