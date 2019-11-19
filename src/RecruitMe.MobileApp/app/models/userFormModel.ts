@@ -12,6 +12,7 @@ export interface IRegistrationRequest {
     surname: string;
     pesel: string | null;
     noPesel: boolean;
+    birthDate: Date;
 }
 export interface IJwtClaims {
     email: string;

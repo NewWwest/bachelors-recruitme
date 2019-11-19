@@ -22,6 +22,11 @@
                 </StackLayout>
     
                 <StackLayout class="form-group">
+                    <Label class="dateHeader" text="Data urodzenia" />
+                    <DatePicker v-model="userData.birthDate" :minDate="minDate" :maxDate="maxDate" />
+                </StackLayout>
+
+                <StackLayout class="form-group">
                     <TextField v-model="userData.email" class="form-input" hint="Adres e-mail" />
                     <TextField v-model="userData.password" class="form-input" hint="Hasło" :secure="true" />
                     <TextField v-model="userData.confirmPassword" class="form-input" hint="Powtórz hasło" :secure="true" />
@@ -46,6 +51,8 @@
 
     @Component
     export default class Register extends Vue {
+        minDate: Date = new Date(2000, 0, 1);
+        maxDate: Date = new Date(2004, 11, 31);
         userData: IRegistrationRequest = {
            email: "",
            password: "",
@@ -54,6 +61,7 @@
            surname: "",
            pesel: "",
            noPesel: false,
+           birthDate: new Date(2000, 0, 1)
         }
         userService: UserService = new UserService();
 
@@ -94,6 +102,12 @@
 
     .form-group {
         margin-top: 15;
+    }
+
+    .dateHeader {
+        margin-bottom: -30;
+        font-size: 18px;
+        color: #FFFFFF;
     }
 
     Label {
