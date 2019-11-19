@@ -4,16 +4,16 @@
      flexDirection="row" justifyContent="space-around" alignItems="center">
         <Image class="drawer__header-image fa t-75" src.decode="font://&#xf2bd;"></Image>
         <StackLayout>
-            <Label class="drawer__header-name" text="User Name"></Label>
-            <Label class="drawer__header-email" text="username@mail.com"></Label>
+            <Label class="drawer__header-name" :text="getUsername"></Label>
+            <Label class="drawer__header-email" :text="getEmail"></Label>
         </StackLayout>
     </FlexboxLayout>
 
     <ScrollView row="1" class="drawer__list">
         <StackLayout>
             <FlexboxLayout flexDirection="row" alignItems="center"
-             :class="'drawer__list-item' + (selectedPage === 'Home' ? '-selected': '')" 
-             @tap="onNavigationItemTap(() => $goto.Home())">
+             :class="'drawer__list-item' + (selectedPage === 'CandidateDashboard' ? '-selected': '')" 
+             @tap="onNavigationItemTap(() => $goto.CandidateDashboard())">
                 <Label text.decode="&#xf015;" class="fa item-icon"></Label>
                 <Label text="Home"></Label>
             </FlexboxLayout>
@@ -34,6 +34,7 @@ import { Component, Vue } from "vue-property-decorator";
 
 import { closeDrawer } from "@/services/sideDrawer/utils";
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service"
+import { LocalStorageService } from '../../services/userService/localStorageService';
 
 @Component
 export default class DrawerContent extends Vue {
@@ -50,6 +51,13 @@ export default class DrawerContent extends Vue {
     onNavigationItemTap(navigateAction: () => void) : void {
         navigateAction();
         closeDrawer();
+    }
+
+    get email() {
+        return LocalStorageService.getEmail();
+    }
+    get username() {
+        return '';
     }
 }
 </script>

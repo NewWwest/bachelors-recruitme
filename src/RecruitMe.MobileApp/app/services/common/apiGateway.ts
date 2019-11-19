@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import { LocalStorageService } from '../userService/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
-import { LoadingIndicator, Mode, OptionsCommon } from "nativescript-loading-indicator";
 
 export class ApiGateway {
     private baseURL = "http://192.168.0.2:5000"; // base url
