@@ -86,7 +86,7 @@ export class UserService {
         try {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            var jsonPayload = decodeURIComponent(this.atobNS(base64).split('').map(function (c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
 
@@ -98,4 +98,10 @@ export class UserService {
         }
     }
 
+    private atobNS(str: string): string {
+        const data = android.util.Base64.decode(str, android.util.Base64.NO_WRAP);
+        const androidString =  new java.lang.String(data,  java.nio.charset.StandardCharsets.UTF_8 );
+
+        return '' + androidString;
+    }
 }

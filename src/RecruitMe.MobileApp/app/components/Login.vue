@@ -69,7 +69,7 @@ import PopupFactory from '@/services/popupFactory';
             if (ConnectionService.IsConnectedToNetwork()) {    
                 this.userService.login(this.username, this.password).then(() => {
                     // go to user dashboard
-                    this.$goto().CandidateDashboard();
+                    this.$goto.CandidateDashboard();
                 })
             }
             else {

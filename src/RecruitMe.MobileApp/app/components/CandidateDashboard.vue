@@ -4,11 +4,11 @@
             <FlexBoxLayout>
                 <NavigationButton class="fa" text.decode="&#xf0c9; " @tap="onDrawerButtonTap">
                 </NavigationButton>
-                <Label class="action-bar-title" text="Login"></Label>
+                <Label class="action-bar-title" text="Home"></Label>
             </FlexBoxLayout>
         </ActionBar>
 
-        <ScrollPanel>
+        <ScrollView>
             <StackLayout>
                 <StackLayout class="detailsInfoBar">
 
@@ -17,7 +17,7 @@
                 
                 </StackLayout>
             </StackLayout>
-        </ScrollPanel>
+        </ScrollView>
     </Page>
 </template>
 

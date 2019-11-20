@@ -4,8 +4,8 @@
      flexDirection="row" justifyContent="space-around" alignItems="center">
         <Image class="drawer__header-image fa t-75" src.decode="font://&#xf2bd;"></Image>
         <StackLayout>
-            <Label class="drawer__header-name" :text="getUsername"></Label>
-            <Label class="drawer__header-email" :text="getEmail"></Label>
+            <Label class="drawer__header-name" :text="username"></Label>
+            <Label class="drawer__header-email" :text="email"></Label>
         </StackLayout>
     </FlexboxLayout>
 
