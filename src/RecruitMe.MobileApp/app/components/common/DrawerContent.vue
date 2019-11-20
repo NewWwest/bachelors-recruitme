@@ -13,14 +13,14 @@
         <StackLayout>
             <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'CandidateDashboard' ? '-selected': '')" 
-             @tap="onNavigationItemTap(() => $goto.CandidateDashboard())">
+             @tap="onNavigationItemTap(() => $goto.CandidateDashboard(true))">
                 <Label text.decode="&#xf015;" class="fa item-icon"></Label>
                 <Label text="Home"></Label>
             </FlexboxLayout>
 
             <FlexboxLayout flexDirection="row" alignItems="center"
-             :class="'drawer__list-item' + (selectedPage === 'Settings' ? '-selected': '')"
-             @tap="onNavigationItemTap(() => $goto.Settings())">
+             :class="'drawer__list-item' + (selectedPage === 'CandidateSettings' ? '-selected': '')"
+             @tap="onNavigationItemTap(() => $goto.CandidateSettings(true))">
                 <Label text.decode="&#xf013;" class="fa item-icon"></Label>
                 <Label text="Settings"></Label>
             </FlexboxLayout>

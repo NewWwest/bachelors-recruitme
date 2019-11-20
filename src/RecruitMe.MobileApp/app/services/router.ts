@@ -8,6 +8,7 @@ import Register from "~/components/Register.vue";
 import RemindLogin from "~/components/RemindLogin.vue";
 import ResetPassword from "~/components/ResetPassword.vue";
 import CandidateDashboard from "~/components/CandidateDashboard.vue";
+import CandidateSettings from "~/components/CandidateSettings.vue";
 
 // Drawer Selected Page Service
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service";
@@ -30,11 +31,14 @@ export class Goto {
         this.options = _options || new RouterOptions(false, true, new Transition("slide", 380, "easeIn"));
     }
 
-    private navigate(component : VueConstructor) {
+    private navigate(component : VueConstructor, clearHistory?: boolean) {
         SelectedPageService.getInstance().updateSelectedPage(component.name);
 
-        // it's a private object, but it's there
-        topmost().currentPage.__vuePageRef__.$navigateTo(component, this.options);
+        let options = clearHistory ? new RouterOptions(true, true, new Transition("slide", 380, "easeIn"))
+         : this.options;
+        
+        // __vuePageRef__ - it's a private object, but it's there
+        topmost().currentPage.__vuePageRef__.$navigateTo(component, options);
     }
 
     /**
@@ -75,8 +79,15 @@ export class Goto {
     /**
      * CandidateDashboard
      */
-    public CandidateDashboard() {
-        this.navigate(CandidateDashboard);
+    public CandidateDashboard(clearHistory?: boolean) {
+        this.navigate(CandidateDashboard, clearHistory);
+    }
+
+    /**
+     * CandidateSettings
+     */
+    public CandidateSettings(clearHistory?: boolean) {
+        this.navigate(CandidateSettings, clearHistory);
     }
 } 
 
