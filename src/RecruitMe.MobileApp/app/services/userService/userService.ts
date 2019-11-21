@@ -18,11 +18,6 @@ export class UserService {
                     LocalStorageService.setJwtToken(response.data.access_token);
                     LocalStorageService.setUserId(jwt.userId);
                 }
-            },
-            (err: any) => {
-                console.error(err);
-
-                PopupFactory.GenericErrorPopup("" + err);
             })
     }
 

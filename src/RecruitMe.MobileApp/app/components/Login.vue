@@ -3,7 +3,6 @@
         <ActionBar class="action-bar">
             <Label class="action-bar-title" text="Login"></Label>
         </ActionBar>
-
         <StackLayout class="loginPageBack">
             <Image class="logoImage"/>
 
@@ -16,10 +15,10 @@
                             </FormattedString>
                         </Label>
                         <TextField v-model="username" hint="Login"
-                         :class="[!validUserName() ? 'form-input' : 'error-input', 'input-width']"/>
+                        :class="[!validUserName() ? 'form-input' : 'error-input', 'input-width']"/>
                     </FlexboxLayout>
                     <Label v-show="validUserName()" class="error-label"
-                     text="Login jest wymagany" /> 
+                    text="Login jest wymagany" /> 
                 </StackLayout>
 
                 <StackLayout class="inputPasswordMargin">
@@ -30,10 +29,10 @@
                             </FormattedString>
                         </Label>
                         <TextField v-model="password" hint="Password" secure="true" 
-                         v-bind:class="[!validPassword() ? 'form-input' : 'error-input', 'input-width']" />
+                        v-bind:class="[!validPassword() ? 'form-input' : 'error-input', 'input-width']" />
                     </FlexboxLayout>
                     <Label v-show="validPassword()" class="error-label"
-                     text="Hasło jest wymagane" />
+                    text="Hasło jest wymagane" />
                 </StackLayout>
 
                 <Button text="Login" @tap="onLoginButtonTap" class="my-button" />
@@ -43,8 +42,7 @@
                     <Label @tap="$goto.ResetPassword()" text="Zresetuj hasło" />
                 </FlexBoxLayout>
             </StackLayout>
-        </StackLayout>
-        
+        </StackLayout>       
     </Page>
 </template>
 
@@ -54,6 +52,10 @@ import { Component, Vue } from 'vue-property-decorator';
 import ConnectionService from '../services/common/connection';
 import PopupFactory from '@/services/popupFactory';
 
+import ActivityLoader from '@/components/common/ActivityLoader.vue';
+//import { EventData } from "tns-core-modules/data/observable";
+//import { View } from "tns-core-modules/ui/core/view";
+
     @Component
     export default class Login extends Vue {
         username: string = "";
@@ -62,14 +64,25 @@ import PopupFactory from '@/services/popupFactory';
         userService: UserService = new UserService();
 
         onLoginButtonTap() {
+            //const view: View = <View>args.object;
+
             this.submitted = true;
             if (!this.username || !this.password)
                     return;
 
-            if (ConnectionService.IsConnectedToNetwork()) {    
+            if (ConnectionService.IsConnectedToNetwork()) {
+                //console.log(this.$showModal);
+                //var modal = view.showModal('/common/ActivityLoader', {context: null, closeCallback: () => {}, fullscreen: true});
+                this.$showModal(ActivityLoader);
+
                 this.userService.login(this.username, this.password).then(() => {
                     // go to user dashboard
+                    //modal.closeModal();
                     this.$goto.CandidateDashboard();
+                }, err => {
+                    console.error(err);
+                    console.log(this.$modal);
+                    PopupFactory.GenericErrorPopup("" + err);
                 })
             }
             else {
