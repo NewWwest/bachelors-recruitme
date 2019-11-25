@@ -51,10 +51,7 @@ import { UserService } from '../services/userService/userService';
 import { Component, Vue } from 'vue-property-decorator';
 import ConnectionService from '../services/common/connection';
 import PopupFactory from '@/services/popupFactory';
-
-import ActivityLoader from '@/components/common/ActivityLoader.vue';
-//import { EventData } from "tns-core-modules/data/observable";
-//import { View } from "tns-core-modules/ui/core/view";
+import LoaderService from '@/services/loaderView/loader';
 
     @Component
     export default class Login extends Vue {
@@ -64,24 +61,19 @@ import ActivityLoader from '@/components/common/ActivityLoader.vue';
         userService: UserService = new UserService();
 
         onLoginButtonTap() {
-            //const view: View = <View>args.object;
-
             this.submitted = true;
             if (!this.username || !this.password)
                     return;
 
             if (ConnectionService.IsConnectedToNetwork()) {
-                //console.log(this.$showModal);
-                //var modal = view.showModal('/common/ActivityLoader', {context: null, closeCallback: () => {}, fullscreen: true});
-                this.$showModal(ActivityLoader);
+                LoaderService.showLoader();
 
                 this.userService.login(this.username, this.password).then(() => {
-                    // go to user dashboard
-                    //modal.closeModal();
                     this.$goto.CandidateDashboard();
                 }, err => {
                     console.error(err);
-                    console.log(this.$modal);
+                    
+                    LoaderService.hideLoader();
                     PopupFactory.GenericErrorPopup("" + err);
                 })
             }

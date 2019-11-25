@@ -12,7 +12,7 @@ export default class SelectedPageService {
         }
     }
 
-    public updateSelectedPage(selectedPage) {
+    public updateSelectedPage(selectedPage: string) {
         this._selectedPageSource.next(selectedPage);
     }
 
