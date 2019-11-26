@@ -69,6 +69,7 @@ import LoaderService from '@/services/loaderView/loader';
                 LoaderService.showLoader();
 
                 this.userService.login(this.username, this.password).then(() => {
+                    LoaderService.hideLoader();
                     this.$goto.CandidateDashboard();
                 }, err => {
                     console.error(err);

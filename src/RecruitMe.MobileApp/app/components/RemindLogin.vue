@@ -39,10 +39,10 @@ import { UserService } from '../services/userService/userService';
 import { IRemindLoginRequest } from '../models/userFormModel';
 import ConnectionService from '../services/common/connection';
 import PopupFactory from '../services/popupFactory';
+import LoaderService from '../services/loaderView/loader';
 
 @Component
 export default class RemindLogin extends Vue {
-    loginReminded: boolean = false;
     noPesel: boolean = false;
     remindData: IRemindLoginRequest = {
         email: '',
@@ -54,9 +54,14 @@ export default class RemindLogin extends Vue {
 
     onRemindTap() {
         if (ConnectionService.IsConnectedToNetwork()) {
+            LoaderService.showLoader();
             this.userService.remindLogin(this.remindData).then(() => {
-                this.loginReminded = true;
-            })
+                LoaderService.hideLoader();
+                PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji został wysłany mail z informacjami");
+            }, err => {
+                LoaderService.hideLoader();
+                PopupFactory.GenericErrorPopup("" + err);
+            });
         }
         else {
             PopupFactory.ConnectionError();

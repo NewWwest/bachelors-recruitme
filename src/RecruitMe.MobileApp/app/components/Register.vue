@@ -48,6 +48,7 @@
     import { AxiosResponse } from 'axios';
     import ConnectionService from "@/services/common/connection";
     import PopupFactory from "@/services/popupFactory";
+import LoaderService from '../services/loaderView/loader';
 
     @Component
     export default class Register extends Vue {
@@ -67,9 +68,19 @@
 
         onRegisterTap() {
             if (ConnectionService.IsConnectedToNetwork()) {
-                this.userService.register(this.userData).then((data) => {
+                LoaderService.showLoader();
+                
+                this.userService.register(this.userData).then(data => {
                     console.log("register ok");
-                }).catch(error => console.log(error));
+                    
+                    LoaderService.hideLoader();
+                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji")
+                }).catch(err => {
+                    console.log(err);
+
+                    LoaderService.hideLoader();
+                    PopupFactory.GenericErrorPopup("" + err);
+                });
             }
             else {
                 PopupFactory.ConnectionError();

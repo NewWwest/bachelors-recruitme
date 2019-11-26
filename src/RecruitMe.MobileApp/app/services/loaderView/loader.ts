@@ -1,20 +1,19 @@
 import * as application from 'tns-core-modules/application';
 import { isIOS, isAndroid } from 'tns-core-modules/platform';
 
-declare var android;
-
-
+declare var android: any;
 
 export default class LoaderService {
-    private static loaderView;
+    private static loaderView: any;
 
     public static showLoader() {
         if (LoaderService.loaderView) {
             return;
         }
     
-        // if Android
-        LoaderService.loaderView = android.app.ProgressDialog.show(application.android.foregroundActivity, '', 'Operacja w trakcie');
+        if (isAndroid) {
+            LoaderService.loaderView = android.app.ProgressDialog.show(application.android.foregroundActivity, '', 'Operacja w trakcie');
+        }
     }
 
     public static hideLoader() {
@@ -22,8 +21,10 @@ export default class LoaderService {
             return;
         }
 
-        // if Android
-        LoaderService.loaderView.dismiss();
+        if (isAndroid) {
+            LoaderService.loaderView.dismiss();
+        }
+
         LoaderService.loaderView = null;
     }
 }
