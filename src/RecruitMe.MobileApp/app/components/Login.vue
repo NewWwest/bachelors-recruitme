@@ -62,7 +62,7 @@ import LoaderService from '@/services/loaderView/loader';
 
         onLoginButtonTap() {
             this.submitted = true;
-            if (!this.username || !this.password)
+            if (!this.username || !this.password) 
                     return;
 
             if (ConnectionService.IsConnectedToNetwork()) {
