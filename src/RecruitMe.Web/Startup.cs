@@ -43,7 +43,10 @@ namespace RecruitMe.Web
             services.AddMvc();
             services.AddMvcCore().AddAuthorization();
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.IssuerUri = "http://0.0.0.0:5000";
+            })
                 .AddDeveloperSigningCredential(true, "IdentityServer.rsa.json")
                 .AddInMemoryIdentityResources(ISConfig.GetIdentityResources())
                 .AddInMemoryApiResources(ISConfig.GetApiResources())
@@ -56,7 +59,7 @@ namespace RecruitMe.Web
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = @"http://localhost:5000/";
-                    options.ApiName =ISConfig.AuthScope;
+                    options.ApiName = ISConfig.AuthScope;
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = SupportedTokens.Jwt;
                 });

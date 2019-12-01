@@ -29,4 +29,12 @@ export class LocalStorageService {
         return store.getters.getEmail;
     }
 
+    static setFullname(fullname: string): void {
+        store.commit('setFullname', fullname);
+    }
+
+    static getFullname(): string {
+        return store.getters.getFullname;
+    }
+
 }

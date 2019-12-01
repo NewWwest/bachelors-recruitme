@@ -67,12 +67,18 @@ export class ApiGateway {
             '/api/Account/RemindLogin', remindModel)
     }
 
+    public getUser(): Promise<AxiosResponse> {
+        return this.makeRequest(RequestType.GET,
+            '/api/Account/GetUserBaseInfo?id=' + LocalStorageService.getUserId(), this.authHeader());
+    }
+
     /// private helpers
 
     private authHeader() {
         return {
             headers: {
-                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
+                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`,
+                'Content-Type': 'application/json; charset=utf-8'
             }
         }
     }

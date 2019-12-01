@@ -14,9 +14,11 @@ export class UserService {
             (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response != null && response.data != null) {
                     let jwt = this.parseJwt(response.data.access_token);
+
                     LocalStorageService.setEmail(jwt.email);
                     LocalStorageService.setJwtToken(response.data.access_token);
                     LocalStorageService.setUserId(jwt.userId);
+                    LocalStorageService.setFullname(jwt.name + ' ' + jwt.surname);
                 }
             })
     }

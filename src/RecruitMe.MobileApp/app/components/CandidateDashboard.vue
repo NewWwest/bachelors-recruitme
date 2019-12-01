@@ -6,8 +6,7 @@
                      @tap="onDrawerButtonTap"/>
                     <Image class="dummyImage" /> <!-- dummy object to get text to center -->
                     <Label class="action-bar-title" text="Home"></Label>
-                </StackLayout>
-                
+                </StackLayout>  
         </ActionBar>
 
         <ScrollView>

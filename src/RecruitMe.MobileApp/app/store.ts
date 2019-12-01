@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     userId: 0,
     email: '',
-    token: ''
+    token: '',
+    fullname: ''
   },
   mutations: {
     setUserId(state, userId) {
@@ -18,12 +19,16 @@ export default new Vuex.Store({
     },
     setToken(state, token) {
       state.token = token ? token : '';
+    },
+    setFullname(state, fullname) {
+      state.fullname = fullname ? fullname : '';
     }
   },
   getters: {
     getUserId: state => state.userId,
     getEmail: state => state.email,
-    getToken: state => state.token
+    getToken: state => state.token,
+    getFullname: state => state.fullname
   },
   actions: {
 

@@ -12,14 +12,17 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Account")]
     public class AccountController : RecruitMeBaseController
     {
+        private readonly GetUserQuery _getUserQuery;
         private readonly LoginUserQuery _loginUserQuery;
         private readonly RegisterUserCommand _registerUserCommand;
 
         public AccountController(
             LoginUserQuery loginUserQuery,
-            RegisterUserCommand registerUserCommand) : base()
+            RegisterUserCommand registerUserCommand,
+            GetUserQuery getUserQuery) : base()
             
         {
+            _getUserQuery = getUserQuery;
             _loginUserQuery = loginUserQuery;
             _registerUserCommand = registerUserCommand;
         }
@@ -29,6 +32,16 @@ namespace RecruitMe.Web.Controllers
         public async Task<int> Register([FromBody] RegisterDto model)
         {
             var result = await _registerUserCommand.Execute(model);
+
+            return result;
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetUserBaseInfo")]
+        public async Task<User> GetUserBaseInfo([FromQuery] int id)
+        {
+            var result = await _getUserQuery.Execute(id);
 
             return result;
         }

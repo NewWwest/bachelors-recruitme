@@ -57,7 +57,7 @@ export default class DrawerContent extends Vue {
         return LocalStorageService.getEmail();
     }
     get username() {
-        return '';
+        return LocalStorageService.getFullname();
     }
 }
 </script>
