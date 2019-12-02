@@ -30,28 +30,44 @@
                 </v-card>
             </div>
 
-            <div class="profile-picture col-sm-6">
-                <PictureInput @picture-confirmed="PictureConfirmed" :fileId="profilePictureFileId" :fileName="profilePicName"></PictureInput>
-            </div>
+            <div class="col-sm-6">
+                <div class="profile-picture mb-4">
+                    <PictureInput @picture-confirmed="PictureConfirmed" :fileId="profilePictureFileId" :fileName="profilePicName"></PictureInput>
+                </div>
 
-        </div>
 
-        <div class="profile-documents">
-            <v-file-input v-model="file"
-                        placeholder="Świadectwo.pdf"
-                        label="Wybierz dokument">
-            </v-file-input>
-            <v-btn @click="uploadDocument">
-                Prześlij document
-            </v-btn>
-            <div v-for="document in profile.documents">
                 <v-card>
-                    {{document.name}}
-                    <v-btn @click="downloadDocument(document.id)">Pobierz   <v-icon>file_download</v-icon></v-btn>
-                    <v-btn @click="deleteDocument(document.id)">Usuń   <v-icon>delete</v-icon></v-btn>
+                    <v-card-text>
+                        <div class="mb-3">
+                            <v-file-input v-model="file"
+                                          placeholder="Świadectwo.pdf"
+                                          label="Wybierz dokument">
+                            </v-file-input>
+                            <v-btn @click="uploadDocument">
+                                Prześlij document
+                            </v-btn>
+                        </div>
+
+                            <div v-for="document in profile.documents">
+                                <v-card>
+                                    <v-card-subtitle>{{document.name}}</v-card-subtitle>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn @click="downloadDocument(document.id)">
+                                            Pobierz   <v-icon>file_download</v-icon>
+                                        </v-btn>
+                                        <v-btn @click="deleteDocument(document.id)">
+                                            Usuń   <v-icon>delete</v-icon>
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </div>
+                    </v-card-text>
                 </v-card>
             </div>
+
         </div>
+
     </div>
 </template>
 <script src="./profile.ts"></script>
