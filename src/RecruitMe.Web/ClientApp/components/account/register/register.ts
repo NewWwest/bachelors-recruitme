@@ -2,9 +2,13 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest } from '../../../models/user.models';
+import { ValidationService } from '../../../services/validation.service';
 
-@Component({})
+@Component({ })
 export default class Register extends Vue {
+    notEmptyRule: any = ValidationService.notEmptyRule();
+    peselHas11digit: any = ValidationService.peselRules();
+
     email: string = "";
     password: string = "";
     confirmPassword: string = "";
@@ -14,6 +18,7 @@ export default class Register extends Vue {
     noPesel: boolean = false;
     birthDate: Date | null = null;
 
+    menu: boolean = false;
     submitted: boolean = false;
     fetching: boolean = false;
     registrationCompleted: boolean = false;
@@ -46,7 +51,10 @@ export default class Register extends Vue {
                 this.registrationCompleted = true;
             }, (err) => {
                 this.fetching = false;
-                this.backendError = "Something went wrong";
+                console.log(err);
+                let lines = err.data.split('\n');
+
+                this.backendError = lines.map((line:string)=>`<p>${line}</p>`).join('');
             }
         )
     }

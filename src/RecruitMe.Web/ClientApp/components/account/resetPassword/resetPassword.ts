@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
-import { IRegistrationRequest, IResetPasswordRequest } from '../../../models/user.models';
+import { IResetPasswordRequest } from '../../../models/user.models';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({})
 export default class ResetPassword extends Vue {
+    notEmptyRule: any = ValidationService.notEmptyRule();
     login: string = "";
 
     submitted: boolean = false;

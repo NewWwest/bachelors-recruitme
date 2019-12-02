@@ -6,7 +6,7 @@ namespace RecruitMe.Logic.Configuration
 {
     public class EndpointConfig
     {
-        public static string BaseAddress => "http://localhost:5000";
+        public static string BaseAddress => "http://localhost:5000";//"http://192.168.0.52:5000/";
         
         public static string ConfirmEmail => "/api/account/confirmEmail";
         public static string SetNewPassword => "/account/SetNewPassword";

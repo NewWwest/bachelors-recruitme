@@ -1,28 +1,24 @@
-<script src="./login.ts"></script>
+﻿<script src="./login.ts"></script>
 <template>
-    <div>
-        <h2>Login</h2>
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-                <label for="login">Login</label>
-                <input type="text" v-model="login" name="login" class="form-control"
-                       v-class="{ 'is-invalid': submitted && !login }" />
-                <div v-show="submitted && !email" class="invalid-feedback">login is required</div>
-                <router-link to="/account/remindLogin" class="btn btn-link">Remind Login</router-link>
-            </div>
-            <div class="form-group">
-                <label htmlFor="password">Password</label>
-                <input type="password" v-model="password" name="password" class="form-control"
-                       v-class="{ 'is-invalid': submitted && !password }" />
-                <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
-                <router-link to="/account/resetpassword" class="btn btn-link">Reset Password</router-link>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" :disabled="fetching">Login</button>
-                <span v-show="failed"> Logowanie sie nie udalo - sprawdz podany login i haslo</span>
-                <img v-show="fetching" />
-                <router-link to="/account/register" class="btn btn-link">Register</router-link>
-            </div>
-        </form>
-    </div>
+    <form @submit.prevent="()=>{}">
+        <card-layout minWidth="600px">
+
+            <v-card-text>
+                <h2>Logowanie</h2>
+                <v-text-field label="Login" v-model="login" name="login" :rules="notEmptyRule"></v-text-field>
+                <v-btn to="/account/remindLogin">Przypomnij login</v-btn>
+                <v-text-field label="Hasło" v-model="password" name="password" type="password" :rules="notEmptyRule"></v-text-field>
+                <v-btn class="mb-2" to="/account/resetpassword">Zresetuj hasło</v-btn>
+                <v-alert type="error" v-show="failed">Logowanie się nie powiodło, spróbuj jeszcze raz lub skontaktuj się z administratorem.</v-alert>
+            </v-card-text>
+
+            <v-card-actions>
+                <div class="form-group">
+                    <v-btn :disabled="fetching" @click="handleSubmit">Zaloguj</v-btn>
+                    <img v-show="fetching" />
+                </div>
+            </v-card-actions>
+
+        </card-layout>
+    </form>
 </template>

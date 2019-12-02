@@ -19,6 +19,7 @@ export class UserService {
                 LocalStorageService.setUserId(jwt.userId);
                 LocalStorageService.setName(jwt.name);
                 LocalStorageService.setSurname(jwt.surname);
+
                 return true;
             },
             (err: any) => {
@@ -36,7 +37,7 @@ export class UserService {
 
             }, (err: any) => {
                 console.error(err);
-                throw err;
+                throw err.response;
             });
     }
 
@@ -86,12 +87,9 @@ export class UserService {
     }
 
     public isLoggedIn(): boolean {
-        console.log(LocalStorageService.getUserId())
-        console.log(LocalStorageService.getEmail())
-        console.log(LocalStorageService.getJwtToken())
         return LocalStorageService.getUserId() != null &&
-            LocalStorageService.getEmail() != null &&
-            LocalStorageService.getJwtToken() != null;
+            LocalStorageService.getEmail() != '' &&
+            LocalStorageService.getJwtToken() != '';
     }
 
     private parseJwt(token: string): IJwtClaims {
