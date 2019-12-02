@@ -586,3 +586,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# LaTEX files
+*.synctex.gz

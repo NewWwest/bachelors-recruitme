@@ -1,0 +1,37 @@
+// Place any CSS rules you want to apply on both iOS and Android here.
+// This is where the vast majority of your CSS code goes.
+
+// Font icon
+.fa {
+   font-family: "FontAwesome";
+}
+
+ActionBar {
+   background-color: #7e99a8;
+   //background-image: linear-gradient(to right, #EAE4C5, #7e99a8);
+}
+
+.my-button {
+   background-color: #DBAD6A;
+   color: white;
+   font-weight: bold;
+   border-radius: 25;
+   padding-top: 14;
+   padding-bottom: 14;
+   text-transform: uppercase;
+   letter-spacing: 0.1;
+   -webkit-box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 75);
+   -moz-box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 75);
+   box-shadow: 0px 0px 30px 20px rgba(0, 0, 0, 75);
+}
+
+.error-input {
+   color: white;
+   placeholder-color: white;
+   border-bottom-color: #A50000;
+   border-bottom-width: 1;
+}
+
+.error-label {
+   color: rgb(165, 0, 0);
+}
