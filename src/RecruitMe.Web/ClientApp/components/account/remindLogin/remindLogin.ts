@@ -1,10 +1,14 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
-import { IRegistrationRequest, IRemindLoginRequest } from '../../../models/user.models';
+import { IRemindLoginRequest } from '../../../models/user.models';
+import { ValidationService } from '../../../services/validation.service';
 
 @Component({})
 export default class RemindLogin extends Vue {
+    notEmptyRule: any = ValidationService.notEmptyRule();
+    peselHas11digit: any = ValidationService.peselRules();
+
     email: string = "";
     name: string = "";
     surname: string = "";

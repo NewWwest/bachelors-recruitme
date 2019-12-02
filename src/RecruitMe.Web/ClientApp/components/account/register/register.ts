@@ -2,14 +2,13 @@ import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest } from '../../../models/user.models';
+import { ValidationService } from '../../../services/validation.service';
 
-@Component({})
+@Component({ })
 export default class Register extends Vue {
-    notEmptyRule:any = [(v:string) => v!="" || "Musisz podać to pole"]
-    peselHas11digit:any = [
-        (v:string) => v.length==11 || "Pesel musi mieć 11 cyfr",
-        (v:string) => /^\d+$/.test(v) || "Pesel może zawierać tylko cyfry",
-    ]
+    notEmptyRule: any = ValidationService.notEmptyRule();
+    peselHas11digit: any = ValidationService.peselRules();
+
     email: string = "";
     password: string = "";
     confirmPassword: string = "";
@@ -19,6 +18,7 @@ export default class Register extends Vue {
     noPesel: boolean = false;
     birthDate: Date | null = null;
 
+    menu: boolean = false;
     submitted: boolean = false;
     fetching: boolean = false;
     registrationCompleted: boolean = false;

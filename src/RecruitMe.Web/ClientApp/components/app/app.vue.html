@@ -1,8 +1,8 @@
 <template>
     <div id='app-root' class="container-fluid">
         <v-app>
-            <menu-component />
-            <router-view></router-view>
+            <menu-component @user-logged-in="setCurretUser" :userLoggedIn="userLoggedIn"/>
+            <router-view @user-logged-in="setCurretUser"></router-view>
         </v-app>
     </div>
 </template>

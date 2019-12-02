@@ -1,38 +1,34 @@
 <template>
-    <v-toolbar app class="blue">
-        <div class="row col-md-12">
+    <div>
+        <v-toolbar>
             <div class="left-menu">
                 <router-link to="/">
-                    <v-toolbar-title class="cyan lighten-3 black--text display-2">RecruitMe.Web</v-toolbar-title>
+                    <v-toolbar-title>RecruitMe.Web</v-toolbar-title>
                 </router-link>
             </div>
-            <div v-if="!displayName" class="right-menu float-right">
-                <router-link to="/account/register">
-                    <v-btn class="cyan  lighten-3">
+            <v-spacer />
+            <template v-if="!userLoggedIn">
+                <v-toolbar-items>
+                    <v-btn to="/account/register">
                         <span>Zarejestruj się   <v-icon>exit_to_app</v-icon></span>
                     </v-btn>
-                </router-link>
-                <router-link to="/account/login">
-                    <v-btn class="cyan  lighten-3">
+                    <v-btn to="/account/login">
                         <span>Zaloguj   <v-icon>account_circle</v-icon></span>
                     </v-btn>
-            </router-link>
-            </div>
-            <div class="right-menu float-right" v-if="displayName">
-                <router-link to="/recruitment/profile">
-                    <v-btn class="cyan  lighten-3">
+                </v-toolbar-items>
+            </template>
+            <template v-if="userLoggedIn">
+                <v-toolbar-items>
+                    <v-btn to="/recruitment/profile">
                         <span>Profil   <v-icon>account_circle</v-icon></span>
                     </v-btn>
-                    </router-link>
-                <button v-on:click="logout()">
-                    <v-btn class="cyan  lighten-3">
+                    <v-btn v-on:click="logout()">
                         <span>Wyloguj   <v-icon>lock</v-icon></span>
                     </v-btn>
-                </button>
-            </div>
-        </div>
-    </v-toolbar>
+                </v-toolbar-items>
+            </template>
+        </v-toolbar>
+    </div>
 </template>
 
 <script src="./navmenu.ts" />
-<style src="./navmenu.css" />

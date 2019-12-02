@@ -1,6 +1,13 @@
-<template>
-    <div>
-        <h2>Email zostal potwierdzony</h2>
-        Teraz mozesz sie zalogowac za pomoca loginu: {{$route.query.candidateId}}
-    </div>
+﻿<template>
+    <card-layout>
+        <v-card-text>
+            <h2>Email zostal potwierdzony</h2>
+            Teraz mozesz sie zalogowac za pomoca loginu: {{$route.query.candidateId}}
+        </v-card-text>
+        <v-card-actions>
+            <v-btn to="/">
+                Strona główna
+            </v-btn>
+        </v-card-actions>
+    </card-layout>
 </template>

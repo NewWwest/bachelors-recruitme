@@ -26,6 +26,23 @@ module.exports = (env) => {
                         }
                     }
                 },
+                {
+                    test: /\.s(c|a)ss$/,
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                implementation: require('sass'),
+                                sassOptions: {
+                                    fiber: require('fibers'),
+                                    indentedSyntax: true
+                                },
+                            },
+                        },
+                    ],
+                },
                 { test: /\.ts$/, include: /ClientApp/, use: isDevBuild ? 'awesome-typescript-loader' : 'awesome-typescript-loader?silent=true' },
                 { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
                 { test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf)$/, use: 'url-loader?limit=100000' }

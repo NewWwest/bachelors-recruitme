@@ -1,44 +1,37 @@
 ﻿<template>
-    <div>
-    <div v-if="!loginReminded">
-        <h2>Przypomnij login</h2>
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-                <label for="email">email</label>
-                <input type="text" v-model="email" name="email" class="form-control" />
-                <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
-            </div>
-            <div class="form-group">
-                <label for="pesel">pesel</label>
-                <input type="text" v-model="pesel" name="pesel" class="form-control" />
-                <label for="noPesel">noPesel</label>
-                <input type="checkbox" v-model="noPesel" name="noPesel" text="Nie mam pesela" class="form-control" />
-            </div>
+    <v-container fluid>
+        <card-layout v-if="!loginReminded" minWidth="600px">
 
-            <div class="form-group" v-show="noPesel">
-                <label for="name">name</label>
-                <input type="text" v-model="name" name="name" class="form-control" />
-                <div v-show="submitted && !name" class="invalid-feedback">name is required</div>
-            </div>
+            <v-card-text>
+                <h2>Przypomnij login</h2>
+                <form @submit.prevent="()=>{}">
+                    <v-text-field label="Adres email" v-model="email" name="email" :rules="notEmptyRule"></v-text-field>
+                    <v-checkbox v-model="noPesel" label="Nie mam numeru PESEL"></v-checkbox>
+                    <v-text-field v-if="!noPesel" label="Nr PESEL" v-model="pesel" name="pesel" :rules="peselHas11digit"></v-text-field>
+                    <v-text-field v-show="noPesel" label="Imię" v-model="name" name="name" :rules="notEmptyRule"></v-text-field>
+                    <v-text-field v-show="noPesel" label="Nazwisko" v-model="surname" name="surname" :rules="notEmptyRule"></v-text-field>
+                </form>
 
-            <div class="form-group" v-show="noPesel">
-                <label for="surname">surname</label>
-                <input type="text" v-model="surname" name="surname" class="form-control" />
-                <div v-show="submitted && !surname" class="invalid-feedback">surname is required</div>
-            </div>
-            
-            <div class="form-group">
-                <button class="btn btn-primary" :disabled="fetching">Sprawdz moj login</button>
-                <div v-show="backendError"> {{backendError}} </div>
-                <img v-show="fetching" />
-            </div>
-        </form>
-    </div>
+            </v-card-text>
+            <v-card-actions>
+                <div class="form-group">
+                    <v-btn :disabled="fetching" @click="handleSubmit">Sprawdz moj login</v-btn>
+                    <img v-show="fetching" />
+                </div>
+            </v-card-actions>
+        </card-layout>
 
-    <div v-if="loginReminded">
-        Jesli wskazane dane zgadzaja sie z uzytkowniekiem w bazie, na adres email podany przy rejestracji został wyslany Twoj login
-    </div>
-    </div>
+        <card-layout v-if="loginReminded" maxWidth="344px">
+            <v-card-text>
+                Jesli wskazane dane zgadzaja sie z uzytkowniekiem w bazie, na adres email podany przy rejestracji został wyslany Twoj login.
+            </v-card-text>
+            <v-card-actions>
+                <v-btn to="/">
+                    Strona główna
+                </v-btn>
+            </v-card-actions>
+        </card-layout>
+    </v-container>
 </template>
 
 <script src="./remindLogin.ts"></script>

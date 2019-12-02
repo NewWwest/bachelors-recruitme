@@ -118,7 +118,8 @@ namespace RecruitMe.Web.Controllers
             }
             catch
             {
-                return BadRequest();
+                //Hide error to block looking up emails
+                return Ok();
             }
         }
     }
