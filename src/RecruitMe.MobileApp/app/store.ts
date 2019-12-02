@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { IPersonalData } from './models/personalDataModel';
 
 Vue.use(Vuex);
 
@@ -8,7 +9,8 @@ export default new Vuex.Store({
     userId: 0,
     email: '',
     token: '',
-    fullname: ''
+    fullname: '',
+    personalData: {} as IPersonalData | null,
   },
   mutations: {
     setUserId(state, userId) {
@@ -22,13 +24,17 @@ export default new Vuex.Store({
     },
     setFullname(state, fullname) {
       state.fullname = fullname ? fullname : '';
-    }
+    },
+    setPersonalData(state, personalData: IPersonalData) {
+      state.personalData = personalData;
+    },
   },
   getters: {
     getUserId: state => state.userId,
     getEmail: state => state.email,
     getToken: state => state.token,
-    getFullname: state => state.fullname
+    getFullname: state => state.fullname,
+    getPersonalData: state => state.personalData,
   },
   actions: {
 

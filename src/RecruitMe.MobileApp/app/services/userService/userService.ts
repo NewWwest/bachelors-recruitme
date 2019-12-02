@@ -1,17 +1,18 @@
 import { ApiGateway } from "../common/apiGateway";
-import { LocalStorageService } from "./localStorageService";
+import { LocalStorageService } from "../localStorage/localStorageService";
 import { AxiosResponse } from "axios";
 import { IAuthenticationResult, IRegistrationRequest,
     IJwtClaims, IRemindLoginRequest,
     IResetPasswordRequest, ISetNewPassword } from "../../models/userFormModel";
 import PopupFactory from '../popupFactory';
+import { PersonalDataService } from '../personalData/personalDataService';
 
 export class UserService {
     private _apiGateway: ApiGateway = new ApiGateway();
 
     public login(email: string, password: string) {
         return this._apiGateway.login(email, password).then(
-            (response: AxiosResponse<IAuthenticationResult>) => {
+            async (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response != null && response.data != null) {
                     let jwt = this.parseJwt(response.data.access_token);
 
@@ -19,15 +20,18 @@ export class UserService {
                     LocalStorageService.setJwtToken(response.data.access_token);
                     LocalStorageService.setUserId(jwt.userId);
                     LocalStorageService.setFullname(jwt.name + ' ' + jwt.surname);
+
+                    const service: PersonalDataService = new PersonalDataService();
+                    await service.getPersonalData();
                 }
             })
     }
 
-    public register(registrationModel: IRegistrationRequest): Promise<number> {
+    public register(registrationModel: IRegistrationRequest): Promise<void> {
         return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<number>) => {
                 if (response != null && response.data != null) {
-                    console.log(`Registration succesfull, internal ID: ${response.data}`)
+                    console.log(`Registration succesfull, internal ID: ${response.data}`);
                 }
             },(err: any) => {
                 console.error(err);

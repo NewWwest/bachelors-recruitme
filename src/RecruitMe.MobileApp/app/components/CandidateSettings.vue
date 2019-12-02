@@ -1,21 +1,17 @@
 <template>
     <Page class="page">
         <ActionBar class="action-bar">
-            <FlexBoxLayout>
-                <NavigationButton class="fa" text.decode="&#xf0c9; " @tap="onDrawerButtonTap">
-                </NavigationButton>
-                <Label class="action-bar-title" text="Settings"></Label>
-            </FlexBoxLayout>
+            <StackLayout horizontalAlignment="left" orientation="horizontal">
+                <Image src="res://mobile_menu_white" width="32" height="32"
+                    @tap="onDrawerButtonTap"/>
+                <Image class="dummyImage" /> <!-- dummy object to get text to center -->
+                <Label class="action-bar-title" text="Ustawienia"></Label>
+            </StackLayout> 
         </ActionBar>
 
         <ScrollView>
-            <StackLayout>
-                <StackLayout class="detailsInfoBar">
-
-                </StackLayout>
-                <StackLayout class="pageBack">
-                
-                </StackLayout>
+            <StackLayout class="pageBack">
+            
             </StackLayout>
         </ScrollView>
     </Page>
@@ -35,4 +31,8 @@ export default class CandidateSettings extends Vue {
 
 <style scoped lang="scss">
     @import '../app-common';
+
+    .dummyImage {
+        width: 27.5%;     // should be 35% - (half of head string length [circa 1% for letter])
+    }
 </style>

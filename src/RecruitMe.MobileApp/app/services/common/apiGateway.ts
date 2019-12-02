@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { LocalStorageService } from '../userService/localStorageService';
+import { LocalStorageService } from '../localStorage/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
 
@@ -48,29 +48,34 @@ export class ApiGateway {
         return this.makeRequest(RequestType.POST, '/connect/token', data, this.ContentTypeFormUrlencoded());
     }
 
-    public register(registrationModel: IRegistrationRequest): any {
+    public register(registrationModel: IRegistrationRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, '/api/Account/Register', registrationModel)
     }
 
-    public resetPassword(resetPasswordRequest: IResetPasswordRequest): any {
+    public resetPassword(resetPasswordRequest: IResetPasswordRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/ResetPassword', resetPasswordRequest)
     }
 
-    public setNewPassword(resetPasswordRequest: ISetNewPassword): any {
+    public setNewPassword(resetPasswordRequest: ISetNewPassword): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/SetNewPassword', resetPasswordRequest)
     }
 
-    public remindLogin(remindModel: IRemindLoginRequest): any {
+    public remindLogin(remindModel: IRemindLoginRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/RemindLogin', remindModel)
     }
 
-    public getUser(): Promise<AxiosResponse> {
+    public getPersonalData() : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
-            '/api/Account/GetUserBaseInfo?id=' + LocalStorageService.getUserId(), this.authHeader());
+            '/api/Recruitment/PersonalData', this.authHeader());
     }
+
+    // public getUser(): Promise<AxiosResponse> {
+    //     return this.makeRequest(RequestType.GET,
+    //         '/api/Account/GetUserBaseInfo?id=' + LocalStorageService.getUserId(), this.authHeader());
+    // }
 
     /// private helpers
 
@@ -78,7 +83,7 @@ export class ApiGateway {
         return {
             headers: {
                 Authorization: `Bearer ${LocalStorageService.getJwtToken()}`,
-                'Content-Type': 'application/json; charset=utf-8'
+                //'Content-Type': 'application/json; charset=utf-8'
             }
         }
     }

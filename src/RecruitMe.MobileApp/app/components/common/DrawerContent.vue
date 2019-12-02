@@ -34,7 +34,7 @@ import { Component, Vue } from "vue-property-decorator";
 
 import { closeDrawer } from "@/services/sideDrawer/utils";
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service"
-import { LocalStorageService } from '../../services/userService/localStorageService';
+import { LocalStorageService } from '../../services/localStorage/localStorageService';
 
 @Component
 export default class DrawerContent extends Vue {

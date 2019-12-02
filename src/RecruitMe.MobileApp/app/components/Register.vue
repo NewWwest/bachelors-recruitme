@@ -71,10 +71,8 @@ import LoaderService from '../services/loaderView/loader';
                 LoaderService.showLoader();
                 
                 this.userService.register(this.userData).then(data => {
-                    console.log("register ok");
-                    
                     LoaderService.hideLoader();
-                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji")
+                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji został wysłany mail z informacjami");
                 }).catch(err => {
                     console.log(err);
 
