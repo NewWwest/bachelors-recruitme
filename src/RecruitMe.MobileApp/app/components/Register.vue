@@ -42,12 +42,12 @@
 </template>
 
 <script lang="ts">
-    import { IRegistrationRequest } from "@/models/userFormModel";
-    import { Component, Vue } from 'vue-property-decorator';
-    import { UserService } from '@/services/userService/userService';
-    import { AxiosResponse } from 'axios';
-    import ConnectionService from "@/services/common/connection";
-    import PopupFactory from "@/services/popupFactory";
+import { IRegistrationRequest } from "@/models/userFormModel";
+import { Component, Vue } from 'vue-property-decorator';
+import { UserService } from '@/services/userService/userService';
+import { AxiosResponse } from 'axios';
+import ConnectionService from "@/services/common/connection";
+import PopupFactory from "@/services/popupFactory";
 import LoaderService from '../services/loaderView/loader';
 
     @Component

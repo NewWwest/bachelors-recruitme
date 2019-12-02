@@ -100,17 +100,6 @@ import LoaderService from '@/services/loaderView/loader';
         color: #cf995f;
     }
 
-    .form-input {
-        color: white;
-        placeholder-color: white;
-        border-bottom-width: 1;
-        border-bottom-color: white;
-    }
-
-    .form-group {
-        margin-top: 15;
-    }
-
     .input-width {
         width: 90%;
     }
