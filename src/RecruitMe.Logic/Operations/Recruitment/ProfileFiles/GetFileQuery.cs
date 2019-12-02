@@ -23,9 +23,9 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
 
     public class GetFileQuery : BaseAsyncOperation<GetFileQueryResult, (int UserId, int FileId)>
     {
-        private readonly IFileStorage _fileStorage;
+        private readonly IFileRepository _fileStorage;
 
-        public GetFileQuery(ILogger logger, BaseDbContext dbContext, IFileStorage fileStorage) : base(logger, dbContext)
+        public GetFileQuery(ILogger logger, BaseDbContext dbContext, IFileRepository fileStorage) : base(logger, dbContext)
         {
             _fileStorage = fileStorage;
         }

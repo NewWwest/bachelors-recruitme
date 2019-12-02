@@ -1,49 +1,57 @@
-<template>
-<div class="profile">
-    <h2>Profile</h2>
-    <div class="row">
-        <div class="profile-data col-md-6">
-                <form @submit.prevent="handleSubmit">
-        
-                    <div class="form-group">
-                        <label for="adress">Adress</label>
-                        <input type="text" v-model="adress" name="adress" class="form-control" />
-                        <div v-show="submitted && !adress" class="invalid-feedback">adress is required</div>
-                    </div>
-        
-                    <div class="form-group">
-                        <label htmlFor="fatherName">FatherName</label>
-                        <input type="text" v-model="fatherName" name="fatherName" class="form-control" />
-                        <div v-show="submitted && !fatherName" class="invalid-feedback">FatherName is required</div>
-                    </div>
-        
-                    <div class="form-group">
-                        <label htmlFor="motherName">MotherName</label>
-                        <input type="text" v-model="motherName" name="motherName" class="form-control" />
-                        <div v-show="submitted && !motherName" class="invalid-feedback">MotherName is required</div>
-                    </div>
-        
-                    <div class="form-group">
-                        <label htmlFor="primarySchool">PrimarySchool</label>
-                        <input type="text" v-model="primarySchool" name="primarySchool" class="form-control" />
-                        <div v-show="submitted && !primarySchool" class="invalid-feedback">PrimarySchool is required</div>
-                    </div>
-        
-                    <div class="form-group">
-                        <button class="btn btn-primary" :disabled="fetching">Submit</button>
-                        <img v-show="fetching" />
-                    </div>
-                </form>
+﻿<template>
+    <div class="profile">
+        <h2>Profil</h2>
+        <div class="row">
+            <div class="profile-data col-sm-6">
+                <v-card class="mb-3">
+                    <v-card-text>
+                        <v-text-field readonly label="Login" v-model="profile.candidateId" name="profile.candidateId"></v-text-field>
+                        <v-text-field readonly label="Imię" v-model="profile.name" name="profile.name"></v-text-field>
+                        <v-text-field readonly label="Nazwisko" v-model="profile.surname" name="profile.surname"></v-text-field>
+                        <v-text-field readonly label="Adres email" v-model="profile.email" name="profile.email"></v-text-field>
+                        <v-text-field readonly label="Data urodzenia" v-model="birthDate" name="birthDate"></v-text-field>
+                        <v-text-field readonly v-if="profile.pesel" label="Nr PESEL" v-model="profile.pesel" name="profile.pesel"></v-text-field>
+                        <p>
+                            Dane podane przy rejestracji, nie mogą zostać zmienione, jeśli widzisz w nich jakiś błąd, skontaktuj się z administratorem.
+                        </p>
+                    </v-card-text>
+                </v-card>
+                <v-card class="mb-3">
+                    <v-card-text>
+                        <v-text-field label="Adres" v-model="adress" name="adress"></v-text-field>
+                        <v-text-field label="Imię i nazwisko rodzica 1" v-model="fatherName" name="fatherName"></v-text-field>
+                        <v-text-field label="Imię i nazwisko rodzica 2" v-model="motherName" name="motherName"></v-text-field>
+                        <v-text-field label="Szkoła podstawowa" v-model="primarySchool" name="primarySchool"></v-text-field>
+                        <div class="form-group">
+                            <v-btn :disabled="fetching" @click="handleSubmit">Zapisz dane</v-btn>
+                            <img v-show="fetching" />
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </div>
+
+            <div class="profile-picture col-sm-6">
+                <PictureInput @picture-confirmed="PictureConfirmed" :fileId="profilePictureFileId" :fileName="profilePicName"></PictureInput>
+            </div>
+
         </div>
-        
-        <div class="profile-picture col-md-6" > 
-            <PictureInput @picture-confirmed="PictureConfirmed" :fileId="profilePictureFileId" :fileName="profilePicName"></PictureInput>
+
+        <div class="profile-documents">
+            <v-file-input v-model="file"
+                        placeholder="Świadectwo.pdf"
+                        label="Wybierz dokument">
+            </v-file-input>
+            <v-btn @click="uploadDocument">
+                Prześlij document
+            </v-btn>
+            <div v-for="document in profile.documents">
+                <v-card>
+                    {{document.name}}
+                    <v-btn @click="downloadDocument(document.id)">Pobierz   <v-icon>file_download</v-icon></v-btn>
+                    <v-btn @click="deleteDocument(document.id)">Usuń   <v-icon>delete</v-icon></v-btn>
+                </v-card>
+            </div>
         </div>
-        
     </div>
-    <div class="profile-documents">
-            TODO
-    </div>
-</div>
 </template>
 <script src="./profile.ts"></script>

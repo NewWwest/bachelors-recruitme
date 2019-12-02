@@ -12,16 +12,18 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
 {
-    public class SetNewProfilePictureCommand : BaseAsyncOperation<string, SetNewProfilePictureCommandRequest>
+    public class SetNewProfilePictureCommand : BaseAsyncOperation<string, FileRequest>
     {
-        private readonly IFileStorage _fileStorage;
+        private readonly IFileRepository _fileStorage;
+        private readonly IPictureSaver _pictureSaver;
 
-        public SetNewProfilePictureCommand(ILogger logger, BaseDbContext dbContext, IFileStorage fileStorage) : base(logger, dbContext)
+        public SetNewProfilePictureCommand(ILogger logger, BaseDbContext dbContext, IFileRepository fileStorage, IPictureSaver pictureSaver) : base(logger, dbContext)
         {
             _fileStorage = fileStorage;
+            _pictureSaver = pictureSaver;
         }
 
-        protected override async Task<string> DoExecute(SetNewProfilePictureCommandRequest request)
+        protected override async Task<string> DoExecute(FileRequest request)
         {
             var profile = await _dbContext.PersonalData
                 .Include(p => p.ProfilePictureFile)
@@ -31,14 +33,16 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
             {
                 var file = profile.ProfilePictureFile;
                 _fileStorage.Delete(file.FileUrl);
+                _dbContext.PersonalDocuments.Remove(file);
             }
 
-            var fileId = await _fileStorage.SaveAsync(request.File, request.FileName);
+            var fileId = await _pictureSaver.SaveAsync(request.File, request.FileName);
             var newFileRecord = new PersonalDocument()
             {
                 FileUrl = fileId,
                 Name = request.FileName,
                 UserId = request.UserId,
+                ContentType = request.ContentType
             };
 
             await _dbContext.PersonalDocuments.AddAsync(newFileRecord);

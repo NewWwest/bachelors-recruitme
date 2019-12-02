@@ -5,8 +5,10 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
 {
-    public class SetNewProfilePictureCommandRequest
+    public class FileRequest
     {
+        public string ContentType { get; set; }
+
         public int UserId { get; set; }
 
         public string FileName { get; set; }

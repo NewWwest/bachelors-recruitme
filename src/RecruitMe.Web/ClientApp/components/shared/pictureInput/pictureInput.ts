@@ -28,15 +28,13 @@ export default class PictureInput extends Vue {
     }
 
     updated() {
-        if (this.fileId != null && this.filesrc == null) {
-            this.apiGateway.getFile(this.fileId).then(d => {
+        if (this.fileId != null && this.fileId > 0 && this.filesrc == null) {
+            this.apiGateway.getImage(this.fileId).then(d => {
                 this.filesrc = `data:${d.contentType};${d.contentEncoding},` + d.file;
                 this.$forceUpdate();
             });
         }
-
     }
-
 
     getdisplayedName(): string {
         if (this.touched) {
@@ -57,7 +55,6 @@ export default class PictureInput extends Vue {
         }
         return { background: `url(${src})` };
     }
-
 
     PictureSelected(evt: any) {
         if (this.processing)
@@ -96,8 +93,10 @@ export default class PictureInput extends Vue {
             this.$forceUpdate();
         }
     }
+
     TakePhoto() {
         alert("integrate webcam");
     }
+
     doNothing() { }
 }
