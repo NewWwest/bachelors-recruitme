@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { LocalStorageService } from '../localStorage/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
+import { IPersonalData } from '@/models/personalDataModel';
 
 export class ApiGateway {
     private baseURL = "http://192.168.0.2:5000"; // base url
@@ -70,6 +71,13 @@ export class ApiGateway {
     public getPersonalData() : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
             '/api/Recruitment/PersonalData', this.authHeader());
+    }
+
+    public setPersonalData(personalDataModel: IPersonalData) : Promise<AxiosResponse> {
+        console.log(personalDataModel);
+        
+        return this.makeRequest(RequestType.POST,
+            '/api/Recruitment/PersonalData', personalDataModel, this.authHeader());
     }
 
     // public getUser(): Promise<AxiosResponse> {

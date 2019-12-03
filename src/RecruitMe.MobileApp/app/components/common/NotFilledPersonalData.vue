@@ -20,17 +20,11 @@ export default class NotFilledPersonalData extends Vue {
     
     constructor() {
         super();
-        
         let personalData = LocalStorageService.getPersonalData();
-
-        console.log(personalData);
 
         if (personalData == null) {
             throw new Error("Personal Data not checked!");
         }
-
-        console.log(personalData ? "aaa" : "bbb");
-        console.log(personalData.adress ? "ccc" : "ddd");
 
         this.visible = personalData ? personalData.adress && personalData.fatherName &&
             personalData.motherName && personalData.primarySchool ? false : true : true;

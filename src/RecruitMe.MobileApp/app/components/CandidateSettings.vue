@@ -10,7 +10,7 @@
         </ActionBar>
 
         <ScrollView>
-            <GridLayout columns="*,*" rows="20,150,*,auto" class="pageBack">
+            <GridLayout columns="*,*" rows="20,auto,*,auto" class="pageBack">
                 <!-- image -->
                 <StackLayout row="1" col="0">
                     <Image class="imagePlaceholder" />
@@ -19,8 +19,8 @@
                 <!-- image selector -->
                 <FlexboxLayout flexDirection="column" justifyContent="space-around"
                 row="1" col="1">
-                    <Button text="Z aparatu" />
-                    <Button text="Z galerii" />
+                    <Button class="my-button" text="Z aparatu" />
+                    <Button class="my-button" text="Z galerii" />
                 </FlexboxLayout>
 
                 <!-- form -->
@@ -38,7 +38,8 @@
                 </StackLayout>
 
                 <!-- Save buttons -->
-                <Button row="3" col="1" text="Zapisz"/>
+                <Button row="3" colSpan="2" class="saveBtn my-button" text="Zapisz"
+                 @tap="onSaveButtonTap"/>
             </GridLayout>
         </ScrollView>
     </Page>
@@ -48,6 +49,11 @@
 import * as utils from '@/services/sideDrawer/utils';
 import { Component, Vue } from "vue-property-decorator";
 import { IPersonalData } from '../models/personalDataModel';
+import { PersonalDataService } from '../services/personalData/personalDataService';
+import ConnectionService from '../services/common/connection';
+import LoaderService from '../services/loaderView/loader';
+import PopupFactory from '../services/popupFactory';
+import { LocalStorageService } from '../services/localStorage/localStorageService';
 
 @Component
 export default class CandidateSettings extends Vue {
@@ -57,9 +63,33 @@ export default class CandidateSettings extends Vue {
         motherName: '',
         primarySchool: ''
     };
+    personalDataService: PersonalDataService = new PersonalDataService();
     
+    constructor() {
+        super();
+        
+        const data = LocalStorageService.getPersonalData();
+
+        if (data !== null) {
+            this.personalData = data;
+        }
+    }
+
     onDrawerButtonTap() {
         utils.showDrawer();
+    }
+
+    onSaveButtonTap() {
+        if (ConnectionService.IsConnectedToNetwork()) {
+            LoaderService.showLoader();
+            this.personalDataService.setPersonalData(this.personalData).then(
+                r => LoaderService.hideLoader(), e => LoaderService.hideLoader()
+            );
+        }
+        else {
+            PopupFactory.ConnectionError();
+        }
+
     }
 }
 </script>
@@ -72,6 +102,11 @@ export default class CandidateSettings extends Vue {
         border-color: white;
         width: 140em;
         height: 140em;
+    }
+
+    .saveBtn {
+        height: 50em;
+        margin-top: 50px;
     }
 
     .dummyImage {

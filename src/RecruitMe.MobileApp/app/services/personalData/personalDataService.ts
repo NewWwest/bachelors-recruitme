@@ -18,4 +18,14 @@ export class PersonalDataService {
             PopupFactory.GenericErrorPopup("" + err);
         })
     }
+
+    public setPersonalData(personalDataModel: IPersonalData) : Promise<void> {
+        return this._apiGateway.setPersonalData(personalDataModel).then(r => {
+            console.log(r);
+            PopupFactory.GenericSuccessPopup("Pomyślnie zapisano dane dodatkowe");
+        }, err => {
+            console.log(err);
+            PopupFactory.GenericErrorPopup("" + err);
+        })
+    }
 }
