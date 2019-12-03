@@ -38,6 +38,8 @@ const routes: any[] = [
     { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default },
     
     { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default },
+
+    { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default },
 ];
 
 new Vue({
