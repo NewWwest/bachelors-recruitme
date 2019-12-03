@@ -13,7 +13,7 @@
             <GridLayout columns="*,*" rows="20,auto,*,auto" class="pageBack">
                 <!-- image -->
                 <StackLayout row="1" col="0">
-                    <Image class="imagePlaceholder" />
+                    <Image class="imagePlaceholder" :src="imageSrc"/>
                 </StackLayout>
 
                 <!-- image selector -->
@@ -48,27 +48,30 @@
 <script lang="ts">
 import * as utils from '@/services/sideDrawer/utils';
 import { Component, Vue } from "vue-property-decorator";
-import { IPersonalData } from '../models/personalDataModel';
+import { IProfileData } from '../models/personalDataModel';
 import { PersonalDataService } from '../services/personalData/personalDataService';
 import ConnectionService from '../services/common/connection';
 import LoaderService from '../services/loaderView/loader';
 import PopupFactory from '../services/popupFactory';
 import { LocalStorageService } from '../services/localStorage/localStorageService';
+import { ImageService } from '../services/image/imageService';
 
 @Component
 export default class CandidateSettings extends Vue {
-    personalData: IPersonalData = {
+    personalData: IProfileData = {
         adress: '',
         fatherName: '',
         motherName: '',
-        primarySchool: ''
+        primarySchool: '',
+        profilePictureName: '',
+        profilePictureFileId: 0
     };
     personalDataService: PersonalDataService = new PersonalDataService();
     
     constructor() {
         super();
         
-        const data = LocalStorageService.getPersonalData();
+        const data = LocalStorageService.getProfileData();
 
         if (data !== null) {
             this.personalData = data;
@@ -89,7 +92,10 @@ export default class CandidateSettings extends Vue {
         else {
             PopupFactory.ConnectionError();
         }
+    }
 
+    get imageSrc() {
+        return (new ImageService()).getUserPicture();
     }
 }
 </script>

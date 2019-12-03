@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { LocalStorageService } from '../localStorage/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
-import { IPersonalData } from '@/models/personalDataModel';
+import { IProfileData } from '@/models/personalDataModel';
 
 export class ApiGateway {
     private baseURL = "http://192.168.0.2:5000"; // base url
@@ -68,16 +68,24 @@ export class ApiGateway {
             '/api/Account/RemindLogin', remindModel)
     }
 
-    public getPersonalData() : Promise<AxiosResponse> {
+    public getProfileData() : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
             '/api/Recruitment/PersonalData', this.authHeader());
     }
 
-    public setPersonalData(personalDataModel: IPersonalData) : Promise<AxiosResponse> {
+    public setProfileData(personalDataModel: IProfileData) : Promise<AxiosResponse> {
         console.log(personalDataModel);
         
         return this.makeRequest(RequestType.POST,
             '/api/Recruitment/PersonalData', personalDataModel, this.authHeader());
+    }
+
+    public getImageRequest(fileId: number) : any {
+        return {
+            url: this.baseURL + '/api/asset/' + fileId,
+            method: 'GET',
+            headers: this.authHeader().headers
+        }
     }
 
     // public getUser(): Promise<AxiosResponse> {

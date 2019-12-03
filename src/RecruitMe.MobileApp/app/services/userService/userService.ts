@@ -22,7 +22,7 @@ export class UserService {
                     LocalStorageService.setFullname(jwt.name + ' ' + jwt.surname);
 
                     const service: PersonalDataService = new PersonalDataService();
-                    await service.getPersonalData();
+                    await service.getProfileData();
                 }
             })
     }

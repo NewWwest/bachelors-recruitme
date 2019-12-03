@@ -1,17 +1,17 @@
 import { ApiGateway } from "../common/apiGateway";
 import { LocalStorageService } from "../localStorage/localStorageService";
-import { IPersonalData } from "../../models/personalDataModel";
+import { IProfileData } from "../../models/personalDataModel";
 import PopupFactory from '../popupFactory';
 
 export class PersonalDataService {
     private _apiGateway: ApiGateway = new ApiGateway();
 
-    public getPersonalData() : Promise<IPersonalData | null> {
-        return this._apiGateway.getPersonalData().then(r => {
+    public getProfileData() : Promise<IProfileData | null> {
+        return this._apiGateway.getProfileData().then(r => {
             console.log("personal data service");
             console.log(r);
 
-            LocalStorageService.setPersonalData(r.data);
+            LocalStorageService.setProfileData(r.data);
             return r.data; 
         }, err => {
             console.log(err);
@@ -19,8 +19,8 @@ export class PersonalDataService {
         })
     }
 
-    public setPersonalData(personalDataModel: IPersonalData) : Promise<void> {
-        return this._apiGateway.setPersonalData(personalDataModel).then(r => {
+    public setProfileData(profileDataModel: IProfileData) : Promise<void> {
+        return this._apiGateway.setProfileData(profileDataModel).then(r => {
             console.log(r);
             PopupFactory.GenericSuccessPopup("Pomyślnie zapisano dane dodatkowe");
         }, err => {

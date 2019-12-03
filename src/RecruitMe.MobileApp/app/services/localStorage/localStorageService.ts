@@ -1,5 +1,5 @@
 import store from '@/store';
-import { IPersonalData } from "../../models/personalDataModel";
+import { IProfileData } from "../../models/personalDataModel";
 
 export class LocalStorageService {
     static setUserId(userId: number): void {
@@ -34,12 +34,12 @@ export class LocalStorageService {
         return store.getters.getFullname;
     }
 
-    static setPersonalData(personalData: IPersonalData): void {
-        store.commit('setPersonalData', personalData);
+    static setProfileData(profileData: IProfileData): void {
+        store.commit('setProfileData', profileData);
     }
 
-    static getPersonalData(): IPersonalData | null {
-        return store.getters.getPersonalData;
+    static getProfileData(): IProfileData | null {
+        return store.getters.getProfileData;
     }
 
 }
