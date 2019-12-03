@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { IPersonalData } from '../models/recruit.models';
 import { LocalStorageService } from '../services/localStorage.service';
-import { IRegistrationRequest } from '../models/user.models';
+import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from '../models/user.models';
 
 export class ApiGateway {
+
     public login(candidateId: string, password: string): any {
         let clientsecret: string = "123456789ABCDEF123456789ABCDEF123456789ABCDEF123456789ABCDEF";
         let data: string = "grant_type=password&" +
@@ -14,15 +15,42 @@ export class ApiGateway {
             `password=${encodeURIComponent(password)}`
         return axios.post('/connect/token', data, this.ContentTypeFormUrlencoded())
     }
+
     public register(registrationModel: IRegistrationRequest): any {
         return axios.post('/api/Account/Register', registrationModel)
+    }
+
+    public resetPassword(resetPasswordRequest: IResetPasswordRequest): any {
+        return axios.post('/api/Account/ResetPassword', resetPasswordRequest)
+    }
+
+    public setNewPassword(resetPasswordRequest: ISetNewPassword): any {
+        return axios.post('/api/Account/SetNewPassword', resetPasswordRequest)
+    }
+
+    public remindLogin(remindModel: IRemindLoginRequest): any {
+        return axios.post('/api/Account/RemindLogin', remindModel)
     }
 
     public updatePersonalData(data: IPersonalData) {
         return axios.post('/api/Recruitment/PersonalData', data, this.authHeader())
     }
+
     public getPersonalData() {
         return axios.get('/api/Recruitment/PersonalData', this.authHeader())
+    }
+
+    public setNewProfilePicture(fileName: string, file: any) {
+        let data: FormData = new FormData();
+        data.append('picture', file, fileName);
+
+        return axios.post('/api/Recruitment/ProfilePicture', data, this.authHeader());
+    }
+
+    public getFile(fileId: number) {
+        return axios.get(`/api/asset/${fileId}`, this.authHeader()).then(resp => {
+            return resp.data
+        });
     }
 
     private authHeader() {

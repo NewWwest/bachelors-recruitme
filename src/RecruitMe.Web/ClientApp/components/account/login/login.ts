@@ -1,15 +1,17 @@
-import Vue from 'vue';
+﻿import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
+import { ValidationService } from '../../../services/validation.service';
 
-// @ts-ignore
-@Component
+@Component({})
 export default class Login extends Vue {
-    email: string = "";
+    notEmptyRule: any = ValidationService.notEmptyRule();
+    login: string = "";
     password: string = "";
 
     submitted: boolean = false;
     fetching: boolean = false;
+    failed: boolean = false;
 
     userService: UserService = new UserService();
 
@@ -18,10 +20,10 @@ export default class Login extends Vue {
     }
 
     handleSubmit() {
-        this.userService.login(this.email, this.password).then((r) => {
-            this.$router.push('/');
+        this.userService.login(this.login, this.password).then((r) => {
+            this.$emit("user-logged-in", true);
         }, (err) => {
-                console.log(err);
+            this.failed = true;
         })
     }
 }

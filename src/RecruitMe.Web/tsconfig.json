@@ -2,17 +2,17 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "module": "es2015",   
+    "module": "es2015",
     "moduleResolution": "node",
     "target": "es5",
     "sourceMap": true,
     "skipDefaultLibCheck": true,
     "strict": true,
-    "types": ["webpack-env"],
-    "lib": ["es5", "es2015", "dom", "scripthost"]
+    "types": [ "node", "vuetify" ],
+    "lib": [ "es5", "es2015", "dom", "scripthost" ]
   },
   "exclude": [
-      "bin",
-      "node_modules"
+    "bin",
+    "node_modules"
   ]
 }

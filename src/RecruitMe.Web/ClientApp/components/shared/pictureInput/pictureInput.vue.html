@@ -1,0 +1,18 @@
+<template>
+    <form mothod="post" @submit.prevent="doNothing">
+        <div class="row col-md-12">
+            <div class="picture-container" :style="getdisplayedImage()" @click="$refs.PicInput.click()">
+                <div class="picture-name">{{getdisplayedName()}}</div>
+                <input type="file" @change="PictureSelected" accept="image/*" style="display: none;" ref="PicInput">
+                <div class="overlay">Kliknij na zdjęcie aby załadować nowe.</div>
+            </div>
+        </div>
+        <div class="row col-md-12">
+            <input class="w150px" type="submit" value="Zapisz zdjęcie" @click="PictureConfirmed" />
+            <input class="w150px" type="submit" value="Zrób zdjęcie teraz" @click="TakePhoto" />
+        </div>
+    </form>
+</template>
+
+<script src="./PictureInput.ts"></script>
+<style src="./pictureInput.css"></style>

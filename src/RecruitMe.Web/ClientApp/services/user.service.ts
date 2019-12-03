@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { IRegistrationRequest, IAuthenticationResult, IJwtClaims } from "../models/user.models";
+import { IRegistrationRequest, IAuthenticationResult, IJwtClaims, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from "../models/user.models";
 import { LocalStorageService } from "./localStorage.service";
 import { AxiosResponse } from "axios";
 
@@ -10,7 +10,7 @@ export class UserService {
         return this._apiGateway.login(email, password).then(
             (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response == null || response.data == null) {
-                    return false;
+                    throw new Error();
                 }
 
                 let jwt = this.parseJwt(response.data.access_token);
@@ -19,23 +19,55 @@ export class UserService {
                 LocalStorageService.setUserId(jwt.userId);
                 LocalStorageService.setName(jwt.name);
                 LocalStorageService.setSurname(jwt.surname);
+
                 return true;
             },
             (err: any) => {
                 console.error(err);
-                return false;
+                throw new Error();
             })
     }
 
     public register(registrationModel: IRegistrationRequest): Promise<number> {
         return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<number>) => {
-                if (response != null && response.data != null) {
-                    alert(`Registration succesfull, internal ID: ${response.data}`)
+                if (response == null || response.data == null) {
+                    throw new Error();
                 }
-            },(err: any) => {
+
+            }, (err: any) => {
                 console.error(err);
-                return err;;
+                throw err.response;
+            });
+    }
+
+    public resetPassword(resetmodel: IResetPasswordRequest): Promise<void> {
+        return this._apiGateway.resetPassword(resetmodel).then(
+            (response: AxiosResponse<number>) => {
+                
+            }, (err: any) => {
+                console.error(err);
+                throw err;;
+            });
+    }
+
+    public setNewPassword(resetModel: ISetNewPassword): Promise<void> {
+        return this._apiGateway.setNewPassword(resetModel).then(
+            (response: AxiosResponse<number>) => {
+
+            }, (err: any) => {
+                console.error(err);
+                throw err;;
+            });
+    }
+
+    public remindLogin(remindModel: IRemindLoginRequest): Promise<void> {
+        return this._apiGateway.remindLogin(remindModel).then(
+            (response: AxiosResponse<string>) => {
+
+            }, (err: any) => {
+                console.error(err);
+                throw err;;
             });
     }
 
@@ -55,12 +87,9 @@ export class UserService {
     }
 
     public isLoggedIn(): boolean {
-        console.log(LocalStorageService.getUserId())
-        console.log(LocalStorageService.getEmail())
-        console.log(LocalStorageService.getJwtToken())
         return LocalStorageService.getUserId() != null &&
-            LocalStorageService.getEmail() != null &&
-            LocalStorageService.getJwtToken() != null;
+            LocalStorageService.getEmail() != '' &&
+            LocalStorageService.getJwtToken() != '';
     }
 
     private parseJwt(token: string): IJwtClaims {

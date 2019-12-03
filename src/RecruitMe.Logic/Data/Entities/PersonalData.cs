@@ -20,6 +20,10 @@ namespace RecruitMe.Logic.Data.Entities
 
         public string PrimarySchool { get; set; }
 
+        public int? ProfilePictureFileId { get; set; }
+
+        public virtual PersonalDocument ProfilePictureFile { get; set; }
+
         public virtual User User { get; set; }
     }
 }

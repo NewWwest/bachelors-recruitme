@@ -12,11 +12,27 @@ export interface IRegistrationRequest {
     surname: string;
     pesel: string | null;
     noPesel: boolean;
+    birthDate: Date;
+}
+export interface IResetPasswordRequest {
+    login: string
+}
+export interface ISetNewPassword {
+    password: string;
+    confirmPassword: string;
+    token: string;
 }
 export interface IJwtClaims {
     email: string;
     userId: number;
     name: string;
     surname: string
+}
+
+export interface IRemindLoginRequest {
+    email: string;
+    name: string | null;
+    surname: string | null;
+    pesel: string | null;
 }
 

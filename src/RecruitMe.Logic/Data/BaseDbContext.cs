@@ -14,11 +14,15 @@ namespace RecruitMe.Logic.Data
 {
     public abstract class BaseDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         public DbSet<PersonalData> PersonalData { get; set; }
 
         public DbSet<PasswordReset> PasswordResets { get; set; }
+
+        public DbSet<ConfirmationEmail> ConfirmationEmails { get; set; }
+
+        public DbSet<PersonalDocument> PersonalDocuments { get; set; }
 
         public BaseDbContext(DbContextOptions options) : base(options)
         {
