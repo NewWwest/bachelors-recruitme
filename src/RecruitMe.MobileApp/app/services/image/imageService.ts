@@ -10,123 +10,70 @@ export class ImageService {
     private _userImage : ImageSource = new ImageSource();
     private _apiGateway: ApiGateway = new ApiGateway();
     private static _cameraOptions: CameraOptions = {
-        width: 500,
-        height: 500,
-        keepAspectRatio: false,
+        width: 200,
+        height: 200,
+        keepAspectRatio: true,
         saveToGallery: false,
-        cameraFacing: "front"
+        cameraFacing: 'front'
     }
 
     public loadUserPicture() : Promise<ImageSource> {
         let fileId: number | undefined = LocalStorageService.getProfileData().profilePictureFileId;
         
         if (fileId) {
-            const url: any = this._apiGateway.getImageRequest(fileId);
-        
-            return fromUrl(url).then(r => {
-                this._userImage = r;
-                return r;
-            }, err => {
-                console.log(err);
-                PopupFactory.GenericErrorPopup("" + err);
+            return this._apiGateway.getProfilePicture(fileId).then(r => {
+                if (r.data) {
+                    this._userImage.loadFromBase64(r.data.file);
+                }
 
-                return new ImageSource();
+                return this._userImage;
             })
         }
 
         return new Promise (() => new ImageSource());
     }
 
-    public takePicture() : Promise<void> {
+    public takePicture() : Promise<any> {
         return requestPermissions().then(permissionGranted => {
-            takePicture(ImageService._cameraOptions).then(imageAsset => {
-                
+            return takePicture(ImageService._cameraOptions).then(imageAsset => {
                 LoaderService.showLoader();
+
                 let is: ImageSource = new ImageSource();
-                is.fromAsset(imageAsset).then(imageSource => {
-                    //const fileContent = imageSource.toBase64String("jpg");
-                    // save file
+                return is.fromAsset(imageAsset).then(imageSource => {
                     const folder = fs.knownFolders.documents().path;
                     const fileName: string = '' + LocalStorageService.getUserId() + '_'
                         + new Date().getTime() + '_mobile.png';
                     const path = fs.path.join(folder, fileName);
 
-                    console.log(path);
+                    // save file
                     const saved = imageSource.saveToFile(path, "png");
                     
                     if (saved) {
+                        return new Promise( (resolve, reject) => {
+                            console.log("setProfilePicture");
+                            let task = this._apiGateway.setProfilePicture(path, fileName);
+                            console.log("after setProfilePicture");
 
-                        console.log('before call');
-                        let task = this._apiGateway.setProfilePicture(path, fileName);
-                        console.log('after call');
-
-                        task.on('error', (e) => {
-                            console.log(e);
-                            // LoaderService.hideLoader();
-                            // PopupFactory.GenericErrorPopup('' + e);
-                        });
-                        task.on('complete', (e) => {
-                            console.log(e);
-                            // LoaderService.hideLoader();
-                            // PopupFactory.GenericSuccessPopup('Pomyślnie zapisano obrazek');
-                        });
+                            task.on('error', (e) => {
+                                console.log(e);
+                                console.log("error, ale done");
+                                return resolve(false);
+                            });
+                            task.on('complete', (e) => {
+                                console.log(e);
+                                console.log("complete i done");
+                                return resolve(true);
+                            });
+                        })
                     }
                     else {
                         LoaderService.hideLoader();
                         PopupFactory.GenericErrorPopup('Nie udał się zapis do pamięci telefonu');
+
+                        return new Promise((resolve, reject) => reject(null));
                     }
-
-                    // this._apiGateway.setProfilePicture(fileContent, fileName).then(r => {
-                    //     console.log("siadło");
-                    //     LoaderService.hideLoader();
-                    //     PopupFactory.GenericSuccessPopup('Pomyślnie zapisano obrazek');
-                    // }, e => {
-                    //     console.log(e);
-                    //     LoaderService.hideLoader();
-                    //     PopupFactory.GenericErrorPopup('' + e);
-                    // });
                 })
-                // imageAsset.getImageAsync((image, error) => {
-                //     if (!error) {
-                //         // only for android
-                //         let bitmapImage: android.graphics.Bitmap = image;
-                //         let stream = new java.io.ByteArrayOutputStream();
-                //         bitmapImage.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream);
-                //         let byteArray = stream.toByteArray();
-                //         bitmapImage.recycle();
-
-                //         console.log(bitmapImage);
-                //         console.log(byteArray);
-
-                //         const str = new java.lang.String(byteArray, java.nio.charset.StandardCharsets.UTF_8);
-                //         const fileContent = '' + str;
-
-                //         console.log(fileContent);
-
-                //         const fileName: string = '' + LocalStorageService.getUserId() + '_'
-                //          + new Date().getTime() + '_mobile.png';
-
-                //         this._apiGateway.setProfilePicture(fileContent, fileName).then(r => {
-                //             console.log("mhm");
-                //             LoaderService.hideLoader();
-                //         }, e => {
-                //             console.log(e);
-                //             LoaderService.hideLoader();
-                //         })
-                //     }
-                //     else {
-                //         console.log(error);
-                //     }
-                // })
-
-                var folder = fs.knownFolders.documents();
-                var path = fs.path.join(folder.path, "Test.png");
-                var saved = imageAsset.saveToFile(path, "png");
             })
         })
-    }
-
-    private savePicture(image: ImageSource) {
-
     }
 }

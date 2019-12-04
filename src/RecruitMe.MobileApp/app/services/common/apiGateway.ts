@@ -71,12 +71,9 @@ export class ApiGateway {
             '/api/Recruitment/PersonalData', personalDataModel, this.authHeader());
     }
 
-    public getImageRequest(fileId: number) : any {
-        return {
-            url: this.baseURL + '/api/asset/' + fileId,
-            method: 'GET',
-            headers: this.authHeader().headers
-        }
+    public getProfilePicture(fileId: number) : Promise<AxiosResponse> {
+        return this.makeRequest(RequestType.GET,
+            '/api/asset/' + fileId, this.authHeader());
     }
     public setProfilePicture(filePath: string, fileName: string) : Task {
         let opt = {
@@ -92,8 +89,8 @@ export class ApiGateway {
             description: 'Trwa przesyłanie zdjęcia',
             androidAutoDeleteAfterUpload: true,
             androidNotificationTitle: "Przesyłanie zdjęcia",
-            //androidDisplayNotificationProgress: true,
-            //androidAutoClearNotification: true,
+            //androidDisplayNotificationProgress: false,
+            //androidAutoClearNotification: false,
         }
         
         const data = {
@@ -102,28 +99,8 @@ export class ApiGateway {
             mimeType: "image/png"
         }
 
-        console.log(s);
-        console.log(options);
         return s.multipartUpload([data], options);
-
-        // const options = Object.assign(contentType, this.authHeader().headers);
-        // const headers = {
-        //     headers: options
-        // }
-
-        // // let data: FormData = new FormData();
-        // // data.append('picture', fileContent, fileName);
-
-        // // console.log(data);
-
-        // return this.makeRequest(RequestType.POST,
-        //      '/api/Recruitment/ProfilePicture', data, headers);
     }
-
-    // public getUser(): Promise<AxiosResponse> {
-    //     return this.makeRequest(RequestType.GET,
-    //         '/api/Account/GetUserBaseInfo?id=' + LocalStorageService.getUserId(), this.authHeader());
-    // }
 
     /// private helpers
 
@@ -131,7 +108,6 @@ export class ApiGateway {
         return {
             headers: {
                 Authorization: `Bearer ${LocalStorageService.getJwtToken()}`,
-                //'Content-Type': 'application/json; charset=utf-8'
             }
         }
     }

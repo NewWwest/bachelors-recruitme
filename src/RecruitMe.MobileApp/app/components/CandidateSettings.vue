@@ -13,7 +13,7 @@
             <GridLayout columns="*,*" rows="20,auto,*,auto" class="pageBack">
                 <!-- image -->
                 <StackLayout row="1" col="0">
-                    <Image class="imagePlaceholder" :src="ImageSrc"/>
+                    <Image class="imagePlaceholder" :src="imageSrc" ref="mainImage"/>
                 </StackLayout>
 
                 <!-- image selector -->
@@ -56,6 +56,7 @@ import PopupFactory from '../services/popupFactory';
 import { LocalStorageService } from '../services/localStorage/localStorageService';
 import { ImageService } from '../services/image/imageService';
 import { ImageSource } from 'tns-core-modules/image-source/image-source';
+import { Image }  from 'tns-core-modules/ui/image'
 
 @Component
 export default class CandidateSettings extends Vue {
@@ -86,8 +87,12 @@ export default class CandidateSettings extends Vue {
     }
 
     reloadPicture() {
-        this.imageService.loadUserPicture().then(r => this.imageSrc = r)
-         .then(r => LoaderService.hideLoader());
+        this.imageService.loadUserPicture().then(r => {
+            //RELOAD NOT WORKING
+
+            this.imageSrc = r;
+            LoaderService.hideLoader();
+        });
     }
 
     onDrawerButtonTap() {
@@ -96,11 +101,12 @@ export default class CandidateSettings extends Vue {
 
     onTakeImageTap() {
         this.imageService.takePicture().then(r => {
-            this.personalDataService.getProfileData().then(r1 => {
-                if (r1) {
+            if (r) {
+                this.personalDataService.getProfileData().then(r1 => {
+                    console.log("reload");
                     this.reloadPicture();
-                }
-            })
+                })
+            }
         })
     }
 
@@ -114,10 +120,6 @@ export default class CandidateSettings extends Vue {
         else {
             PopupFactory.ConnectionError();
         }
-    }
-
-    get ImageSrc() {
-        return this.imageSrc;
     }
 }
 </script>
