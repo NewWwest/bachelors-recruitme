@@ -13,7 +13,7 @@
             <GridLayout columns="*,*" rows="20,auto,*,auto" class="pageBack">
                 <!-- image -->
                 <StackLayout row="1" col="0">
-                    <Image class="imagePlaceholder" :src="imageSrc"/>
+                    <Image class="imagePlaceholder" :src="ImageSrc"/>
                 </StackLayout>
 
                 <!-- image selector -->
@@ -26,14 +26,14 @@
                 <!-- form -->
                 <StackLayout row="2" colSpan="2">
                     <StackLayout class="form-group">
-                        <TextField v-model="personalData.adress" hint="Adres" class="form-input" />
+                        <TextField v-model="profileData.adress" hint="Adres" class="form-input" />
                     </StackLayout>
                     <StackLayout class="form-group">
-                        <TextField v-model="personalData.fatherName" hint="Imię i nazwisko rodzica 1" class="form-input" />
-                        <TextField v-model="personalData.motherName" hint="Imię i nazwisko rodzica 2" class="form-input" />
+                        <TextField v-model="profileData.fatherName" hint="Imię i nazwisko rodzica 1" class="form-input" />
+                        <TextField v-model="profileData.motherName" hint="Imię i nazwisko rodzica 2" class="form-input" />
                     </StackLayout>
                     <StackLayout class="form-group">
-                        <TextField v-model="personalData.primarySchool" hint="Szkoła podstawowa" class="form-input" />
+                        <TextField v-model="profileData.primarySchool" hint="Szkoła podstawowa" class="form-input" />
                     </StackLayout>
                 </StackLayout>
 
@@ -55,10 +55,13 @@ import LoaderService from '../services/loaderView/loader';
 import PopupFactory from '../services/popupFactory';
 import { LocalStorageService } from '../services/localStorage/localStorageService';
 import { ImageService } from '../services/image/imageService';
+import { ImageSource } from 'tns-core-modules/image-source/image-source';
 
 @Component
 export default class CandidateSettings extends Vue {
-    personalData: IProfileData = {
+    imageSrc: ImageSource = new ImageSource();
+    imageService: ImageService = new ImageService();
+    profileData: IProfileData = {
         adress: '',
         fatherName: '',
         motherName: '',
@@ -74,8 +77,12 @@ export default class CandidateSettings extends Vue {
         const data = LocalStorageService.getProfileData();
 
         if (data !== null) {
-            this.personalData = data;
+            this.profileData = data;
         }
+    }
+
+    beforeMount() {
+        this.imageService.loadUserPicture().then(r => this.imageSrc = r);
     }
 
     onDrawerButtonTap() {
@@ -85,7 +92,7 @@ export default class CandidateSettings extends Vue {
     onSaveButtonTap() {
         if (ConnectionService.IsConnectedToNetwork()) {
             LoaderService.showLoader();
-            this.personalDataService.setPersonalData(this.personalData).then(
+            this.personalDataService.setProfileData(this.profileData).then(
                 r => LoaderService.hideLoader(), e => LoaderService.hideLoader()
             );
         }
@@ -94,8 +101,8 @@ export default class CandidateSettings extends Vue {
         }
     }
 
-    get imageSrc() {
-        return (new ImageService()).getUserPicture();
+    get ImageSrc() {
+        return this.imageSrc;
     }
 }
 </script>
