@@ -3,19 +3,10 @@ import { LocalStorageService } from '../localStorage/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
 import { IProfileData } from '@/models/personalDataModel';
+import { Request, session, Task } from 'nativescript-background-http';
 
 export class ApiGateway {
     private baseURL = "http://192.168.0.2:5000"; // base url
-    // private indicator = new LoadingIndicator();
-    // private options: OptionsCommon = {
-    //     message: 'Ladowanie...',
-    //     details: 'aaa',
-    //     mode: Mode.AnnularDeterminate,
-    //     android: {
-    //         dimBackground: true,
-    //         cancelable: false, 
-    //     } 
-    // }
 
     private makeRequest(type: RequestType, url: string, data: any, headers?: any): Promise<AxiosResponse> {
         url = this.baseURL + url;
@@ -86,6 +77,47 @@ export class ApiGateway {
             method: 'GET',
             headers: this.authHeader().headers
         }
+    }
+    public setProfilePicture(filePath: string, fileName: string) : Task {
+        let opt = {
+            "Content-Type": "application/octet-stream",
+            "File-Name": fileName
+        }
+
+        let s = session("picture");
+        const options: Request = {
+            url: this.baseURL + '/api/Recruitment/ProfilePicture',
+            method: 'POST',
+            headers: Object.assign(opt, this.authHeader().headers),
+            description: 'Trwa przesyłanie zdjęcia',
+            androidAutoDeleteAfterUpload: true,
+            androidNotificationTitle: "Przesyłanie zdjęcia",
+            //androidDisplayNotificationProgress: true,
+            //androidAutoClearNotification: true,
+        }
+        
+        const data = {
+            name: 'picture',
+            filename: filePath,
+            mimeType: "image/png"
+        }
+
+        console.log(s);
+        console.log(options);
+        return s.multipartUpload([data], options);
+
+        // const options = Object.assign(contentType, this.authHeader().headers);
+        // const headers = {
+        //     headers: options
+        // }
+
+        // // let data: FormData = new FormData();
+        // // data.append('picture', fileContent, fileName);
+
+        // // console.log(data);
+
+        // return this.makeRequest(RequestType.POST,
+        //      '/api/Recruitment/ProfilePicture', data, headers);
     }
 
     // public getUser(): Promise<AxiosResponse> {

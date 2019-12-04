@@ -19,7 +19,7 @@
                 <!-- image selector -->
                 <FlexboxLayout flexDirection="column" justifyContent="space-around"
                 row="1" col="1">
-                    <Button class="my-button" text="Z aparatu" />
+                    <Button class="my-button" text="Z aparatu" @tap="onTakeImageTap"/>
                     <Button class="my-button" text="Z galerii" />
                 </FlexboxLayout>
 
@@ -82,11 +82,26 @@ export default class CandidateSettings extends Vue {
     }
 
     beforeMount() {
-        this.imageService.loadUserPicture().then(r => this.imageSrc = r);
+        this.reloadPicture();
+    }
+
+    reloadPicture() {
+        this.imageService.loadUserPicture().then(r => this.imageSrc = r)
+         .then(r => LoaderService.hideLoader());
     }
 
     onDrawerButtonTap() {
         utils.showDrawer();
+    }
+
+    onTakeImageTap() {
+        this.imageService.takePicture().then(r => {
+            this.personalDataService.getProfileData().then(r1 => {
+                if (r1) {
+                    this.reloadPicture();
+                }
+            })
+        })
     }
 
     onSaveButtonTap() {
