@@ -105,8 +105,12 @@ export default class ManageComponent extends Vue {
         this.fetchItems(this.currentSystemEntity, this.pagination);
     }
 
+    handleSelect(entity: any) {
+        this.$router.push(`/adminPanel/details/${this.currentSystemEntity}/${entity.id}`);
+    }
+
     fetchItems(ent: SystemEntity, pagingParams: any) {
-        //TODO fetch items
+        console.error("TODO: fetch items from DB")
         this.items =
             [
                 {
@@ -138,24 +142,24 @@ export default class ManageComponent extends Vue {
                     name: 'Matma7',
                 },
                 {
-                    id: 7,
-                    name: 'Matma7',
+                    id: 8,
+                    name: 'Matma8',
                 },
                 {
-                    id: 7,
-                    name: 'Matma7',
+                    id: 9,
+                    name: 'Matma9',
                 },
                 {
-                    id: 7,
-                    name: 'Matma7',
+                    id: 11,
+                    name: 'Matma11',
                 },
                 {
-                    id: 7,
-                    name: 'Matma7',
+                    id: 12,
+                    name: 'Matma12',
                 },
                 {
-                    id: 7,
-                    name: 'Matma7',
+                    id: 13,
+                    name: 'Matma13',
                 },
             ];
     }

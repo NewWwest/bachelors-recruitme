@@ -11,23 +11,23 @@ export enum ExamType {
 }
 
 
-export interface Teacher {
+export interface ITeacher {
     id: number;
     name: number;
     surname: number;
 }
 
-export interface Exam {
+export interface IExam {
     id: number;
     name: number;
     startDateTime: Date;
     type: ExamType;
     durationInMinutes: number;
-    examCategory: ExamCategory;
+    examCategory: IExamCategory;
 }
 
 
-export interface ExamCategory {
+export interface IExamCategory {
     id: number;
     name: number;
 }

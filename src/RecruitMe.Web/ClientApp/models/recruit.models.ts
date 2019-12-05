@@ -6,7 +6,9 @@ export interface IPersonalData {
 }
 
 export interface IProfileData {
+    id: number; //same as userId
     userId: number;
+
     email: string;
     name: string;
     surname: string;

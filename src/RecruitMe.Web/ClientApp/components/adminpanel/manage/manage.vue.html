@@ -1,7 +1,6 @@
 ﻿<template>
     <div>
-        <h2>list items: {{ currentSystemEntity }}</h2>
-        <v-toolbar>
+        <v-toolbar dense dark>
             <v-btn @click="changeEntity(SystemEntityEnum.Candidate)" :depressed="SystemEntityEnum.Candidate==currentSystemEntity">
                 Kandydaci
             </v-btn>
@@ -17,34 +16,19 @@
         </v-toolbar>
 
         <card-layout className="col-md-10">
-        <v-card-text>
-            <v-data-table :headers="headers()"
-                          :items="items"
-                          :options.sync="pagination"
-                          >
-                <template slot="headerCell" scope="props">
-                    <v-tooltip bottom>
-                        <span slot="activator">
-                            {{ props.header.text }}
-                        </span>
-                        <span>
-                            {{ props.header.text }}
-                        </span>
-                    </v-tooltip>
-                </template>
-                <template slot="items" scope="props">
-                    <td>{{ props.item.name }}</td>
-                    <td class="text-xs-right">{{ props.item.calories }}</td>
-                    <td class="text-xs-right">{{ props.item.fat }}</td>
-                    <td class="text-xs-right">{{ props.item.carbs }}</td>
-                    <td class="text-xs-right">{{ props.item.protein }}</td>
-                    <td class="text-xs-right">{{ props.item.sodium }}</td>
-                    <td class="text-xs-right">{{ props.item.calcium }}</td>
-                    <td class="text-xs-right">{{ props.item.iron }}</td>
-                </template>
-            </v-data-table>
-        </v-card-text>
-    </card-layout>
+            <h2>list items: {{ currentSystemEntity }}</h2>
+            <v-btn v-if="SystemEntityEnum.Candidate!=currentSystemEntity"
+                   :to="'/adminPanel/add/'+currentSystemEntity">
+                Dodaj
+            </v-btn>
+            <v-card-text>
+                <v-data-table :headers="headers()"
+                              :items="items"
+                              :options.sync="pagination"
+                              @click:row="handleSelect">
+                </v-data-table>
+            </v-card-text>
+        </card-layout>
     </div>
 </template>
 <script src="./manage.ts"></script>

@@ -1,0 +1,40 @@
+﻿<template>
+    <div>
+        <h2>add items: {{ currentSystemEntity }}</h2>
+        <card-layout className="col-md-10">
+            <v-card-text>
+                <v-container v-if="SystemEntityEnum.Exam==currentSystemEntity">
+                    <v-text-field label="Nazwa" v-model="exam.name" name="exam.name"></v-text-field>
+                    <v-datetime-picker label="Start Egzaminu"
+                                       v-model="exam.startDateTime">
+                    </v-datetime-picker>
+                    <v-select v-model="exam.type"
+                              :items="examTypes"
+                              item-text="name"
+                              item-value="id"
+                              label="Typ egzaminu">
+                    </v-select>
+                    <v-text-field label="Czas trwania" v-model="exam.durationInMinutes" name="exam.durationInMinutes" type="number"></v-text-field>
+                    <v-select v-model="exam.examCategory" :items="examCategories" label="Kategoria egzaminu"></v-select>
+                </v-container>
+
+                <v-container v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
+                    <v-text-field label="Nazwa kategorii" v-model="examCategory.name" name="examCategory.name"></v-text-field>
+
+                </v-container>
+
+                <v-container v-if="SystemEntityEnum.Teacher==currentSystemEntity">
+                    <v-text-field label="Imię" v-model="teacher.name" name="teacher.name"></v-text-field>
+                    <v-text-field label="Nazwisko" v-model="teacher.surname" name="teacher.surname"></v-text-field>
+
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn @click="handleSubmit">
+                    Zapisz
+                </v-btn>
+            </v-card-actions>
+        </card-layout>
+    </div>
+</template>
+<script src="./add.ts"></script>
