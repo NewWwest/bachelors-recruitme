@@ -13,7 +13,7 @@ namespace RecruitMe.Logic.Operations.Email
         {
         }
 
-        protected override OperationResult DoExecute(EmailDto request)
+        public override OperationResult Execute(EmailDto request)
         {
             var client = new SmtpClient("smtp.gmail.com", 587)
             {

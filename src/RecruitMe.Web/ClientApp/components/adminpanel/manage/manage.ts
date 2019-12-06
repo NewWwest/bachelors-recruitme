@@ -1,9 +1,12 @@
 ﻿import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
 import { SystemEntity } from '../../../models/administraion.models';
+import { ApiGateway } from '../../../api/api.gateway';
 
 @Component({})
 export default class ManageComponent extends Vue {
+    apiGateway = new ApiGateway();
+
     SystemEntityEnum = SystemEntity;
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
     items: any = [];
@@ -83,7 +86,9 @@ export default class ManageComponent extends Vue {
 
     @Watch('pagination')
     onPropertyChanged(value: any, oldValue: any) {
-        this.fetchItems(this.currentSystemEntity, value)
+        //Listing Candidates supports pagination since its the only entity that we estimate that there will be above a hundred
+        if (this.currentSystemEntity == SystemEntity.Candidate)
+            this.fetchItems(this.currentSystemEntity, value)
     }
     mounted() {
         let type = this.$route.params.entityType;
@@ -110,57 +115,15 @@ export default class ManageComponent extends Vue {
     }
 
     fetchItems(ent: SystemEntity, pagingParams: any) {
-        console.error("TODO: fetch items from DB")
-        this.items =
-            [
-                {
-                    id: 1,
-                    name: 'Matma1',
-                },
-                {
-                    id: 2,
-                    name: 'Matma2',
-                },
-                {
-                    id: 3,
-                    name: 'Matma3',
-                },
-                {
-                    id: 4,
-                    name: 'Matma4',
-                },
-                {
-                    id: 5,
-                    name: 'Matma5',
-                },
-                {
-                    id: 6,
-                    name: 'Matma6',
-                },
-                {
-                    id: 7,
-                    name: 'Matma7',
-                },
-                {
-                    id: 8,
-                    name: 'Matma8',
-                },
-                {
-                    id: 9,
-                    name: 'Matma9',
-                },
-                {
-                    id: 11,
-                    name: 'Matma11',
-                },
-                {
-                    id: 12,
-                    name: 'Matma12',
-                },
-                {
-                    id: 13,
-                    name: 'Matma13',
-                },
-            ];
+        switch (this.currentSystemEntity) {
+            case SystemEntity.ExamCategory:
+                this.apiGateway.listExamCategories().then(resp => {
+                    console.log(resp);
+                    this.items = resp;
+                    this.pagination.rowsPerPage = resp.length;
+                    this.pagination.page = 1;
+                })
+            default:
+        }
     }
 }

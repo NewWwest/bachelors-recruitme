@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { IPersonalData, IProfileData } from '../models/recruit.models';
 import { LocalStorageService } from '../services/localStorage.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from '../models/user.models';
+import { IExamCategory } from '../models/administraion.models';
 
 export class ApiGateway {
 
@@ -70,6 +71,41 @@ export class ApiGateway {
             saveAs(new Blob([response.data]), filename)
         });
     }
+
+    public listExamCategories() {
+        return axios.get(`/api/administration/examCategory`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public addExamCategory(data: IExamCategory) {
+        return axios.put(`/api/administration/examCategory`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public updateExamCategory(data: IExamCategory) {
+        return axios.post(`/api/administration/examCategory`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public deleteExamCategory(examCategoryId: IExamCategory) {
+        return axios.delete(`/api/administration/examCategory/${examCategoryId}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     private authHeader() {
         return {

@@ -16,7 +16,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
         {
         }
 
-        protected override async Task<ProfileDataDto> DoExecute(int request)
+        public override async Task<ProfileDataDto> Execute(int request)
         {
             var user = await _dbContext.Users
                 .Include(u => u.PersonalData)

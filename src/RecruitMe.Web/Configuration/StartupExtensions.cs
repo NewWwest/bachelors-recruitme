@@ -8,6 +8,7 @@ using RecruitMe.Logic.Operations.Account.Registration;
 using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
 using RecruitMe.Logic.Operations.Account.SetNewPassword;
+using RecruitMe.Logic.Operations.Administration.ExamCategory;
 using RecruitMe.Logic.Operations.Email;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
@@ -19,7 +20,7 @@ namespace RecruitMe.Web.Configuration
     {
         public static void AddDependencInjection(this IServiceCollection services)
         {
-            services.AddTransient<ILogger,ConsoleLogger>();
+            services.AddTransient<ILogger, ConsoleLogger>();
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
 
 
@@ -59,6 +60,14 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<DeleteFileCommand>();
 
             services.AddTransient<GetFileQuery>();
+
+            //admin panel
+            services.AddTransient<AddExamCategoryCommand>();
+            services.AddTransient<DeleteExamCategoryCommand>();
+            services.AddTransient<GetExamCategoriesQuery>();
+            services.AddTransient<AddExamCategoryValidator>();
+            services.AddTransient<UpdateExamCategoryValidator>();
+            services.AddTransient<UpdateExamCategoryCommand>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
             _sendEmailCommand = sendEmailCommand;
         }
 
-        protected override async Task<OperationResult> DoExecute(ResetPasswordDto request)
+        public override async Task<OperationResult> Execute(ResetPasswordDto request)
         {
             if (string.IsNullOrWhiteSpace(request.Login))
                 return new OperationSucceded();

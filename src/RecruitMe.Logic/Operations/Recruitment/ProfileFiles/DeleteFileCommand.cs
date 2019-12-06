@@ -19,7 +19,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
             _filestorage = filestorage;
         }
 
-        protected override async Task<OperationResult> DoExecute((int UserId, int FileId) request)
+        public override async Task<OperationResult> Execute((int UserId, int FileId) request)
         {
             var document = _dbContext.PersonalDocuments.FirstOrDefault(pd => pd.UserId == request.UserId && pd.Id == request.FileId);
             if (document == null)

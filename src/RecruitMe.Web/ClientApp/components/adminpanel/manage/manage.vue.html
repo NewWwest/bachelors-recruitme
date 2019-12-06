@@ -25,7 +25,10 @@
                 <v-data-table :headers="headers()"
                               :items="items"
                               :options.sync="pagination"
-                              @click:row="handleSelect">
+                              @click:row="handleSelect"
+                              :hide-default-header="SystemEntityEnum.Candidate!=currentSystemEntity"
+                              :hide-default-footer="SystemEntityEnum.Candidate!=currentSystemEntity"
+                              >
                 </v-data-table>
             </v-card-text>
         </card-layout>
