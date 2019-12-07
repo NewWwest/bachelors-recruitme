@@ -13,18 +13,22 @@
                 </h3>
                 <v-btn class="ml-3"
                        :to="'/adminPanel/manage/'+currentSystemEntity">
-                    Cofnij
+                    Wróć
                 </v-btn>
             </c-card-title>
 
             <v-card-text>
                 <v-container v-if="SystemEntityEnum.Exam==currentSystemEntity">
-                    <v-text-field label="Nazwa" v-model="exam.name" name="exam.name"></v-text-field>
                     <v-datetime-picker label="Start Egzaminu"
                                        v-model="exam.startDateTime">
                     </v-datetime-picker>
+                    <v-text-field label="Liczba osób" v-model="exam.seatCount" name="exam.seatCount" type="number"></v-text-field>
                     <v-text-field label="Czas trwania" v-model="exam.durationInMinutes" name="exam.durationInMinutes" type="number"></v-text-field>
-                    <v-select v-model="exam.examCategory" :items="examCategories" label="Kategoria egzaminu"></v-select>
+                    <v-select v-model="exam.examCategoryId"
+                              :items="examCategories"
+                              label="Kategoria egzaminu"
+                              item-text="name"
+                              item-value="id"></v-select>
                 </v-container>
 
                 <v-container v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">

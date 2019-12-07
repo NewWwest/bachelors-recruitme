@@ -13,5 +13,7 @@ namespace RecruitMe.Logic.Data.Entities
         public string Name { get; set; }
 
         public ExamType ExamType { get; set; }
+
+        public virtual IEnumerable<Exam> Exams { get; set; }
     }
 }

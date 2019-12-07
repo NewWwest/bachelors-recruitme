@@ -25,21 +25,31 @@ export default class AddComponent extends Vue {
     ];
 
     mounted() {
-        let type = this.$route.params.entityType;
-        if (type != SystemEntity.Exam &&
-            type != SystemEntity.ExamCategory &&
-            type != SystemEntity.Teacher) {
+        let sysEntitytype = this.$route.params.entityType;
+        if (sysEntitytype != SystemEntity.Exam &&
+            sysEntitytype != SystemEntity.ExamCategory &&
+            sysEntitytype != SystemEntity.Teacher) {
             this.$router.push(`/adminPanel/manage/${SystemEntity.Candidate}`);
         }
 
-        this.currentSystemEntity = type as SystemEntity;
+        this.currentSystemEntity = sysEntitytype as SystemEntity;
+        if (this.currentSystemEntity == SystemEntity.Exam) {
+            this.apiGateway.listExamCategories().then(resp => {
+                this.examCategories = resp;
+            }, err => {
+                console.error(err);
+            });
+        }
     }
 
     handleSubmit() {
         switch (this.currentSystemEntity) {
             case SystemEntity.Exam:
-                console.error("SystemEntity.Exam, TODO: implement api saving");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.Exam}`);
+                this.apiGateway.addExam(this.exam).then(resp => {
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.Exam}`);
+                }, err => {
+                    console.error(err)
+                });
                 break;
 
             case SystemEntity.ExamCategory:

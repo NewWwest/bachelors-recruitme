@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { IPersonalData, IProfileData } from '../models/recruit.models';
 import { LocalStorageService } from '../services/localStorage.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from '../models/user.models';
-import { IExamCategory, ITeacher } from '../models/administraion.models';
+import { IExamCategory, ITeacher, IExam } from '../models/administraion.models';
 
 export class ApiGateway {
 
@@ -102,7 +102,7 @@ export class ApiGateway {
         });
     }
 
-    public listTeacherss() {
+    public listTeachers() {
         return axios.get(`/api/administration/teacher`, this.authHeader()).then((resp) => {
             return resp.data;
         });
@@ -133,6 +133,35 @@ export class ApiGateway {
     }
 
 
+    public listExams() {
+        return axios.get(`/api/administration/exam`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public getExam(id: number) {
+        return axios.get(`/api/administration/exam/${id}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public addExam(data: IExam) {
+        return axios.put(`/api/administration/exam`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public updateExam(data: IExam) {
+        return axios.post(`/api/administration/exam`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public deleteExam(ExamId: number) {
+        return axios.delete(`/api/administration/exam/${ExamId}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
 
 
 

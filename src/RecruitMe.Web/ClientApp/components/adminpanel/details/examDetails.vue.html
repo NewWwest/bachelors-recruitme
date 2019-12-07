@@ -1,9 +1,35 @@
 ﻿<template>
     <div>
-        <h2>examdetails items</h2>
-            <card-layout className="col-md-10">
+        <h3 class="d-inline-block mb-3">
+            Edycja egzaminu
+        </h3>
+        <v-btn class="ml-3 mb-3"
+               to="/adminPanel/manage/exam">
+            Wróć
+        </v-btn>
+        <div class="row">
+            <v-card class="ml-3 mr-3 col-md-10 col-lg-5">
+                <c-card-title>
+                    <h3 class="d-inline-block">
+                        Podstawowe dane
+                    </h3>
+                </c-card-title>
                 <v-card-text>
-                    TODO
+                    <p>
+                        Edytowanie lub usuwanie egzaminów w czasie rekrutacji może być niemożliwe, jeśli są do nich przypisani kandytaci.
+                        Upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                    </p>
+                    <v-text-field readonly label="Id" v-model="exam.id" name="exam.id " type="number"></v-text-field>
+                    <v-datetime-picker label="Start Egzaminu"
+                                       v-model="exam.startDateTime">
+                    </v-datetime-picker>
+                    <v-text-field label="Liczba osób" v-model="exam.seatCount" name="exam.seatCount" type="number"></v-text-field>
+                    <v-text-field label="Czas trwania" v-model="exam.durationInMinutes" name="exam.durationInMinutes" type="number"></v-text-field>
+                    <v-select v-model="exam.examCategoryId"
+                              :items="examCategories"
+                              label="Kategoria egzaminu"
+                              item-text="name"
+                              item-value="id"></v-select>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn @click="handleDelete">
@@ -13,7 +39,40 @@
                         Zapisz
                     </v-btn>
                 </v-card-actions>
-            </card-layout>
+            </v-card>
+
+            <v-card class="ml-3 mr-3 col-md-10 col-lg-5">
+                <v-card-title>
+                    <h3 class="d-inline-block">
+                        Uczestnicy Egzaminu
+                    </h3>
+                </v-card-title>
+
+                <v-card-text>
+                    <p>
+                        Obecnie na egzamin zapisanych jest {{examTakers.length}} na {{exam.seatCount}} kandydatów
+                    </p>
+                    <div v-for="examTaker in examTakers">
+                        <v-card>
+                            <v-card-text>
+                                <span>
+                                    {{examTaker.userDisplayName}}
+                                </span>
+                                <span>
+                                    {{examTaker.startDate}}
+                                </span>
+                                <span v-if="examTaker.score">
+                                    {{examTaker.score}}
+                                </span>
+                                <span v-if="examTaker.teacherDisplayName">
+                                    {{examTaker.teacherDisplayName}}
+                                </span>
+                            </v-card-text>
+                        </v-card>
+                    </div>
+                </v-card-text>
+            </v-card>
+        </div>
     </div>
 </template>
 <script src="./examDetails.ts"></script>

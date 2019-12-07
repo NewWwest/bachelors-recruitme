@@ -32,6 +32,10 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<Teacher> Teachers { get; set; }
 
+        public DbSet<Exam> Exams { get; set; }
+
+        public DbSet<ExamTaker> ExamTakers { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -40,6 +44,18 @@ namespace RecruitMe.Logic.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasAlternateKey(c => c.CandidateId);
+
+            modelBuilder.Entity<ExamTaker>()
+              .HasOne(et => et.User)
+              .WithMany(u => u.ExamTakers)
+              .HasForeignKey(et=> et.CandidateId)
+              .HasPrincipalKey(u => u.CandidateId);
+
+        }
         public void EnsureCreated()
         {
             Database.EnsureCreated();

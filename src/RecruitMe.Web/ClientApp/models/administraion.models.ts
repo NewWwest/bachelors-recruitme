@@ -24,19 +24,35 @@ export function ExamTypeDisplayName(type: ExamType) {
 
 export interface ITeacher {
     id: number;
-    name: number;
-    surname: number;
-    email: string;
+    name: string;
+    surname: string;
+    email: string; 
+}
+
+
+export interface IExamDetails {
+    exam: IExam;
+    examTakers: IExamTaker[];
 }
 
 export interface IExam {
     id: number;
-    name: number;
+    seatCount: number;
     startDateTime: Date;
     durationInMinutes: number;
-    examCategory: IExamCategory;
+    examCategoryId: number;
 }
 
+export interface IExamTaker {
+    id: number;
+    examId: number;
+    candidateId: number;
+    TeacherId: number | undefined;
+    startDate: Date;
+    score: number | undefined;
+    userDisplayName: string;
+    teacherDisplayName: string;
+}
 
 export interface IExamCategory {
     id: number;

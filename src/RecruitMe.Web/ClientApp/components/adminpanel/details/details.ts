@@ -5,22 +5,19 @@ import { ApiGateway } from '../../../api/api.gateway';
 
 @Component({
     components: {
-        "exam-details": require('./examDetails').default,
-        "candidate-details": require('./candidateDetails').default
+        "exam-details": require('./examDetails.vue.html').default,
+        "candidate-details": require('./candidateDetails.vue.html').default
     }
 })
 export default class DetailsComponent extends Vue {
     apiGateway = new ApiGateway();
     SystemEntityEnum = SystemEntity;
-    ExamTypeEnum = ExamType;
     
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
     id: number = 0;
 
-    teacher: ITeacher = {} as ITeacher
-    exam: IExam = {} as IExam;
+    teacher: ITeacher = {} as ITeacher;
     examCategory: IExamCategory = {} as IExamCategory;
-    examCategories: IExamCategory[] = [];
     examTypes: any[] = [{
         name: ExamTypeDisplayName(ExamType.Individual),
         id: ExamType.Individual

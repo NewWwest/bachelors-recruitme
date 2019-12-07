@@ -8,6 +8,7 @@ using RecruitMe.Logic.Operations.Account.Registration;
 using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
 using RecruitMe.Logic.Operations.Account.SetNewPassword;
+using RecruitMe.Logic.Operations.Administration.Exam;
 using RecruitMe.Logic.Operations.Administration.ExamCategory;
 using RecruitMe.Logic.Operations.Administration.Teacher;
 using RecruitMe.Logic.Operations.Email;
@@ -76,6 +77,14 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<AddTeacherValidator>();
             services.AddTransient<UpdateTeacherValidator>();
             services.AddTransient<UpdateTeacherCommand>();
+
+            services.AddTransient<AddExamCommand>();
+            services.AddTransient<DeleteExamCommand>();
+            services.AddTransient<GetExamsQuery>();
+            services.AddTransient<AddExamValidator>();
+            services.AddTransient<UpdateExamValidator>();
+            services.AddTransient<UpdateExamCommand>();
+            services.AddTransient<GetExamDetailsQuery>();
         }
     }
 }
