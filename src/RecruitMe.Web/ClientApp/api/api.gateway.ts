@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { IPersonalData } from '../models/recruit.models';
+import { saveAs } from 'file-saver';
+import { IPersonalData, IProfileData } from '../models/recruit.models';
 import { LocalStorageService } from '../services/localStorage.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from '../models/user.models';
 
@@ -36,8 +37,8 @@ export class ApiGateway {
         return axios.post('/api/Recruitment/PersonalData', data, this.authHeader())
     }
 
-    public getPersonalData() {
-        return axios.get('/api/Recruitment/PersonalData', this.authHeader())
+    public getProfile() {
+        return axios.get('/api/Recruitment/Profile', this.authHeader())
     }
 
     public setNewProfilePicture(fileName: string, file: any) {
@@ -46,10 +47,27 @@ export class ApiGateway {
 
         return axios.post('/api/Recruitment/ProfilePicture', data, this.authHeader());
     }
+    
+    public uploadDocument(fileName: string, file: any) {
+        let data: FormData = new FormData();
+        data.append('file', file, fileName);
 
-    public getFile(fileId: number) {
-        return axios.get(`/api/asset/${fileId}`, this.authHeader()).then(resp => {
+        return axios.post('/api/Recruitment/document', data, this.authHeader());
+    }
+
+    public deleteDocument(fileId: number) {
+        return axios.delete(`/api/Recruitment/document/${fileId}`, this.authHeader());
+    }
+
+    public getImage(fileId: number) {
+        return axios.get(`/api/asset/image/${fileId}`, this.authHeader()).then(resp => {
             return resp.data
+        });
+    }
+
+    public downloadDocument(fileId: number, filename: string) {
+        return axios.get(`/api/asset/${fileId}`, this.blobResponseAuthHeader()).then((response) => {
+            saveAs(new Blob([response.data]), filename)
         });
     }
 
@@ -64,6 +82,14 @@ export class ApiGateway {
         return {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+    }
+    private blobResponseAuthHeader(): any {
+        return {
+            responseType: "blob",
+            headers: {
+                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
             }
         };
     }

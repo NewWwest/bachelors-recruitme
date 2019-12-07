@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using System;
@@ -23,8 +24,8 @@ namespace RecruitMe.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{fileid}")]
-        public async Task<ActionResult> GetProfilePicture(int fileid)
+        [Route("image/{fileid}")]
+        public async Task<ActionResult> GetImage(int fileid)
         {
             User user = await GetUser();
 
@@ -43,6 +44,15 @@ namespace RecruitMe.Web.Controllers
                     contentEncoding = "base64"
                 });
             }
+        }
+
+        [HttpGet]
+        [Route("{fileid}")]
+        public async Task<ActionResult> GetFile(int fileid)
+        {
+            User user = await GetUser();
+            GetFileQueryResult stream = await _getFileQuery.Execute((user.Id, fileid));
+            return new FileStreamResult(stream.Data, stream.ContentType);
         }
     }
 }

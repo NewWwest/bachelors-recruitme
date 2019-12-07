@@ -15,19 +15,25 @@ namespace RecruitMe.Web.Controllers
         private readonly GetProfileDataQuery _getProfileDataQuery;
         private readonly AddOrUpdateProfileDataCommand _addOrUpdateProfileDataCommand;
         private readonly SetNewProfilePictureCommand _setNewProfilePictureCommand;
+        private readonly SaveFileCommand _saveFileCommand;
+        private readonly DeleteFileCommand _deleteFileCommand;
 
         public RecruitmentController(GetProfileDataQuery GetProfileDataQuery, 
             AddOrUpdateProfileDataCommand AddOrUpdateProfileDataCommand,
-            SetNewProfilePictureCommand SetNewProfilePictureCommand
+            SetNewProfilePictureCommand SetNewProfilePictureCommand,
+            SaveFileCommand saveFileCommand,
+            DeleteFileCommand deleteFileCommand
             ) : base()
         {
             _getProfileDataQuery = GetProfileDataQuery;
             _addOrUpdateProfileDataCommand = AddOrUpdateProfileDataCommand;
             _setNewProfilePictureCommand = SetNewProfilePictureCommand;
+            _saveFileCommand = saveFileCommand;
+            _deleteFileCommand = deleteFileCommand;
         }
 
         [HttpGet]
-        [Route("PersonalData")]
+        [Route("Profile")]
         public async Task<ActionResult> GetPersonalData()
         {
             User user = await GetUser();
@@ -51,17 +57,17 @@ namespace RecruitMe.Web.Controllers
                 return BadRequest();
             }
         }
-
-
+        
         [HttpPost]
         [Route("ProfilePicture")]
         public async Task<ActionResult> ProfilePicture(IFormFile picture)
         {
             User user = await GetUser();
-
+            
             using (var stream = picture.OpenReadStream())
             {
-                var result = await _setNewProfilePictureCommand.Execute(new SetNewProfilePictureCommandRequest() { 
+                var result = await _setNewProfilePictureCommand.Execute(new FileRequest() { 
+                    ContentType = picture.ContentType,
                     File = stream, 
                     FileName = picture.FileName,
                     UserId = user.Id 
@@ -70,15 +76,40 @@ namespace RecruitMe.Web.Controllers
             return Ok();
         }
 
-
-        [HttpGet]
-        [Route(FileStorageConfiguration.ProfilePictures + "{fileId}")]
-        public async Task<ActionResult> ProfilePicture(string fileId)
+        [HttpPost]
+        [Route("document")]
+        public async Task<ActionResult> AddPersonalDocument(IFormFile file)
         {
             User user = await GetUser();
 
-            //todo check permission
-            return PhysicalFile(fileId, "image");
+            using (var stream = file.OpenReadStream())
+            {
+                var result = await _saveFileCommand.Execute(new FileRequest()
+                {
+                    ContentType = file.ContentType,
+                    File = stream,
+                    FileName = file.FileName,
+                    UserId = user.Id
+                });
+            }
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("document/{fileid}")]
+        public async Task<ActionResult> DeletePersonalDocument(int fileid)
+        {
+            User user = await GetUser();
+            var result = await _deleteFileCommand.Execute((user.Id, fileid));
+
+            if (result.Success)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }
