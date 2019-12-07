@@ -26,6 +26,7 @@ export interface ITeacher {
     id: number;
     name: number;
     surname: number;
+    email: string;
 }
 
 export interface IExam {

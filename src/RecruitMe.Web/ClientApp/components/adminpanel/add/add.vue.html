@@ -35,12 +35,12 @@
                               item-value="id"
                               label="Typ egzaminu">
                     </v-select>
-
                 </v-container>
 
                 <v-container v-if="SystemEntityEnum.Teacher==currentSystemEntity">
                     <v-text-field label="Imię" v-model="teacher.name" name="teacher.name"></v-text-field>
                     <v-text-field label="Nazwisko" v-model="teacher.surname" name="teacher.surname"></v-text-field>
+                    <v-text-field label="Adres Email" v-model="teacher.email" name="teacher.email"></v-text-field>
                 </v-container>
             </v-card-text>
 

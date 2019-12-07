@@ -30,6 +30,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<ExamCategory> ExamCategories { get; set; }
 
+        public DbSet<Teacher> Teachers { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }

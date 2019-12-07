@@ -16,12 +16,12 @@ export default class AddComponent extends Vue {
     examCategories: IExamCategory[] = [];
 
     examTypes: any[] = [{
-            name: ExamTypeDisplayName(ExamType.Individual),
-            id: ExamType.Individual
-        }, {
-            name: ExamTypeDisplayName(ExamType.Collective),
-            id: ExamType.Collective
-        }
+        name: ExamTypeDisplayName(ExamType.Individual),
+        id: ExamType.Individual
+    }, {
+        name: ExamTypeDisplayName(ExamType.Collective),
+        id: ExamType.Collective
+    }
     ];
 
     mounted() {
@@ -34,7 +34,7 @@ export default class AddComponent extends Vue {
 
         this.currentSystemEntity = type as SystemEntity;
     }
-    
+
     handleSubmit() {
         switch (this.currentSystemEntity) {
             case SystemEntity.Exam:
@@ -43,18 +43,19 @@ export default class AddComponent extends Vue {
                 break;
 
             case SystemEntity.ExamCategory:
-                console.log(this.examCategory);
                 this.apiGateway.addExamCategory(this.examCategory).then(resp => {
-                        this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
-                    },
-                    err => {
-                        console.error(err)
-                    });
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
+                }, err => {
+                    console.error(err)
+                });
                 break;
 
             case SystemEntity.Teacher:
-                console.error("SystemEntity.teacher, TODO: implement api saving");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                this.apiGateway.addTeacher(this.teacher).then(resp => {
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                }, err => {
+                    console.error(err)
+                });
                 break;
         }
     }

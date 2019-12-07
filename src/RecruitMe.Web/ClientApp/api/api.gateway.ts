@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { IPersonalData, IProfileData } from '../models/recruit.models';
 import { LocalStorageService } from '../services/localStorage.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from '../models/user.models';
-import { IExamCategory } from '../models/administraion.models';
+import { IExamCategory, ITeacher } from '../models/administraion.models';
 
 export class ApiGateway {
 
@@ -102,6 +102,35 @@ export class ApiGateway {
         });
     }
 
+    public listTeacherss() {
+        return axios.get(`/api/administration/teacher`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public getTeacher(id: number) {
+        return axios.get(`/api/administration/teacher/${id}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public addTeacher(data: ITeacher) {
+        return axios.put(`/api/administration/teacher`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public updateTeacher(data: ITeacher) {
+        return axios.post(`/api/administration/teacher`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
+    public deleteTeacher(teacherId: number) {
+        return axios.delete(`/api/administration/teacher/${teacherId}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
 
 
 

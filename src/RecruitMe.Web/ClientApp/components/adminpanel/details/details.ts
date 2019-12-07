@@ -39,8 +39,6 @@ export default class DetailsComponent extends Vue {
             type != SystemEntity.Candidate) {
             this.$router.push(`/adminPanel/manage/${SystemEntity.Candidate}`);
         }
-        console.log("XD");
-        console.log(this.$route.params.id)
         let id = parseInt(this.$route.params.id);
         if (!id || id <= 0) {
             this.$router.push(`/adminPanel/manage/${SystemEntity.Candidate}`);
@@ -62,8 +60,11 @@ export default class DetailsComponent extends Vue {
                 break;
 
             case SystemEntity.Teacher:
-                console.error("SystemEntity.Teacher, TODO: implement api DELETE");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                this.apiGateway.deleteTeacher(this.id).then((resp: any) => {
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                }, (err: any) => {
+                    console.error(err)
+                });
                 break;
         }
     }
@@ -79,13 +80,15 @@ export default class DetailsComponent extends Vue {
                 break;
 
             case SystemEntity.Teacher:
-                console.error("SystemEntity.ExamCategory, TODO: implement api update");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                this.apiGateway.updateTeacher(this.teacher).then((resp: any) => {
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                }, (err: any) => {
+                    console.error(err)
+                });
                 break;
         }
     }
     fetchItem() {
-
         switch (this.currentSystemEntity) {
             case SystemEntity.ExamCategory:
                 this.apiGateway.getExamCategory(this.id).then((resp: IExamCategory) => {
@@ -96,8 +99,11 @@ export default class DetailsComponent extends Vue {
                 break;
 
             case SystemEntity.Teacher:
-                console.error("SystemEntity.Teacher, TODO: implement api DELETE");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                this.apiGateway.getTeacher(this.id).then((resp: ITeacher) => {
+                    this.teacher = resp;
+                }, (err: any) => {
+                    console.error(err)
+                });
                 break;
         }
     }

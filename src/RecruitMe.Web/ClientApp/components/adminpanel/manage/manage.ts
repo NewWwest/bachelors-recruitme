@@ -83,6 +83,10 @@ export default class ManageComponent extends Vue {
                     {
                         text: 'Nazwisko',
                         value: 'surname'
+                    },
+                    {
+                        text: 'Adres Email',
+                        value: 'email'
                     }
                 ];
         }
@@ -122,7 +126,6 @@ export default class ManageComponent extends Vue {
         switch (this.currentSystemEntity) {
             case SystemEntity.ExamCategory:
                 this.apiGateway.listExamCategories().then(resp => {
-                    console.log(resp);
                     this.items = resp.map((category: IExamCategory) => {
                         return {
                             id: category.id,
@@ -132,7 +135,13 @@ export default class ManageComponent extends Vue {
                     });
                     this.pagination.rowsPerPage = resp.length;
                     this.pagination.page = 1;
-                })
+                });
+            case SystemEntity.Teacher:
+                this.apiGateway.listTeacherss().then(resp => {
+                    this.items = resp;
+                    this.pagination.rowsPerPage = resp.length;
+                    this.pagination.page = 1;
+                });
             default:
         }
     }
