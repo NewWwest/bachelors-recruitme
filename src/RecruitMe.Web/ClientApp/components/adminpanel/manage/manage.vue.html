@@ -16,19 +16,30 @@
         </v-toolbar>
 
         <card-layout className="col-md-10">
-            <h2>list items: {{ currentSystemEntity }}</h2>
-            <v-btn v-if="SystemEntityEnum.Candidate!=currentSystemEntity"
-                   :to="'/adminPanel/add/'+currentSystemEntity">
-                Dodaj
-            </v-btn>
+            <c-card-title>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Candidate==currentSystemEntity">
+                    Kandydaci
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Exam==currentSystemEntity">
+                    Egzaminy
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
+                    Kategorie egzaminów
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Teacher==currentSystemEntity">
+                    Nauczyciele
+                </h3>
+                <v-btn  class="ml-3" v-if="SystemEntityEnum.Candidate!=currentSystemEntity"
+                       :to="'/adminPanel/add/'+currentSystemEntity">
+                    Dodaj
+                </v-btn>
+            </c-card-title>
             <v-card-text>
                 <v-data-table :headers="headers()"
                               :items="items"
                               :options.sync="pagination"
                               @click:row="handleSelect"
-                              :hide-default-header="SystemEntityEnum.Candidate!=currentSystemEntity"
-                              :hide-default-footer="SystemEntityEnum.Candidate!=currentSystemEntity"
-                              >
+                              :hide-default-footer="SystemEntityEnum.Candidate!=currentSystemEntity">
                 </v-data-table>
             </v-card-text>
         </card-layout>

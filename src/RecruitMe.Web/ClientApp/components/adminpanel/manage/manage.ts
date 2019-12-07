@@ -1,6 +1,6 @@
 ﻿import Vue from 'vue';
 import { Component, Watch } from 'vue-property-decorator';
-import { SystemEntity } from '../../../models/administraion.models';
+import { SystemEntity, IExamCategory, ExamTypeDisplayName } from '../../../models/administraion.models';
 import { ApiGateway } from '../../../api/api.gateway';
 
 @Component({})
@@ -64,6 +64,10 @@ export default class ManageComponent extends Vue {
                     {
                         text: 'Nazwa',
                         value: 'name'
+                    },
+                    {
+                        text: 'Typ Egzaminu',
+                        value: 'examTypeName'
                     }
                 ];
             case SystemEntity.Teacher:
@@ -119,7 +123,13 @@ export default class ManageComponent extends Vue {
             case SystemEntity.ExamCategory:
                 this.apiGateway.listExamCategories().then(resp => {
                     console.log(resp);
-                    this.items = resp;
+                    this.items = resp.map((category: IExamCategory) => {
+                        return {
+                            id: category.id,
+                            name: category.name,
+                            examTypeName: ExamTypeDisplayName(category.examType)
+                        };
+                    });
                     this.pagination.rowsPerPage = resp.length;
                     this.pagination.page = 1;
                 })

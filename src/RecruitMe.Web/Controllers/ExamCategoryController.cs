@@ -36,9 +36,19 @@ UpdateExamCategoryCommand UpdateExamCategoryCommand
             return Json(result);
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult> Get(int id)
+        {
+            var admin = await AuthenticateAdmin();
+            var examCategories = await _GetExamCategoriesQuery.Execute();
+            var result = examCategories.Single(ec => ec.Id == id);
+            return Json(result);
+        }
+
         [HttpPut]
         [Route("")]
-        public async Task<ActionResult> Add(ExamCategoryDto examCategory)
+        public async Task<ActionResult> Add([FromBody]ExamCategoryDto examCategory)
         {
             var admin = await AuthenticateAdmin();
             var result = await _AddExamCategoryCommand.Execute(examCategory);
@@ -54,7 +64,7 @@ UpdateExamCategoryCommand UpdateExamCategoryCommand
 
         [HttpPost]
         [Route("")]
-        public async Task<ActionResult> Update(ExamCategoryDto examCategory)
+        public async Task<ActionResult> Update([FromBody]ExamCategoryDto examCategory)
         {
             var admin = await AuthenticateAdmin();
             var result = await _UpdateExamCategoryCommand.Execute(examCategory);

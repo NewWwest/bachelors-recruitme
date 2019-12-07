@@ -78,6 +78,12 @@ export class ApiGateway {
         });
     }
 
+    public getExamCategory(id: number) {
+        return axios.get(`/api/administration/examCategory/${id}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+
     public addExamCategory(data: IExamCategory) {
         return axios.put(`/api/administration/examCategory`, data, this.authHeader()).then((resp) => {
             return resp.data;
@@ -90,7 +96,7 @@ export class ApiGateway {
         });
     }
 
-    public deleteExamCategory(examCategoryId: IExamCategory) {
+    public deleteExamCategory(examCategoryId: number) {
         return axios.delete(`/api/administration/examCategory/${examCategoryId}`, this.authHeader()).then((resp) => {
             return resp.data;
         });

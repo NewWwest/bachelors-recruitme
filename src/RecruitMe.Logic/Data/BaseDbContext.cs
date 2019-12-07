@@ -4,9 +4,12 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
+using RecruitMe.Logic.Operations.Account.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +17,7 @@ namespace RecruitMe.Logic.Data
 {
     public abstract class BaseDbContext : DbContext
     {
+
         public virtual DbSet<User> Users { get; set; }
 
         public DbSet<PersonalData> PersonalData { get; set; }
@@ -32,6 +36,26 @@ namespace RecruitMe.Logic.Data
 
         protected BaseDbContext()
         {
+        }
+
+        public void EnsureCreated()
+        {
+            Database.EnsureCreated();
+            var admin = Users.FirstOrDefault(u => u.CandidateId == BusinessConfiguration.AdminLogin);
+            if(admin == null)
+            {
+                Users.Add(
+                    new User
+                    {
+                        CandidateId = BusinessConfiguration.AdminLogin,
+                        Email = BusinessConfiguration.Email,
+                        EmailVerified = true,
+                        Name = "Administrator",
+                        Surname = "Szkoły",
+                        PasswordHash = BusinessConfiguration.InitialAdminPasswordHash
+                    });
+                SaveChanges();
+            }
         }
     }
 }

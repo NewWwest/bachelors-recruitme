@@ -1,4 +1,5 @@
-﻿using RecruitMe.Logic.Data;
+﻿using RecruitMe.Logic.Configuration;
+using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
 using System.Net;
@@ -17,7 +18,7 @@ namespace RecruitMe.Logic.Operations.Email
         {
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
-                Credentials = new NetworkCredential("RecruitMeSystem@gmail.com", "Tester123!"),
+                Credentials = new NetworkCredential(BusinessConfiguration.Email, BusinessConfiguration.EmailPassword),
                 EnableSsl = true
             };
             client.Send("RecruitMeSystem@gmail.com", request.To, request.Title, request.Body);

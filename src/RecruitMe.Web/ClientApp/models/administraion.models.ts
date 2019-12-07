@@ -6,8 +6,19 @@
 }
 
 export enum ExamType {
-    Individual,
-    Collective
+    Individual = 1,
+    Collective = 2
+}
+
+export function ExamTypeDisplayName(type: ExamType) {
+    switch (type) {
+        case ExamType.Individual:
+            return "Indywidualny";
+        case ExamType.Collective:
+            return "Pisemny";
+        default:
+            return type;
+    }
 }
 
 
@@ -21,7 +32,6 @@ export interface IExam {
     id: number;
     name: number;
     startDateTime: Date;
-    type: ExamType;
     durationInMinutes: number;
     examCategory: IExamCategory;
 }
@@ -29,5 +39,6 @@ export interface IExam {
 
 export interface IExamCategory {
     id: number;
-    name: number;
+    name: string;
+    examType: ExamType;
 }

@@ -1,6 +1,7 @@
 ﻿import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType } from '../../../models/administraion.models';
+import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType, ExamTypeDisplayName } from '../../../models/administraion.models';
+import { ApiGateway } from '../../../api/api.gateway';
 
 @Component({
     components: {
@@ -9,23 +10,24 @@ import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType } from '../../..
     }
 })
 export default class DetailsComponent extends Vue {
+    apiGateway = new ApiGateway();
     SystemEntityEnum = SystemEntity;
     ExamTypeEnum = ExamType;
     
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
-    id: number | null = null;
+    id: number = 0;
 
     teacher: ITeacher = {} as ITeacher
     exam: IExam = {} as IExam;
     examCategory: IExamCategory = {} as IExamCategory;
     examCategories: IExamCategory[] = [];
     examTypes: any[] = [{
-            name: "Indywidualny",
-            id: ExamType.Individual
-        }, {
-            name: "Pisemny",
-            id: ExamType.Collective
-        }
+        name: ExamTypeDisplayName(ExamType.Individual),
+        id: ExamType.Individual
+    }, {
+        name: ExamTypeDisplayName(ExamType.Collective),
+        id: ExamType.Collective
+    }
     ];
 
 
@@ -46,13 +48,17 @@ export default class DetailsComponent extends Vue {
 
         this.id = id;
         this.currentSystemEntity = type as SystemEntity;
+        this.fetchItem();
     }
 
     handleDelete() {
         switch (this.currentSystemEntity) {
             case SystemEntity.ExamCategory:
-                console.error("SystemEntity.ExamCategory, TODO: implement api DELETE");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
+                this.apiGateway.deleteExamCategory(this.id).then((resp: any) => {
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
+                }, (err: any) => {
+                    console.error(err)
+                });
                 break;
 
             case SystemEntity.Teacher:
@@ -65,12 +71,32 @@ export default class DetailsComponent extends Vue {
     handleSubmit() {
         switch (this.currentSystemEntity) {
             case SystemEntity.ExamCategory:
-                console.error("SystemEntity.ExamCategory, TODO: implement api update");
-                this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
+                this.apiGateway.updateExamCategory(this.examCategory).then((resp: any) => {
+                    this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
+                }, (err: any) => {
+                    console.error(err)
+                });
                 break;
 
             case SystemEntity.Teacher:
                 console.error("SystemEntity.ExamCategory, TODO: implement api update");
+                this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
+                break;
+        }
+    }
+    fetchItem() {
+
+        switch (this.currentSystemEntity) {
+            case SystemEntity.ExamCategory:
+                this.apiGateway.getExamCategory(this.id).then((resp: IExamCategory) => {
+                    this.examCategory = resp;
+                }, (err: any) => {
+                    console.error(err)
+                });
+                break;
+
+            case SystemEntity.Teacher:
+                console.error("SystemEntity.Teacher, TODO: implement api DELETE");
                 this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
                 break;
         }
