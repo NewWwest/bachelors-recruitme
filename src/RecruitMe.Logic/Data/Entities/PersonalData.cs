@@ -24,6 +24,8 @@ namespace RecruitMe.Logic.Data.Entities
 
         public virtual PersonalDocument ProfilePictureFile { get; set; }
 
+        //public virtual List<PersonalDocument> Documents { get; set; }
+
         public virtual User User { get; set; }
     }
 }

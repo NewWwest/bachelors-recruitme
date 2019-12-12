@@ -21,7 +21,11 @@ namespace RecruitMe.Web.Configuration
         {
             services.AddTransient<ILogger,ConsoleLogger>();
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
-            services.AddTransient<IFileStorage, LocalFileStorage>();
+
+
+            services.AddTransient<IFileSaver, LocalFileStorage>();
+            services.AddTransient<IPictureSaver, LocalFileStorage>();
+            services.AddTransient<IFileRepository, LocalFileStorage>();
 
             //Email
             services.AddTransient<SendEmailCommand>();
@@ -51,6 +55,8 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<AddOrUpdateProfileDataCommand>();
 
             services.AddTransient<SetNewProfilePictureCommand>();
+            services.AddTransient<SaveFileCommand>();
+            services.AddTransient<DeleteFileCommand>();
 
             services.AddTransient<GetFileQuery>();
         }

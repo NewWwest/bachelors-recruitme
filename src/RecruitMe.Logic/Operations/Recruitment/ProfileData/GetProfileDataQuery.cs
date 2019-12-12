@@ -18,10 +18,14 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 
         protected override async Task<ProfileDataDto> DoExecute(int request)
         {
-            var data = await _dbContext.PersonalData.FirstOrDefaultAsync(pd => pd.UserId == request);
-            var docs = await _dbContext.PersonalDocuments.Where(doc => doc.UserId == request).ToListAsync();
+            var user = await _dbContext.Users
+                .Include(u => u.PersonalData)
+                .Include(u=>u.PersonalDocuments)
+                .FirstOrDefaultAsync(u => u.Id == request);
+            var data = user.PersonalData;
+            var docs = user.PersonalDocuments;
 
-            var result = ProfileDataDto.FromPersonalDataEntity(data, docs);
+            var result = ProfileDataDto.FromPersonalDataEntity(user, data, docs);
 
             return result;
         }
