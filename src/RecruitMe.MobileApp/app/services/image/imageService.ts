@@ -27,6 +27,9 @@ export class ImageService {
                 }
 
                 return this._userImage;
+            }, err => {
+                console.log(err);
+                return new ImageSource();
             })
         }
 

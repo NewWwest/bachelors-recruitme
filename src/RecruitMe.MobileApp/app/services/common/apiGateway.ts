@@ -61,7 +61,7 @@ export class ApiGateway {
 
     public getProfileData() : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
-            '/api/Recruitment/PersonalData', this.authHeader());
+            '/api/Recruitment/Profile', this.authHeader());
     }
 
     public setProfileData(personalDataModel: IProfileData) : Promise<AxiosResponse> {
@@ -73,7 +73,7 @@ export class ApiGateway {
 
     public getProfilePicture(fileId: number) : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
-            '/api/asset/' + fileId, this.authHeader());
+            '/api/asset/image/' + fileId, this.authHeader());
     }
     public setProfilePicture(filePath: string, fileName: string) : Task {
         let opt = {
