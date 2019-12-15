@@ -24,6 +24,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<PersonalDocument> PersonalDocuments { get; set; }
 
+        public DbSet<Payment> Payments { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }

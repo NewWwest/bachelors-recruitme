@@ -38,6 +38,10 @@ const routes: any[] = [
     { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default },
     
     { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default },
+
+    { path: '/payments/makepayments', component: require('./components/payments/makePayment/makePayment.vue.html').default },
+    { path: '/payments/thankyou', component: require('./components/payments/thankYou/thankYou.vue.html').default },
+    
 ];
 
 new Vue({

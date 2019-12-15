@@ -71,6 +71,14 @@ export class ApiGateway {
         });
     }
 
+    // Payments calls
+
+    public makePayment() {
+        let data: any = {};
+
+        return axios.post('/api/payment/processPayment', data, this.authHeader());
+    }
+
     private authHeader() {
         return {
             headers: {

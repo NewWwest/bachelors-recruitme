@@ -22,6 +22,7 @@
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.5.3" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
   </ItemGroup>
@@ -39,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="assets\" />
     <Folder Include="assets\recruitment" />
     <Folder Include="assets\recruitment\images" />

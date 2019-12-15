@@ -9,6 +9,8 @@ using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
 using RecruitMe.Logic.Operations.Account.SetNewPassword;
 using RecruitMe.Logic.Operations.Email;
+using RecruitMe.Logic.Operations.Payments.Payment;
+using RecruitMe.Logic.Operations.Payments.PaymentLink;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using RecruitMe.Web.Services.Data;
@@ -59,6 +61,10 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<DeleteFileCommand>();
 
             services.AddTransient<GetFileQuery>();
+
+            //Payments
+            services.AddTransient<CreatePaymentLinkCommand>();
+            services.AddTransient<GetNewPaymentDescriptionQuery>();
         }
     }
 }
