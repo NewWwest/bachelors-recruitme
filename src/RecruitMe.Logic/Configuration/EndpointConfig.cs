@@ -13,9 +13,9 @@ namespace RecruitMe.Logic.Configuration
         public static string EmailVerified(string candidateId) => $"/account/EmailVerified?candidateId={candidateId}";
         public static string SuccessfulMoneyTransfer => "/api/payment/successfulMoneyTransfer";
 
-        private static string DotpayBaseAddress => "https://ssl.dotpay.pl";
-        public static string DotpayProductionAddress => DotpayBaseAddress + "/s2/login/api/v1";
-        public static string DotpayTestBaseAddress => DotpayBaseAddress + "/test_seller/api/v1";
+        public static string DotpayBaseAddress => "https://ssl.dotpay.pl";
+        public static string DotpayProductionAddress => "/s2/login/api/v1";
+        public static string DotpayTestAddress => "/test_seller/api/v1";
         public static string CreatePaymentLink => $"/accounts/{PaymentConfiguration.Id}/payment_links/";
     }
 }

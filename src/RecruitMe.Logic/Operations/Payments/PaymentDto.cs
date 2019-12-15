@@ -12,7 +12,7 @@ namespace RecruitMe.Logic.Operations.Payments
         public string Currency => PaymentConfiguration.Currency;
         public string Description { get; set; }
         public string Control { get; set; }
-        public string Language => "PLN";
+        public string Language => "pl";
         public int Ignore_Last_Payment_Channel => 1;
         public int Redirection_Type => 0;
         public string Url { get; set; }

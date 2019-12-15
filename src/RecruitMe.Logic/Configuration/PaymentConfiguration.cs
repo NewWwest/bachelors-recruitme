@@ -13,7 +13,6 @@ namespace RecruitMe.Logic.Configuration
         internal static string TestPIN => "BZBIQwWeul9VUsPavNumCnIDhRujLILZ";
         internal static string ProdPIN => "";
 
-        internal static string Login => "zyskowskif@student.mini.pw.edu.pl";
-        internal static string Password => "dotpay2019xd";
+        internal static string AuthToken => "enlza293c2tpZkBzdHVkZW50Lm1pbmkucHcuZWR1LnBsOmRvdHBheTIwMTl4ZA==";
     }
 }
