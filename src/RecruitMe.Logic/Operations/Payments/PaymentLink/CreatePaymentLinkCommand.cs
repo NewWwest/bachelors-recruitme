@@ -15,11 +15,37 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
 {
     public class CreatePaymentLinkCommand : BaseAsyncOperation<string, PaymentDto>
     {
-        public CreatePaymentLinkCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        GetExistingPaymentLinkQuery _getExistingPaymentLinkQuery;
+
+        public CreatePaymentLinkCommand(ILogger logger, BaseDbContext dbContext,
+            GetExistingPaymentLinkQuery getExistingPaymentLinkQuery) : base(logger, dbContext)
         {
+            _getExistingPaymentLinkQuery = getExistingPaymentLinkQuery;
         }
 
         protected override async Task<string> DoExecute(PaymentDto request)
+        {
+            int userId = int.Parse(GetUserIdFromDscription(request.Description));
+            string paymentLink = _getExistingPaymentLinkQuery.Execute(userId);
+            
+            if (string.IsNullOrEmpty(paymentLink))
+            {
+                paymentLink = await CreatePaymentLinkFromDotpay(request);
+
+                // insert link to db
+                _dbContext.PaymentLinks.Add(new Data.Entities.PaymentLink()
+                {
+                    Link = paymentLink,
+                    UserId = userId
+                });
+
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return paymentLink;
+        }
+
+        private async Task<string> CreatePaymentLinkFromDotpay(PaymentDto request)
         {
             using (HttpClient client = new HttpClient())
             {

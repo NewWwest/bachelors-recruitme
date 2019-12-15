@@ -26,6 +26,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<Payment> Payments { get; set; }
 
+        public DbSet<PaymentLink> PaymentLinks { get; set; }
+
         public BaseDbContext(DbContextOptions options) : base(options)
         {
         }

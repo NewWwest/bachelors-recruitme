@@ -65,6 +65,7 @@ namespace RecruitMe.Web.Configuration
             //Payments
             services.AddTransient<CreatePaymentLinkCommand>();
             services.AddTransient<GetNewPaymentDescriptionQuery>();
+            services.AddTransient<GetExistingPaymentLinkQuery>();
         }
     }
 }
