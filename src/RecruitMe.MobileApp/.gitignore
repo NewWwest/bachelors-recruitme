@@ -7,3 +7,7 @@ node_modules
 # NativeScript application
 hooks
 platforms
+
+
+# Nativescript's update backup files
+.update_backup
