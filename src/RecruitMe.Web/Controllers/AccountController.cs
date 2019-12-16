@@ -129,15 +129,5 @@ namespace RecruitMe.Web.Controllers
                 return Ok();
             }
         }
-
-        [HttpGet]
-        [Authorize]
-        [Route("GetUserBaseInfo")]
-        public async Task<User> GetUserBaseInfo([FromQuery] int id)
-        {
-            var result = await _getUserQuery.Execute(id);
-
-            return result;
-        }
     }
 }
