@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Abstractions;
+using RecruitMe.Logic.Operations.Account;
+using RecruitMe.Logic.Operations.Account.Login;
 using RecruitMe.Logic.Operations.Account.Registration;
 using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
@@ -16,6 +18,8 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Account")]
     public class AccountController : RecruitMeBaseController
     {
+        private readonly GetUserQuery _getUserQuery;
+        private readonly LoginUserQuery _loginUserQuery;
         private readonly RegisterUserCommand _registerUserCommand;
         private readonly ConfirmEmailCommand _confirmEmailCommand;
         private readonly SetNewPasswordCommand _setNewPasswordCommand;
@@ -23,13 +27,16 @@ namespace RecruitMe.Web.Controllers
         private readonly RemindLoginCommand _remindLoginQuery;
 
         public AccountController(
+            LoginUserQuery loginUserQuery,
+            GetUserQuery getUserQuery,
             RegisterUserCommand registerUserCommand, 
             ConfirmEmailCommand confirmEmailCommand,
             ResetPasswordCommand resetPasswordCommand,
             SetNewPasswordCommand setNewPasswordCommand,
             RemindLoginCommand remindLoginQuery) : base()
-
         {
+            _getUserQuery = getUserQuery;
+            _loginUserQuery = loginUserQuery;
             _registerUserCommand = registerUserCommand;
             _confirmEmailCommand = confirmEmailCommand;
             _setNewPasswordCommand = setNewPasswordCommand;

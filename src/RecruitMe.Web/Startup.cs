@@ -45,8 +45,9 @@ namespace RecruitMe.Web
             services.AddMvcCore().AddAuthorization();
 
             services.AddIdentityServer(options =>
-                    options.IssuerUri = EndpointConfig.BaseAddress
-                )
+            {
+                options.IssuerUri = "http://0.0.0.0:5000";
+            })
                 .AddDeveloperSigningCredential(true, "IdentityServer.rsa.json")
                 .AddInMemoryIdentityResources(ISConfig.GetIdentityResources())
                 .AddInMemoryApiResources(ISConfig.GetApiResources())
