@@ -11,6 +11,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         public int ExamId { get; set; }
 
+        public string ExamCategoryName { get; set; }
+
         public int UserId { get; set; }
 
         public string CandidateId { get; set; }
@@ -33,11 +35,11 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 return new db.ExamTaker()
                 {
                     Id = Id.Value,
-                    ExamId=ExamId,
+                    ExamId = ExamId,
                     UserId = UserId,
                     StartDate = StartDate,
-                    Score= Score,
-                    TeacherId= TeacherId
+                    Score = Score,
+                    TeacherId = TeacherId
                 };
             }
             else
@@ -53,7 +55,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
             }
         }
 
-        public static ExamTakerDto FromEntities(db.ExamTaker entity,db.User user, db.Teacher teacher)
+        public static ExamTakerDto FromEntities(db.ExamTaker entity, db.User user, db.Teacher teacher, string examCategoryName)
         {
             return new ExamTakerDto()
             {
@@ -65,7 +67,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 StartDate = entity.StartDate,
                 Score = entity.Score,
                 TeacherId = entity.TeacherId,
-                TeacherDisplayName = string.Concat(teacher.Name, " ", teacher.Surname)
+                TeacherDisplayName = teacher == null ? "" : string.Concat(teacher.Name, " ", teacher.Surname),
+                ExamCategoryName = examCategoryName
             };
         }
     }

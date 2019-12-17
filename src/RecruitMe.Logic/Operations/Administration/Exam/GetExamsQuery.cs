@@ -18,7 +18,12 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         public override async Task<IEnumerable<ExamDto>> Execute()
         {
-            return (await _dbContext.Exams.ToListAsync()).Select(e => ExamDto.FromEntity(e));
+            return (
+                await _dbContext.Exams
+                .Include(e => e.ExamCategory)
+                .ToListAsync()
+                )
+                .Select(e => ExamDto.FromEntity(e, e.ExamCategory.Name));
         }
     }
 }

@@ -41,13 +41,16 @@ export interface IExam {
     startDateTime: Date;
     durationInMinutes: number;
     examCategoryId: number;
+    examCategoryName: string;
 }
 
 export interface IExamTaker {
     id: number;
     examId: number;
-    candidateId: number;
-    TeacherId: number | undefined;
+    examCategoryName: string;
+    candidateId: string;
+    userId: number;
+    teacherId: number | undefined;
     startDate: Date;
     score: number | undefined;
     userDisplayName: string;

@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { IPersonalData, IProfileData } from '../models/recruit.models';
 import { LocalStorageService } from '../services/localStorage.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from '../models/user.models';
-import { IExamCategory, ITeacher, IExam } from '../models/administraion.models';
+import { IExamCategory, ITeacher, IExam, IExamTaker } from '../models/administraion.models';
 
 export class ApiGateway {
 
@@ -153,6 +153,18 @@ export class ApiGateway {
         });
     }
 
+    public listExamsForUser(userId: number | undefined = undefined) {
+        if (userId) {
+            return axios.get(`/api/administration/candidates/${userId}/exams`, this.authHeader()).then((resp) => {
+                return resp.data;
+            });
+        }
+        else {
+            alert("TODO")
+            return null as any as Promise<any>;
+        }
+    }
+
     public getExam(id: number) {
         return axios.get(`/api/administration/exam/${id}`, this.authHeader()).then((resp) => {
             return resp.data;
@@ -165,6 +177,16 @@ export class ApiGateway {
         });
     }
 
+    public addOrUpdateExamTaker(data: IExamTaker) {
+        return axios.post(`/api/administration/candidates/${data.userId}/exams`, data, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+    public deleteExamTaker(userId:number, id: number) {
+        return axios.delete(`/api/administration/candidates/${userId}/exams/${id}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
     public updateExam(data: IExam) {
         return axios.post(`/api/administration/exam`, data, this.authHeader()).then((resp) => {
             return resp.data;
@@ -178,13 +200,7 @@ export class ApiGateway {
     }
 
     public listCandidates(pagingParams: any) {
-        let xd: any = {
-            params: pagingParams,
-            headers: {
-                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
-            }
-        }
-        return axios.get(`/api/administration/candidates/`, xd).then((resp) => {
+        return axios.get(`/api/administration/candidates/`, this.withParams(pagingParams)).then((resp) => {
             return resp.data;
         });
     }
@@ -236,6 +252,14 @@ export class ApiGateway {
     private blobResponseAuthHeader(): any {
         return {
             responseType: "blob",
+            headers: {
+                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
+            }
+        };
+    }
+    private withParams(params:any ): any {
+        return {
+            params: params,
             headers: {
                 Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
             }

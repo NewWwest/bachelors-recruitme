@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Administration.Candidate;
+using RecruitMe.Logic.Operations.Administration.Exam;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using RecruitMe.Logic.Utilities.Paging;
@@ -19,19 +20,28 @@ namespace RecruitMe.Web.Controllers
         private readonly UpdateCandidateCommand _UpdateCandidateCommand;
         private readonly DeleteCandidateCommand _DeleteCandidateCommand;
         private readonly DeleteFileCommand _deleteFileCommand;
+        private readonly GetEnrolledExamsQuerry _GetEnrolledExamsQuerry;
+        private readonly AddOrUpdateExamTakerCommand _AddOrUpdateExamTakerCommand;
+        private readonly DeleteExamTakerCommand _DeleteExamTakerCommand;
 
         public CandidatesController(
             GetCandidatesQuery GetCandidatesQuery,
             GetProfileDataQuery GetProfileDataQuery,
             UpdateCandidateCommand UpdateCandidateCommand,
             DeleteCandidateCommand DeleteCandidateCommand,
-            DeleteFileCommand deleteFileCommand)
+            DeleteFileCommand deleteFileCommand,
+            GetEnrolledExamsQuerry GetEnrolledExamsQuerry,
+            AddOrUpdateExamTakerCommand AddOrUpdateExamTakerCommand,
+            DeleteExamTakerCommand DeleteExamTakerCommand)
         {
             _GetCandidatesQuery = GetCandidatesQuery;
             _GetProfileDataQuery = GetProfileDataQuery;
             _UpdateCandidateCommand = UpdateCandidateCommand;
             _DeleteCandidateCommand = DeleteCandidateCommand;
             _deleteFileCommand = deleteFileCommand;
+            _GetEnrolledExamsQuerry = GetEnrolledExamsQuerry;
+            _AddOrUpdateExamTakerCommand = AddOrUpdateExamTakerCommand;
+            _DeleteExamTakerCommand = DeleteExamTakerCommand;
         }
 
         [HttpGet]
@@ -90,6 +100,40 @@ namespace RecruitMe.Web.Controllers
 
             return BadRequest();
 
+        }
+
+
+        [HttpGet]
+        [Route("{userId}/exams/")]
+        public async Task<ActionResult> ListExams(int userId)
+        {
+            var admin = await AuthenticateAdmin();
+
+            var data = await _GetEnrolledExamsQuerry.Execute(userId);
+            return Json(data);
+        }
+
+        [HttpPost]
+        [Route("{userId}/exams/")]
+        public async Task<ActionResult> AddOrUpdateExamTaker([FromBody]ExamTakerDto examTaker)
+        {
+            var admin = await AuthenticateAdmin();
+
+            var id = await _AddOrUpdateExamTakerCommand.Execute(examTaker);
+            var data = await _GetEnrolledExamsQuerry.Execute(examTaker.UserId);
+
+            return Json(data);
+        }
+        [HttpDelete]
+        [Route("{userId}/exams/{id}/")]
+        public async Task<ActionResult> AddOrUpdateExamTaker(int userId, int id)
+        {
+            var admin = await AuthenticateAdmin();
+
+            var result = await _DeleteExamTakerCommand.Execute(id);
+            var data = await _GetEnrolledExamsQuerry.Execute(userId);
+
+            return Json(data);
         }
     }
 

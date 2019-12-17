@@ -16,7 +16,6 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         public override async Task<OperationResult> Execute(int request)
         {
-            //TODO: check if this fails when there are entities with FK to This exam
             _dbContext.Exams.Remove(await _dbContext.Exams.FindAsync(request)); 
             await _dbContext.SaveChangesAsync();
             return new OperationSucceded();

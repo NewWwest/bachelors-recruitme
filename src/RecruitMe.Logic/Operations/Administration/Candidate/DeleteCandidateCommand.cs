@@ -1,4 +1,5 @@
-﻿using RecruitMe.Logic.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
 using System;
@@ -33,7 +34,7 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
                 _dbContext.PersonalData.Where(pd => pd.UserId == request)
                 );
             _dbContext.Users.Remove(
-                _dbContext.Users.Find(request)
+                await _dbContext.Users.SingleAsync(u=>u.Id == request)
                 );
             await _dbContext.SaveChangesAsync();
             return new OperationSucceded();

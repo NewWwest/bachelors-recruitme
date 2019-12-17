@@ -89,7 +89,10 @@ namespace RecruitMe.Web.Configuration
 
             services.AddTransient<GetCandidatesQuery>();
             services.AddTransient<UpdateCandidateCommand>();
-            services.AddTransient<DeleteCandidateCommand>();
+            services.AddTransient<DeleteCandidateCommand>(); 
+            services.AddTransient<GetEnrolledExamsQuerry>();
+            services.AddTransient<AddOrUpdateExamTakerCommand>();
+            services.AddTransient<DeleteExamTakerCommand>();
         }
     }
 }

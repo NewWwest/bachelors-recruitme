@@ -2,7 +2,8 @@
 import { Component, Prop } from 'vue-property-decorator';
 import { ApiGateway } from '../../../api/api.gateway';
 import { IProfileData } from '../../../models/recruit.models';
-import { SystemEntity } from '../../../models/administraion.models';
+import { SystemEntity, IExam, IExamTaker, ITeacher } from '../../../models/administraion.models';
+import { start } from 'repl';
 
 @Component({})
 export default class CandidateDetailsComponent extends Vue {
@@ -11,6 +12,11 @@ export default class CandidateDetailsComponent extends Vue {
     candidateId: number | undefined;
 
     profile: IProfileData = {} as IProfileData;
+    userExams: IExamTaker[] = [];
+    exams: any[] = [];
+    examsData: any[] = [];
+    teachers: any[] = [];
+    newExamTaker: IExamTaker = {} as IExamTaker;;
 
     menu: boolean = false;
     submitted: boolean = false;
@@ -25,12 +31,37 @@ export default class CandidateDetailsComponent extends Vue {
     }
 
     fetchProfile() {
-        this.apiGateway.getProfile(this.candidateId as number).then(d => {
-            this.profile = d;
-
+        this.apiGateway.getProfile(this.candidateId as number).then(d => this.profile = d, err => {
+            console.error(err);
+        });
+        this.apiGateway.listExamsForUser(this.candidateId).then(d => {
+            this.setUserExams(d);
         }, err => {
             console.error(err);
-        })
+        });
+        this.apiGateway.listExams().then(d => {
+            this.exams = d.map((e: IExam) => {
+                return {
+                    id: e.id,
+                    name: e.examCategoryName + " @" + e.startDateTime,
+                    startDateTime: new Date(e.startDateTime)
+                }
+            })
+            console.log(d);
+        }, err => {
+            console.error(err);
+        });
+        this.apiGateway.listTeachers().then(d => {
+            this.teachers = d.map((e: ITeacher) => {
+                return {
+                    id: e.id,
+                    name: e.name + " " + e.surname
+                }
+            })
+            console.log(d);
+        }, err => {
+            console.error(err);
+        });
     }
 
     handleSubmit() {
@@ -62,12 +93,52 @@ export default class CandidateDetailsComponent extends Vue {
     downloadDocument(fileId: number) {
         if (fileId == this.profile.profilePictureFileId) {
             this.apiGateway.downloadDocument(fileId, this.profile.profilePictureName, this.profile.userId);
-            
+
         } else {
             let doc = this.profile.documents.find(d => d.id == fileId);
             if (doc) {
                 this.apiGateway.downloadDocument(fileId, doc.name, this.profile.userId);
             }
+        }
+    }
+
+    setDefaultDate() {
+        let matches = this.exams.filter(e => e.id == this.newExamTaker.examId)
+        if (matches && matches.length > 0) {
+            this.newExamTaker.startDate = matches[0].startDateTime;
+        }
+    }
+
+    addExamTaker() {
+        console.log(this.newExamTaker)
+        this.newExamTaker.candidateId = this.profile.candidateId;
+        this.newExamTaker.userId = this.profile.userId;
+
+        this.apiGateway.addOrUpdateExamTaker(this.newExamTaker).then(d => {
+            this.setUserExams(d);
+        }, err => {
+                console.error(err);
+        })
+    }
+    saveExamTaker(data: IExamTaker) {
+        this.apiGateway.addOrUpdateExamTaker(data).then(d => {
+            this.setUserExams(d);
+        }, err => {
+            console.error(err);
+        })
+    }
+    removeExamTaker(data: IExamTaker) {
+        this.apiGateway.deleteExamTaker(this.profile.userId, data.id).then(d => {
+            this.setUserExams(d);
+        }, err => {
+            console.error(err);
+        })
+    }
+    setUserExams(data: IExamTaker[]) {
+        this.newExamTaker = {} as IExamTaker;
+        this.userExams = data;
+        for (var i = 0; i < this.userExams.length; i++) {
+            this.userExams[i].startDate = new Date(this.userExams[i].startDate);
         }
     }
 }

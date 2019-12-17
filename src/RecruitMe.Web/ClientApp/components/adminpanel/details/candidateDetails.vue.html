@@ -1,113 +1,161 @@
 ﻿<template>
     <div>
         <h2>Edycja danych kandydata</h2>
-        <div class="profile-data col-sm-6">
-            <v-card class="mb-3">
-                <v-card-subtitle>
-                    Podczas edycji danych upewnij się, że zmiany nie zablokują dostępu kandydatowi.
-                </v-card-subtitle>
-                <v-card-text>
-                    <v-text-field label="Login" v-model="profile.candidateId" name="profile.candidateId"></v-text-field>
-                    <v-text-field label="Imię" v-model="profile.name" name="profile.name"></v-text-field>
-                    <v-text-field label="Nazwisko" v-model="profile.surname" name="profile.surname"></v-text-field>
-                    <v-text-field label="Adres email" v-model="profile.email" name="profile.email"></v-text-field>
+        <div class="row">
+            <div class="profile-data col-sm-6">
+                <v-card class="mb-3">
+                    <v-card-subtitle>
+                        Podczas edycji danych upewnij się, że zmiany nie zablokują dostępu kandydatowi.
+                    </v-card-subtitle>
+                    <v-card-text>
+                        <v-text-field label="Login" v-model="profile.candidateId" name="profile.candidateId"></v-text-field>
+                        <v-text-field label="Imię" v-model="profile.name" name="profile.name"></v-text-field>
+                        <v-text-field label="Nazwisko" v-model="profile.surname" name="profile.surname"></v-text-field>
+                        <v-text-field label="Adres email" v-model="profile.email" name="profile.email"></v-text-field>
 
-                    <v-menu ref="menu"
-                            v-model="menu"
-                            :close-on-content-click="false"
-                            :return-value.sync="profile.birthDate"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px">
-                        <template v-slot:activator="{ on }">
-                            <v-text-field v-model="profile.birthDate"
-                                          label="Data urodzenia"
-                                          prepend-icon="event"
-                                          readonly
-                                          v-on="on"></v-text-field>
-                        </template>
-                        <v-date-picker locale="pl"
-                                       v-model="profile.birthDate" no-title scrollable>
-                            <v-spacer></v-spacer>
-                            <v-btn text color="primary" @click="menu = false">Anuluj</v-btn>
-                            <v-btn text color="primary" @click="$refs.menu.save(profile.birthDate)">OK</v-btn>
-                        </v-date-picker>
-                    </v-menu>
-                    <v-text-field v-if="profile.pesel" label="Nr PESEL" v-model="profile.pesel" name="profile.pesel"></v-text-field>
-                    <v-text-field label="Adres" v-model="profile.adress" name="adress"></v-text-field>
-                    <v-text-field label="Imię i nazwisko rodzica 1" v-model="profile.fatherName" name="fatherName"></v-text-field>
-                    <v-text-field label="Imię i nazwisko rodzica 2" v-model="profile.motherName" name="motherName"></v-text-field>
-                    <v-text-field label="Szkoła podstawowa" v-model="profile.primarySchool" name="primarySchool"></v-text-field>
-                    <div class="form-group">
-                    </div>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn @click="handleSubmit">Zapisz dane</v-btn>
-                </v-card-actions>
-            </v-card>
+                        <v-menu ref="menu"
+                                v-model="menu"
+                                :close-on-content-click="false"
+                                :return-value.sync="profile.birthDate"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="290px">
+                            <template v-slot:activator="{ on }">
+                                <v-text-field v-model="profile.birthDate"
+                                              label="Data urodzenia"
+                                              prepend-icon="event"
+                                              readonly
+                                              v-on="on"></v-text-field>
+                            </template>
+                            <v-date-picker locale="pl"
+                                           v-model="profile.birthDate" no-title scrollable>
+                                <v-spacer></v-spacer>
+                                <v-btn text color="primary" @click="menu = false">Anuluj</v-btn>
+                                <v-btn text color="primary" @click="$refs.menu.save(profile.birthDate)">OK</v-btn>
+                            </v-date-picker>
+                        </v-menu>
+                        <v-text-field v-if="profile.pesel" label="Nr PESEL" v-model="profile.pesel" name="profile.pesel"></v-text-field>
+                        <v-text-field label="Adres" v-model="profile.adress" name="adress"></v-text-field>
+                        <v-text-field label="Imię i nazwisko rodzica 1" v-model="profile.fatherName" name="fatherName"></v-text-field>
+                        <v-text-field label="Imię i nazwisko rodzica 2" v-model="profile.motherName" name="motherName"></v-text-field>
+                        <v-text-field label="Szkoła podstawowa" v-model="profile.primarySchool" name="primarySchool"></v-text-field>
+                        <div class="form-group">
+                        </div>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn @click="handleSubmit">Zapisz dane</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </div>
+
+            <div class="col-sm-6">
+                <v-card class="mb-3">
+                    <v-card-title>
+                        Akcje:
+                    </v-card-title>
+                    <v-card-actions>
+                        <v-btn @click="getIdentityCard">Drukuj Identyfikator</v-btn>
+                        <v-btn @click="handleDelete">Usuń Użytkownika</v-btn>
+                    </v-card-actions>
+                </v-card>
+                <v-card>
+                    <v-card-title>
+                        Pliki użytkownika:
+                    </v-card-title>
+                    <v-card-text>
+                        <div class="mb-3" v-if="profile.profilePictureFileId">
+                            <v-card>
+                                <v-card-subtitle>{{profile.profilePictureName}}</v-card-subtitle>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="downloadDocument(profile.profilePictureFileId)">
+                                        Pobierz   <v-icon>file_download</v-icon>
+                                    </v-btn>
+                                    <v-btn @click="deleteDocument(profile.profilePictureFileId)">
+                                        Usuń   <v-icon>delete</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
+                        <div class="mb-3" v-for="document in profile.documents">
+                            <v-card>
+                                <v-card-subtitle>{{document.name}}</v-card-subtitle>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="downloadDocument(document.id)">
+                                        Pobierz   <v-icon>file_download</v-icon>
+                                    </v-btn>
+                                    <v-btn @click="deleteDocument(document.id)">
+                                        Usuń   <v-icon>delete</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </div>
         </div>
 
-        <div class="col-sm-6">
-            <v-card class="mb-3">
-                <v-card-title>
-                    Akcje:
-                </v-card-title>
-                <v-card-actions>
-                    <v-btn @click="getIdentityCard">Drukuj Identyfikator</v-btn>
-                    <v-btn @click="handleDelete">Usuń Użytkownika</v-btn>
-                </v-card-actions>
-            </v-card>
-            <v-card>
-                <v-card-title>
-                    Pliki użytkownika:
-                </v-card-title>
-                <v-card-text>
-                    <div class="mb-3" v-if="profile.profilePictureFileId">
-                        <v-card >
-                            <v-card-subtitle>{{profile.profilePictureName}}</v-card-subtitle>
+        <div class="row">
+            <div class="col-sm-6">
+                <v-card class="mb-3">
+                    <v-card-subtitle>
+                        Egzaminy kandydata:
+                    </v-card-subtitle>
+                    <v-card-text>
+                        <v-card raised class="mb-3">
+                            <v-card-subtitle>Dodaj nowy</v-card-subtitle>
+                            <v-card-text>
+                                <v-select v-model="newExamTaker.examId"
+                                          :items="exams"
+                                          label="Egzamin"
+                                          item-text="name"
+                                          @change="setDefaultDate()"
+                                          item-value="id"></v-select>
+                                <v-datetime-picker label="Start Egzaminu"
+                                                   v-model="newExamTaker.startDate">
+                                </v-datetime-picker>
+                            </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn @click="downloadDocument(profile.profilePictureFileId)">
-                                    Pobierz   <v-icon>file_download</v-icon>
-                                </v-btn>
-                                <v-btn @click="deleteDocument(profile.profilePictureFileId)">
-                                    Usuń   <v-icon>delete</v-icon>
+                                <v-btn @click="addExamTaker()">
+                                    Dodaj
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
-                    </div>
-                    <div class="mb-3" v-for="document in profile.documents">
-                        <v-card>
-                            <v-card-subtitle>{{document.name}}</v-card-subtitle>
+
+                        <v-card class="mb-3" v-for="taker in userExams" :key="taker.id">
+                            <v-card-subtitle>Dodaj nowy</v-card-subtitle>
+                            <v-card-text>
+                                {{taker.examCategoryName}}
+                                <v-datetime-picker label="Start Egzaminu"
+                                                   v-model="taker.startDate">
+                                </v-datetime-picker>
+                                <v-text-field label="Ocena" v-model="taker.score" name="taker.score" type="number"></v-text-field>
+                                <v-select v-model="taker.teacherId"
+                                          :items="teachers"
+                                          label="Nauczyciel oceniający"
+                                          item-text="name"
+                                          @change="setDefaultDate()"
+                                          item-value="id"></v-select>
+                            </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn @click="downloadDocument(document.id)">
-                                    Pobierz   <v-icon>file_download</v-icon>
+                                <v-btn @click="saveExamTaker(taker)">
+                                    Zapisz
                                 </v-btn>
-                                <v-btn @click="deleteDocument(document.id)">
-                                    Usuń   <v-icon>delete</v-icon>
+                                <v-btn @click="removeExamTaker(taker)">
+                                    Usuń
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
-                    </div>
-                </v-card-text>
-            </v-card>
+
+
+                    </v-card-text>
+
+                </v-card>
+            </div>
         </div>
-
-
-        <card-layout className="col-md-10">
-            <v-card-text>
-                TODO
-            </v-card-text>
-            <v-card-actions>
-                <v-btn @click="handleDelete">
-                    Usun
-                </v-btn>
-                <v-btn @click="handleSubmit">
-                    Zapisz
-                </v-btn>
-            </v-card-actions>
-        </card-layout>
     </div>
 </template>
 <script src="./candidateDetails.ts"></script>

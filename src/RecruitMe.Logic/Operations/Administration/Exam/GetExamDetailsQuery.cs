@@ -19,6 +19,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
         public override async Task<ExamDetailsDto> Execute(int request)
         {
             var exam = await _dbContext.Exams
+                .Include(e => e.ExamCategory)
                 .Include(e => e.ExamTakers)
                 .ThenInclude(et => et.User)
                 .Include(e => e.ExamTakers)
@@ -27,8 +28,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
             var examdto = new ExamDetailsDto()
             {
-                Exam = ExamDto.FromEntity(exam),
-                ExamTakers = exam.ExamTakers.Select(et => ExamTakerDto.FromEntities(et, et.User, et.Teacher)).ToList()
+                Exam = ExamDto.FromEntity(exam, exam.ExamCategory.Name),
+                ExamTakers = exam.ExamTakers.Select(et => ExamTakerDto.FromEntities(et, et.User, et.Teacher, et.Exam.ExamCategory.Name)).ToList()
             };
             return examdto;
         }

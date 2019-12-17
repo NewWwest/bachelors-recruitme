@@ -16,6 +16,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         public int ExamCategoryId { get; set; }
 
+        public string ExamCategoryName { get; set; }
+
 
         public Data.Entities.Exam ToEntity()
         {
@@ -42,7 +44,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
             }
         }
 
-        public static ExamDto FromEntity(Data.Entities.Exam entity)
+        public static ExamDto FromEntity(Data.Entities.Exam entity, string examCategoryName)
         {
             return new ExamDto()
             {
@@ -50,7 +52,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 SeatCount = entity.SeatCount,
                 StartDateTime = entity.StartDateTime,
                 DurationInMinutes = entity.DurationInMinutes,
-                ExamCategoryId = entity.ExamCategoryId
+                ExamCategoryId = entity.ExamCategoryId,
+                ExamCategoryName = examCategoryName
             };
 
         }
