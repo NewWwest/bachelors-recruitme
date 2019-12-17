@@ -11,6 +11,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         public int ExamId { get; set; }
 
+        public int UserId { get; set; }
+
         public string CandidateId { get; set; }
 
         public DateTime StartDate { get; set; }
@@ -32,7 +34,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 {
                     Id = Id.Value,
                     ExamId=ExamId,
-                    CandidateId = CandidateId,
+                    UserId = UserId,
                     StartDate = StartDate,
                     Score= Score,
                     TeacherId= TeacherId
@@ -43,7 +45,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 return new db.ExamTaker()
                 {
                     ExamId = ExamId,
-                    CandidateId = CandidateId,
+                    UserId = UserId,
                     StartDate = StartDate,
                     Score = Score,
                     TeacherId = TeacherId
@@ -57,7 +59,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
             {
                 Id = entity.Id,
                 ExamId = entity.ExamId,
-                CandidateId = entity.CandidateId,
+                UserId = user.Id,
+                CandidateId = user.CandidateId,
                 UserDisplayName = string.Concat(user.Name, " ", user.Surname),
                 StartDate = entity.StartDate,
                 Score = entity.Score,

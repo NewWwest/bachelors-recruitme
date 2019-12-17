@@ -16,7 +16,7 @@
         </v-toolbar>
 
         <card-layout className="col-md-10">
-            <c-card-title>
+            <v-card-title>
                 <h3 class="d-inline-block" v-if="SystemEntityEnum.Candidate==currentSystemEntity">
                     Kandydaci
                 </h3>
@@ -33,13 +33,13 @@
                        :to="'/adminPanel/add/'+currentSystemEntity">
                     Dodaj
                 </v-btn>
-            </c-card-title>
+            </v-card-title>
             <v-card-text>
                 <v-data-table :headers="headers()"
                               :items="items"
                               :options.sync="pagination"
                               @click:row="handleSelect"
-                              :hide-default-footer="SystemEntityEnum.Candidate!=currentSystemEntity">
+                              :server-items-length="rowsTotal">
                 </v-data-table>
             </v-card-text>
         </card-layout>

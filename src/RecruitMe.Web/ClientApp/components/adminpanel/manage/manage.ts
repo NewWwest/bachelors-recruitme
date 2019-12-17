@@ -10,8 +10,9 @@ export default class ManageComponent extends Vue {
     examCategories: IExamCategory[] = [];
     SystemEntityEnum = SystemEntity;
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
+    rowsTotal = 0;
     items: any = [];
-    pagination = {
+    pagination: any = {
         rowsPerPage: 5,
         page: 1
     }
@@ -99,10 +100,11 @@ export default class ManageComponent extends Vue {
 
     @Watch('pagination')
     onPropertyChanged(value: any, oldValue: any) {
-        //Listing Candidates supports pagination since its the only entity that we estimate that there will be above a hundred
+        //Paging implemented only for users
         if (this.currentSystemEntity == SystemEntity.Candidate)
             this.fetchItems(this.currentSystemEntity, value)
     }
+
     mounted() {
         let type = this.$route.params.entityType;
         if (type == SystemEntity.Candidate ||
@@ -118,8 +120,12 @@ export default class ManageComponent extends Vue {
     }
 
     changeEntity(ent: SystemEntity) {
+        if (ent == this.currentSystemEntity)
+            return;
+
         this.currentSystemEntity = ent;
         this.$router.push(`/adminPanel/manage/${ent}`);
+        this.items = [];
         this.fetchItems(this.currentSystemEntity, this.pagination);
     }
 
@@ -141,14 +147,14 @@ export default class ManageComponent extends Vue {
                     }, (err: any) => {
                         console.log(err);
                     });
-                    this.pagination.rowsPerPage = resp.length;
+                    this.rowsTotal = resp.length;
                     this.pagination.page = 1;
                 });
                 break;
             case SystemEntity.Teacher:
                 this.apiGateway.listTeachers().then(resp => {
                     this.items = resp;
-                    this.pagination.rowsPerPage = resp.length;
+                    this.rowsTotal = resp.length;
                     this.pagination.page = 1;
                 });
                 break;
@@ -166,6 +172,20 @@ export default class ManageComponent extends Vue {
                     }
                 });
                 break;
+            case SystemEntity.Candidate:
+                let paging: any = {
+                    page: this.pagination.page,
+                    pageSize: this.pagination.rowsPerPage,
+                    sortBy: this.pagination.sortBy[0],
+                    sortDesc: this.pagination.sortDesc[0]
+                }
+                this.apiGateway.listCandidates(paging).then(x => {
+                    this.items = x.data;
+                    this.rowsTotal = x.total;
+                }, e => {
+                    console.error(e);
+                });
+                break;
             default:
         }
     }
@@ -180,7 +200,7 @@ export default class ManageComponent extends Vue {
                 examCategory: this.examCategories.find(ec => ec.id == e.examCategoryId)?.name
             };
         });
-        this.pagination.rowsPerPage = exams.length;
+        this.rowsTotal = exams.length;
         this.pagination.page = 1;
     }
 }

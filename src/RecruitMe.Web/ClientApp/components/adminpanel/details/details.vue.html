@@ -1,18 +1,16 @@
 ﻿<template>
     <div>
-
         <v-container v-if="SystemEntityEnum.Exam==currentSystemEntity">
-            <exam-details :id="id"></exam-details>
+            <exam-details :id="entityId"></exam-details>
         </v-container>
 
         <v-container v-if="SystemEntityEnum.Candidate==currentSystemEntity">
-            TODO
-            <candidate-details :id="id"></candidate-details>
+            <candidate-details :candidateId="entityId"></candidate-details>
         </v-container>
 
         <v-container v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
             <card-layout className="col-md-10">
-                <c-card-title>
+                <v-card-title>
                     <h3 class="d-inline-block">
                         Edycja kategorii egzaminu
                     </h3>
@@ -20,7 +18,7 @@
                            :to="'/adminPanel/manage/'+currentSystemEntity">
                         Wróć
                     </v-btn>
-                </c-card-title>
+                </v-card-title>
 
                 <v-card-text>
                     Edytowanie lub usuwanie kategorii egzaminów w czasie rekrutacji może być niemożliwe jeśli są do niej przypięte egzaminy i kandytaci.
@@ -47,7 +45,7 @@
 
         <v-container v-if="SystemEntityEnum.Teacher==currentSystemEntity">
             <card-layout className="col-md-10">
-                <c-card-title>
+                <v-card-title>
                     <h3 class="d-inline-block">
                         Edycja danych nauczyciela
                     </h3>
@@ -55,7 +53,7 @@
                            :to="'/adminPanel/manage/'+currentSystemEntity">
                         Wróć
                     </v-btn>
-                </c-card-title>
+                </v-card-title>
 
                 <v-card-text>
                     <v-text-field readonly label="Id" v-model="teacher.id" name="teacher.id"></v-text-field>

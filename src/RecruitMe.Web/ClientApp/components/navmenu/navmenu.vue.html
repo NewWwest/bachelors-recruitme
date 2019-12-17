@@ -7,6 +7,7 @@
                 </router-link>
             </div>
             <v-spacer />
+
             <template v-if="!userLoggedIn">
                 <v-toolbar-items>
                     <v-btn to="/account/register">
@@ -17,10 +18,28 @@
                     </v-btn>
                 </v-toolbar-items>
             </template>
-            <template v-if="userLoggedIn">
+
+            <template v-if="userLoggedIn && displayName!='AdministratorRecruitMeSystem@gmail.com'">
                 <v-toolbar-items>
+                    <!--<div>
+                        {{displayName}}
+                    </div>-->
                     <v-btn to="/recruitment/profile">
                         <span>Profil   <v-icon>account_circle</v-icon></span>
+                    </v-btn>
+                    <v-btn v-on:click="logout()">
+                        <span>Wyloguj   <v-icon>lock</v-icon></span>
+                    </v-btn>
+                </v-toolbar-items>
+            </template>
+
+            <template v-if="userLoggedIn && displayName=='AdministratorRecruitMeSystem@gmail.com'">
+                <v-toolbar-items>
+                    <div>
+                        {{displayName}}
+                    </div>
+                    <v-btn to="/adminPanel/manage/any">
+                        <span>Zarządzaj   <v-icon>account_circle</v-icon></span>
                     </v-btn>
                     <v-btn v-on:click="logout()">
                         <span>Wyloguj   <v-icon>lock</v-icon></span>

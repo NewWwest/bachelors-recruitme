@@ -44,18 +44,6 @@ namespace RecruitMe.Logic.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>()
-                .HasAlternateKey(c => c.CandidateId);
-
-            modelBuilder.Entity<ExamTaker>()
-              .HasOne(et => et.User)
-              .WithMany(u => u.ExamTakers)
-              .HasForeignKey(et=> et.CandidateId)
-              .HasPrincipalKey(u => u.CandidateId);
-
-        }
         public void EnsureCreated()
         {
             Database.EnsureCreated();

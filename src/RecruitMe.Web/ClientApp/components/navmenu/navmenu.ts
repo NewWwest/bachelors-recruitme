@@ -6,24 +6,17 @@ import { UserService } from '../../services/user.service';
 export default class Navmenu extends Vue {
     @Prop()
     userLoggedIn: boolean | undefined;
+    @Prop()
     displayName: string | undefined;
     userService: UserService = new UserService();
 
     constructor() {
         super();
     }
-    updated() {
-        this.displayName = this.userService.getDisplayName();
-    }
-  
-    mounted() {
-        this.displayName = this.userService.getDisplayName();
-    }
 
     logout() {
         this.userService.logout();
         this.$emit("user-logged-in", false);
-        this.displayName = this.userService.getDisplayName();
         this.$forceUpdate();
     }
 }

@@ -1,7 +1,7 @@
 ﻿<template>
     <div>
         <card-layout className="col-md-10">
-            <c-card-title>
+            <v-card-title>
                 <h3 class="d-inline-block" v-if="SystemEntityEnum.Exam==currentSystemEntity">
                     Dodaj termin egzaminu
                 </h3>
@@ -15,7 +15,7 @@
                        :to="'/adminPanel/manage/'+currentSystemEntity">
                     Wróć
                 </v-btn>
-            </c-card-title>
+            </v-card-title>
 
             <v-card-text>
                 <v-container v-if="SystemEntityEnum.Exam==currentSystemEntity">

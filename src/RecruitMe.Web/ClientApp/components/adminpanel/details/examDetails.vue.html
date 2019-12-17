@@ -9,11 +9,11 @@
         </v-btn>
         <div class="row">
             <v-card class="ml-3 mr-3 col-md-10 col-lg-5">
-                <c-card-title>
+                <v-card-title>
                     <h3 class="d-inline-block">
                         Podstawowe dane
                     </h3>
-                </c-card-title>
+                </v-card-title>
                 <v-card-text>
                     <p>
                         Edytowanie lub usuwanie egzaminów w czasie rekrutacji może być niemożliwe, jeśli są do nich przypisani kandytaci.
@@ -67,6 +67,7 @@
                                 <span v-if="examTaker.teacherDisplayName">
                                     {{examTaker.teacherDisplayName}}
                                 </span>
+                                <v-btn @click="deleteUserTaker(examTaker.id)">Usuń   <v-icon>delete</v-icon></v-btn>
                             </v-card-text>
                         </v-card>
                     </div>

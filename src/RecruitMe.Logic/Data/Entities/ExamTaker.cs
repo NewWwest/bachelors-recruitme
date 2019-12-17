@@ -12,7 +12,7 @@ namespace RecruitMe.Logic.Data.Entities
         public int Id { get; set; }
 
         [ForeignKey(nameof(User))]
-        public string CandidateId { get; set; }
+        public int UserId { get; set; }
 
         [ForeignKey(nameof(Exam))]
         public int ExamId { get; set; }

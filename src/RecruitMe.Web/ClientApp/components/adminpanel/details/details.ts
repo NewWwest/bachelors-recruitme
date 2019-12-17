@@ -14,7 +14,7 @@ export default class DetailsComponent extends Vue {
     SystemEntityEnum = SystemEntity;
     
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
-    id: number = 0;
+    entityId: number = 0;
 
     teacher: ITeacher = {} as ITeacher;
     examCategory: IExamCategory = {} as IExamCategory;
@@ -28,7 +28,7 @@ export default class DetailsComponent extends Vue {
     ];
 
 
-    mounted() {
+    beforeMount() {
         let type = this.$route.params.entityType;
         if (type != SystemEntity.Exam &&
             type != SystemEntity.ExamCategory &&
@@ -41,15 +41,17 @@ export default class DetailsComponent extends Vue {
             this.$router.push(`/adminPanel/manage/${SystemEntity.Candidate}`);
         }
 
-        this.id = id;
+        this.entityId = id;
         this.currentSystemEntity = type as SystemEntity;
+    }
+    mounted() {
         this.fetchItem();
     }
 
     handleDelete() {
         switch (this.currentSystemEntity) {
             case SystemEntity.ExamCategory:
-                this.apiGateway.deleteExamCategory(this.id).then((resp: any) => {
+                this.apiGateway.deleteExamCategory(this.entityId).then((resp: any) => {
                     this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
                 }, (err: any) => {
                     console.error(err)
@@ -57,7 +59,7 @@ export default class DetailsComponent extends Vue {
                 break;
 
             case SystemEntity.Teacher:
-                this.apiGateway.deleteTeacher(this.id).then((resp: any) => {
+                this.apiGateway.deleteTeacher(this.entityId).then((resp: any) => {
                     this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
                 }, (err: any) => {
                     console.error(err)
@@ -88,7 +90,7 @@ export default class DetailsComponent extends Vue {
     fetchItem() {
         switch (this.currentSystemEntity) {
             case SystemEntity.ExamCategory:
-                this.apiGateway.getExamCategory(this.id).then((resp: IExamCategory) => {
+                this.apiGateway.getExamCategory(this.entityId).then((resp: IExamCategory) => {
                     this.examCategory = resp;
                 }, (err: any) => {
                     console.error(err)
@@ -96,7 +98,7 @@ export default class DetailsComponent extends Vue {
                 break;
 
             case SystemEntity.Teacher:
-                this.apiGateway.getTeacher(this.id).then((resp: ITeacher) => {
+                this.apiGateway.getTeacher(this.entityId).then((resp: ITeacher) => {
                     this.teacher = resp;
                 }, (err: any) => {
                     console.error(err)

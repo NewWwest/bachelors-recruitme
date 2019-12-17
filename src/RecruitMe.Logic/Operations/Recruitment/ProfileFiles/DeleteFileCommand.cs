@@ -21,10 +21,16 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
 
         public override async Task<OperationResult> Execute((int UserId, int FileId) request)
         {
-            var document = _dbContext.PersonalDocuments.FirstOrDefault(pd => pd.UserId == request.UserId && pd.Id == request.FileId);
+            Data.Entities.PersonalDocument document = _dbContext.PersonalDocuments.FirstOrDefault(pd => pd.UserId == request.UserId && pd.Id == request.FileId);
             if (document == null)
             {
                 return new OperationFailed();
+            }
+
+            Data.Entities.PersonalData profile = await _dbContext.PersonalData.FindAsync(request.UserId);
+            if (profile.ProfilePictureFileId == request.FileId)
+            {
+                profile.ProfilePictureFileId = null;
             }
             _dbContext.PersonalDocuments.Remove(document);
             _filestorage.Delete(document.FileUrl);

@@ -38,8 +38,15 @@ export class ApiGateway {
         return axios.post('/api/Recruitment/PersonalData', data, this.authHeader())
     }
 
-    public getProfile() {
-        return axios.get('/api/Recruitment/Profile', this.authHeader())
+    public getProfile(id: number | undefined = undefined) {
+        if (id) {
+            return axios.get(`/api/administration/candidates/${id}`, this.authHeader()).then((resp) => {
+                return resp.data;
+            });
+        }
+        else {
+            return axios.get('/api/Recruitment/Profile', this.authHeader())
+        }
     }
 
     public setNewProfilePicture(fileName: string, file: any) {
@@ -56,8 +63,13 @@ export class ApiGateway {
         return axios.post('/api/Recruitment/document', data, this.authHeader());
     }
 
-    public deleteDocument(fileId: number) {
-        return axios.delete(`/api/Recruitment/document/${fileId}`, this.authHeader());
+    public deleteDocument(fileId: number, userId: number | undefined = undefined) {
+        if (userId) {
+            return axios.delete(`/api/administration/candidates/${userId}/documents/${fileId}`, this.authHeader());
+        }
+        else {
+            return axios.delete(`/api/Recruitment/document/${fileId}`, this.authHeader());
+        }
     }
 
     public getImage(fileId: number) {
@@ -66,8 +78,10 @@ export class ApiGateway {
         });
     }
 
-    public downloadDocument(fileId: number, filename: string) {
-        return axios.get(`/api/asset/${fileId}`, this.blobResponseAuthHeader()).then((response) => {
+    public downloadDocument(fileId: number, filename: string, userId: number | undefined = undefined) {
+        let url = userId ? `/api/asset/${fileId}?userId=${userId}` : `/api/asset/${fileId}`;
+
+        return axios.get(url, this.blobResponseAuthHeader()).then((response) => {
             saveAs(new Blob([response.data]), filename)
         });
     }
@@ -163,10 +177,44 @@ export class ApiGateway {
         });
     }
 
+    public listCandidates(pagingParams: any) {
+        let xd: any = {
+            params: pagingParams,
+            headers: {
+                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
+            }
+        }
+        return axios.get(`/api/administration/candidates/`, xd).then((resp) => {
+            return resp.data;
+        });
+    }
 
+    public updateProfile(data: IProfileData) {
+        let json = {
+            id: data.id,
+            userId: data.userId,
 
+            email: data.email,
+            name: data.name,
+            surname: data.surname,
+            pesel: data.pesel,
+            candidateId: data.candidateId,
+            birthDate: data.birthDate,
 
-
+            adress: data.adress,
+            fatherName: data.fatherName,
+            motherName: data.motherName,
+            primarySchool: data.primarySchool,
+        }
+        return axios.post(`/api/administration/candidates/`, json, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
+    public deleteCandidate(id: number) {
+        return axios.delete(`/api/administration/candidates/${id}`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
+    }
 
 
 
