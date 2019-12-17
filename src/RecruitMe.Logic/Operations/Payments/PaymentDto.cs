@@ -15,7 +15,7 @@ namespace RecruitMe.Logic.Operations.Payments
         public string Language => "pl";
         public int Ignore_Last_Payment_Channel => 1;
         public int Redirection_Type => 0;
-        public string Url { get; set; }
+        public string Url => EndpointConfig.BaseAddress + EndpointConfig.AfterPayment;
         public string Urlc => EndpointConfig.BaseAddress + EndpointConfig.SuccessfulMoneyTransfer;
         public PayerDto Payer { get; set; }
     }

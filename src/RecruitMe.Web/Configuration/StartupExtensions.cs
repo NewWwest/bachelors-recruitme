@@ -19,7 +19,7 @@ namespace RecruitMe.Web.Configuration
 {
     public static class StartupExtensions
     {
-        public static void AddDependencInjection(this IServiceCollection services)
+        public static void AddDependencyInjection(this IServiceCollection services)
         {
             services.AddTransient<ILogger,ConsoleLogger>();
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
@@ -66,6 +66,7 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<CreatePaymentLinkCommand>();
             services.AddTransient<GetNewPaymentDescriptionQuery>();
             services.AddTransient<GetExistingPaymentLinkQuery>();
+            services.AddTransient<RemoveExistingPaymentLink>();
         }
     }
 }

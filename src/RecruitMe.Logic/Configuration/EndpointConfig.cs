@@ -12,6 +12,7 @@ namespace RecruitMe.Logic.Configuration
         public static string SetNewPassword => "/account/SetNewPassword";
         public static string EmailVerified(string candidateId) => $"/account/EmailVerified?candidateId={candidateId}";
         public static string SuccessfulMoneyTransfer => "/api/payment/successfulMoneyTransfer";
+        public static string AfterPayment => "/api/payment/afterPayment";
 
         public static string DotpayBaseAddress => "https://ssl.dotpay.pl";
         public static string DotpayProductionAddress => "/s2/login/api/v1";

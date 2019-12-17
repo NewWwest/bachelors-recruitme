@@ -16,6 +16,6 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
         {
         }
 
-        protected override string DoExecute(int userId) => _dbContext.PaymentLinks.Where(p => p.UserId == userId).FirstOrDefault().Link;
+        protected override string DoExecute(int userId) => _dbContext.PaymentLinks.Where(p => p.UserId == userId).FirstOrDefault()?.Link ?? "";
     }
 }

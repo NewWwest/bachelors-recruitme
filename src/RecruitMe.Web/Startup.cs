@@ -65,7 +65,7 @@ namespace RecruitMe.Web
                 });
 
 
-            services.AddDependencInjection();
+            services.AddDependencyInjection();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,7 +86,7 @@ namespace RecruitMe.Web
             }
 
 
-            List<string> origins = new List<string> { "" };
+            List<string> origins = new List<string> { EndpointConfig.DotpayBaseAddress };
 
             app.UseCors(
                 options => options.WithOrigins(origins.ToArray()).AllowAnyMethod().WithHeaders("authorization", "accept", "content-type", "origin")

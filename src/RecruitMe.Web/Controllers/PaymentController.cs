@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Payments;
@@ -40,6 +37,15 @@ namespace RecruitMe.Web.Controllers
         }
 
         // redirect after payment method
+        [HttpGet]
+        [Route("afterPayment")]
+        public async Task<ActionResult> AfterPayment(dynamic data)
+        {
+            // redirect to web or mobile, depending on data
+            string redirectUrl = "http://localhost:5000/payments/thankyou";
+
+            return RedirectPermanent(redirectUrl);
+        }
 
         // method for dotpay to call after successful money transfer
         [HttpPost]
