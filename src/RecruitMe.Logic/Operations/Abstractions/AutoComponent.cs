@@ -9,6 +9,5 @@ namespace RecruitMe.Logic.Operations.Abstractions
     /// </summary>
     public interface IAutoComponent
     {
-        //TODO
     }
 }

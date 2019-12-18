@@ -1,4 +1,5 @@
 ﻿using RecruitMe.Logic.Data.Entities;
+using RecruitMe.Logic.Operations.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Account.Helpers
 {
-    public class PasswordHasher
+    public class PasswordHasher : IAutoComponent
     {
         private static int HashIterations = 10000;
         private static int saltLength = 16;

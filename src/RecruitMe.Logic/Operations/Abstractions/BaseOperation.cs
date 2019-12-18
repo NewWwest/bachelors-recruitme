@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Abstractions
 {
-    public abstract class BaseOperation
+    public abstract class BaseOperation : IAutoComponent
     {
         protected readonly ILogger _logger;
         protected readonly BaseDbContext _dbContext;
