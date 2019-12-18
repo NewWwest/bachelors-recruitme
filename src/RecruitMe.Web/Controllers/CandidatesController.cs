@@ -15,41 +15,17 @@ namespace RecruitMe.Web.Controllers
     [Route("api/administration/candidates/")]
     public class CandidatesController : RecruitMeBaseController
     {
-        private readonly GetCandidatesQuery _GetCandidatesQuery;
-        private readonly GetProfileDataQuery _GetProfileDataQuery;
-        private readonly UpdateCandidateCommand _UpdateCandidateCommand;
-        private readonly DeleteCandidateCommand _DeleteCandidateCommand;
-        private readonly DeleteFileCommand _deleteFileCommand;
-        private readonly GetEnrolledExamsQuerry _GetEnrolledExamsQuerry;
-        private readonly AddOrUpdateExamTakerCommand _AddOrUpdateExamTakerCommand;
-        private readonly DeleteExamTakerCommand _DeleteExamTakerCommand;
-
-        public CandidatesController(
-            GetCandidatesQuery GetCandidatesQuery,
-            GetProfileDataQuery GetProfileDataQuery,
-            UpdateCandidateCommand UpdateCandidateCommand,
-            DeleteCandidateCommand DeleteCandidateCommand,
-            DeleteFileCommand deleteFileCommand,
-            GetEnrolledExamsQuerry GetEnrolledExamsQuerry,
-            AddOrUpdateExamTakerCommand AddOrUpdateExamTakerCommand,
-            DeleteExamTakerCommand DeleteExamTakerCommand)
+        public CandidatesController()
         {
-            _GetCandidatesQuery = GetCandidatesQuery;
-            _GetProfileDataQuery = GetProfileDataQuery;
-            _UpdateCandidateCommand = UpdateCandidateCommand;
-            _DeleteCandidateCommand = DeleteCandidateCommand;
-            _deleteFileCommand = deleteFileCommand;
-            _GetEnrolledExamsQuerry = GetEnrolledExamsQuerry;
-            _AddOrUpdateExamTakerCommand = AddOrUpdateExamTakerCommand;
-            _DeleteExamTakerCommand = DeleteExamTakerCommand;
         }
 
         [HttpGet]
         [Route("")]
         public async Task<ActionResult> List(PagingParameters paging)
         {
-            var admin = await AuthenticateAdmin();
-            var data = _GetCandidatesQuery.Execute(paging);
+            await AuthenticateAdmin();
+
+            PagedResponse<GetCandidatesResultDto> data = Get<GetCandidatesQuery>().Execute(paging);
             return Json(data);
         }
 
@@ -57,9 +33,9 @@ namespace RecruitMe.Web.Controllers
         [Route("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            ProfileDataDto data = await _GetProfileDataQuery.Execute(id);
+            ProfileDataDto data = await Get<GetProfileDataQuery>().Execute(id);
             return Json(data);
         }
 
@@ -67,10 +43,15 @@ namespace RecruitMe.Web.Controllers
         [Route("")]
         public async Task<ActionResult> Update([FromBody]ProfileDataDto data)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            OperationResult cmdResult = await _UpdateCandidateCommand.Execute(data);
-            ProfileDataDto qResult = await _GetProfileDataQuery.Execute(data.UserId);
+            OperationResult cmdResult = await Get<UpdateCandidateCommand>().Execute(data);
+            if (!cmdResult.Success)
+            {
+                return BadRequest();
+            }
+
+            ProfileDataDto qResult = await Get<GetProfileDataQuery>().Execute(data.UserId);
 
             return Json(qResult);
         }
@@ -79,27 +60,29 @@ namespace RecruitMe.Web.Controllers
         [Route("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            var result = await _DeleteCandidateCommand.Execute(id);
-            return Json(result);
+            OperationResult result = await Get<DeleteCandidateCommand>().Execute(id);
+            if (result.Success)
+                return Ok();
+            else
+                return BadRequest();
         }
 
         [HttpDelete]
         [Route("{userId}/documents/{fileid}")]
         public async Task<ActionResult> DeletePersonalDocument(int userId, int fileid)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            var cmdResult = await _deleteFileCommand.Execute((userId, fileid));
-            if (cmdResult.Success)
+            OperationResult cmdResult = await Get<DeleteFileCommand>().Execute((userId, fileid));
+            if (!cmdResult.Success)
             {
-                ProfileDataDto result = await _GetProfileDataQuery.Execute(userId);
-                return Json(result);
+                return BadRequest();
             }
 
-            return BadRequest();
-
+            ProfileDataDto result = await Get<GetProfileDataQuery>().Execute(userId);
+            return Json(result);
         }
 
 
@@ -107,9 +90,9 @@ namespace RecruitMe.Web.Controllers
         [Route("{userId}/exams/")]
         public async Task<ActionResult> ListExams(int userId)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            var data = await _GetEnrolledExamsQuerry.Execute(userId);
+            List<ExamTakerDto> data = await Get<GetEnrolledExamsQuerry>().Execute(userId);
             return Json(data);
         }
 
@@ -117,24 +100,33 @@ namespace RecruitMe.Web.Controllers
         [Route("{userId}/exams/")]
         public async Task<ActionResult> AddOrUpdateExamTaker([FromBody]ExamTakerDto examTaker)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            var id = await _AddOrUpdateExamTakerCommand.Execute(examTaker);
-            var data = await _GetEnrolledExamsQuerry.Execute(examTaker.UserId);
+            int id = await Get<AddOrUpdateExamTakerCommand>().Execute(examTaker);
+            if (id > 0)
+            {
+                List<ExamTakerDto> data = await Get<GetEnrolledExamsQuerry>().Execute(examTaker.UserId);
 
-            return Json(data);
+                return Json(data);
+            }
+
+            return BadRequest();
         }
+
         [HttpDelete]
         [Route("{userId}/exams/{id}/")]
         public async Task<ActionResult> AddOrUpdateExamTaker(int userId, int id)
         {
-            var admin = await AuthenticateAdmin();
+            await AuthenticateAdmin();
 
-            var result = await _DeleteExamTakerCommand.Execute(id);
-            var data = await _GetEnrolledExamsQuerry.Execute(userId);
+            OperationResult result = await Get<DeleteExamTakerCommand>().Execute(id);
+            if (result.Success)
+            {
+                var data = await Get<GetEnrolledExamsQuerry>().Execute(userId);
 
-            return Json(data);
+                return Json(data);
+            }
+            return BadRequest();
         }
     }
-
 }

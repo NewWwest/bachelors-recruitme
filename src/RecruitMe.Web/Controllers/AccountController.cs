@@ -16,25 +16,8 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Account")]
     public class AccountController : RecruitMeBaseController
     {
-        private readonly RegisterUserCommand _registerUserCommand;
-        private readonly ConfirmEmailCommand _confirmEmailCommand;
-        private readonly SetNewPasswordCommand _setNewPasswordCommand;
-        private readonly ResetPasswordCommand _resetPasswordCommand;
-        private readonly RemindLoginCommand _remindLoginQuery;
-
-        public AccountController(
-            RegisterUserCommand registerUserCommand, 
-            ConfirmEmailCommand confirmEmailCommand,
-            ResetPasswordCommand resetPasswordCommand,
-            SetNewPasswordCommand setNewPasswordCommand,
-            RemindLoginCommand remindLoginQuery) : base()
-
+        public AccountController()
         {
-            _registerUserCommand = registerUserCommand;
-            _confirmEmailCommand = confirmEmailCommand;
-            _setNewPasswordCommand = setNewPasswordCommand;
-            _resetPasswordCommand = resetPasswordCommand;
-            _remindLoginQuery = remindLoginQuery;
         }
 
         [HttpPost]
@@ -43,10 +26,10 @@ namespace RecruitMe.Web.Controllers
         {
             try
             {
-                var result = await _registerUserCommand.Execute(model);
+                int result = await Get<RegisterUserCommand>().Execute(model);
                 return Ok(result);
             }
-            catch(ValidationFailedException e)
+            catch (ValidationFailedException e)
             {
                 return BadRequest(string.Join("\n", e.ValidationResult.Errors));
             }
@@ -58,7 +41,8 @@ namespace RecruitMe.Web.Controllers
         {
             try
             {
-                string candidateId = await _confirmEmailCommand.Execute(token);
+                string candidateId = await Get<ConfirmEmailCommand>().Execute(token);
+
                 if (!string.IsNullOrWhiteSpace(candidateId))
                     return Redirect(EndpointConfig.EmailVerified(candidateId));
                 else
@@ -77,9 +61,9 @@ namespace RecruitMe.Web.Controllers
         {
             try
             {
-                await _setNewPasswordCommand.Execute(request);
+                await Get<SetNewPasswordCommand>().Execute(request);
                 return Ok();
-                
+
             }
             catch
             {
@@ -94,7 +78,7 @@ namespace RecruitMe.Web.Controllers
         {
             try
             {
-                await _resetPasswordCommand.Execute(login);
+                await Get<ResetPasswordCommand>().Execute(login);
                 return Ok();
 
             }
@@ -112,7 +96,7 @@ namespace RecruitMe.Web.Controllers
         {
             try
             {
-                await _remindLoginQuery.Execute(request);
+                await Get<RemindLoginCommand>().Execute(request);
                 return Ok();
 
             }
