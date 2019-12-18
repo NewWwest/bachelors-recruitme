@@ -38,7 +38,7 @@ namespace RecruitMe.Web.Controllers
         {
             GetUserQuery query = HttpContext.RequestServices.Get<GetUserQuery>();
             User user = await query.Execute(ParseUserId());
-            if (user.CandidateId == BusinessConfiguration.AdminLogin)
+            if (user.CandidateId == Get<BusinessConfiguration>().AdminLogin)
             {
 
                 return user;

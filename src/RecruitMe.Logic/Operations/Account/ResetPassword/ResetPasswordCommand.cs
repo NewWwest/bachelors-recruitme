@@ -13,10 +13,12 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
     public class ResetPasswordCommand : BaseAsyncOperation<OperationResult, ResetPasswordDto>
     {
         private readonly SendEmailCommand _sendEmailCommand;
+        private readonly EndpointConfig _endpointConfig;
 
-        public ResetPasswordCommand(ILogger logger, BaseDbContext dbContext, SendEmailCommand sendEmailCommand) : base(logger, dbContext)
+        public ResetPasswordCommand(ILogger logger, BaseDbContext dbContext, SendEmailCommand sendEmailCommand, EndpointConfig endpointConfig) : base(logger, dbContext)
         {
             _sendEmailCommand = sendEmailCommand;
+            _endpointConfig = endpointConfig;
         }
 
         public override async Task<OperationResult> Execute(ResetPasswordDto request)
@@ -38,7 +40,7 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
             {
                 To=user.Email,
                 Title="Reset Password",
-                Body = EndpointConfig.BaseAddress + EndpointConfig.SetNewPassword + $"?token={passwordReset.Id}"
+                Body = _endpointConfig.SetNewPassword(passwordReset.Id.ToString())
             });
 
             return new OperationSucceded();

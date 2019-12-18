@@ -17,6 +17,7 @@ namespace RecruitMe.Logic.Data
 {
     public abstract class BaseDbContext : DbContext
     {
+        private readonly BusinessConfiguration businessConfiguration;
 
         public virtual DbSet<User> Users { get; set; }
 
@@ -36,29 +37,31 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<ExamTaker> ExamTakers { get; set; }
 
-        public BaseDbContext(DbContextOptions options) : base(options)
+        public BaseDbContext(DbContextOptions options, BusinessConfiguration businessConfiguration) : base(options)
         {
+            this.businessConfiguration = businessConfiguration;
         }
 
-        protected BaseDbContext()
+        protected BaseDbContext(BusinessConfiguration businessConfiguration)
         {
+            this.businessConfiguration = businessConfiguration;
         }
 
         public void EnsureCreated()
         {
             Database.EnsureCreated();
-            var admin = Users.FirstOrDefault(u => u.CandidateId == BusinessConfiguration.AdminLogin);
+            var admin = Users.FirstOrDefault(u => u.CandidateId == businessConfiguration.AdminLogin);
             if(admin == null)
             {
                 Users.Add(
                     new User
                     {
-                        CandidateId = BusinessConfiguration.AdminLogin,
-                        Email = BusinessConfiguration.Email,
+                        CandidateId = businessConfiguration.AdminLogin,
+                        Email = businessConfiguration.Email,
                         EmailVerified = true,
                         Name = "Administrator",
                         Surname = "Szkoły",
-                        PasswordHash = BusinessConfiguration.InitialAdminPasswordHash
+                        PasswordHash = businessConfiguration.InitialAdminPasswordHash
                     });
                 SaveChanges();
             }

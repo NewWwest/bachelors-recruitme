@@ -20,7 +20,7 @@ namespace RecruitMe.Web
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls(EndpointConfig.BaseAddress)
+                //.UseUrls(EndpointConfig.BaseAddress)
                 .UseStartup<Startup>()
                 .Build();
     }

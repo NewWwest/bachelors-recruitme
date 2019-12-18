@@ -44,7 +44,7 @@ namespace RecruitMe.Web.Controllers
                 string candidateId = await Get<ConfirmEmailCommand>().Execute(token);
 
                 if (!string.IsNullOrWhiteSpace(candidateId))
-                    return Redirect(EndpointConfig.EmailVerified(candidateId));
+                    return Redirect(Get<EndpointConfig>().EmailVerified(candidateId));
                 else
                     return BadRequest();
             }
