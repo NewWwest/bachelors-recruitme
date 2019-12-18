@@ -21,8 +21,13 @@
                 </v-card-title>
 
                 <v-card-text>
-                    Edytowanie lub usuwanie kategorii egzaminów w czasie rekrutacji może być niemożliwe jeśli są do niej przypięte egzaminy i kandytaci.
-                    Upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                    <p>
+                        Usunięcie kategorii usunie również wszystkie egzaminy oraz terminy wszystkich kandydatów.
+                        Jeśli chcesz usunąć pojedynczy egzamin lub termin kandydata skorzystaj z panelu egzaminy.
+                    </p>
+                    <p>
+                        Aby ułatwić korzystanie z sytemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                    </p>
                     <v-text-field readonly label="Id" v-model="examCategory.id" name="examCategory.id"></v-text-field>
                     <v-text-field label="Nazwa kategorii" v-model="examCategory.name" name="examCategory.name"></v-text-field>
                     <v-select v-model="examCategory.examType"

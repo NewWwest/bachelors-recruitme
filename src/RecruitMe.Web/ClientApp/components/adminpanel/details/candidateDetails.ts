@@ -3,7 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { ApiGateway } from '../../../api/api.gateway';
 import { IProfileData } from '../../../models/recruit.models';
 import { SystemEntity, IExam, IExamTaker, ITeacher } from '../../../models/administraion.models';
-import { start } from 'repl';
+import { toLocalTime } from '../../../helpers/datetime.helper';
 
 @Component({})
 export default class CandidateDetailsComponent extends Vue {
@@ -47,7 +47,6 @@ export default class CandidateDetailsComponent extends Vue {
                     startDateTime: new Date(e.startDateTime)
                 }
             })
-            console.log(d);
         }, err => {
             console.error(err);
         });
@@ -58,7 +57,6 @@ export default class CandidateDetailsComponent extends Vue {
                     name: e.name + " " + e.surname
                 }
             })
-            console.log(d);
         }, err => {
             console.error(err);
         });
@@ -110,7 +108,6 @@ export default class CandidateDetailsComponent extends Vue {
     }
 
     addExamTaker() {
-        console.log(this.newExamTaker)
         this.newExamTaker.candidateId = this.profile.candidateId;
         this.newExamTaker.userId = this.profile.userId;
 
@@ -137,8 +134,8 @@ export default class CandidateDetailsComponent extends Vue {
     setUserExams(data: IExamTaker[]) {
         this.newExamTaker = {} as IExamTaker;
         this.userExams = data;
-        for (var i = 0; i < this.userExams.length; i++) {
-            this.userExams[i].startDate = new Date(this.userExams[i].startDate);
+        for (let i = 0; i < this.userExams.length; i++) {
+            this.userExams[i].startDate = toLocalTime(this.userExams[i].startDate);
         }
     }
 }

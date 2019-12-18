@@ -1,6 +1,12 @@
 ﻿<template>
     <div>
-        <h2>Edycja danych kandydata</h2>
+        <h3 class="d-inline-block mb-3">
+            Edycja danych kandydata
+        </h3>
+        <v-btn class="ml-3 mb-3"
+               to="/adminPanel/manage/candidate">
+            Wróć
+        </v-btn>
         <div class="row">
             <div class="profile-data col-sm-6">
                 <v-card class="mb-3">
@@ -53,9 +59,21 @@
                     <v-card-title>
                         Akcje:
                     </v-card-title>
+                    <v-card-text>
+                        <h4>Usunięcia uzytkownika nie da się cofnąć!</h4>
+                    </v-card-text>
                     <v-card-actions>
-                        <v-btn @click="getIdentityCard">Drukuj Identyfikator</v-btn>
-                        <v-btn @click="handleDelete">Usuń Użytkownika</v-btn>
+                        <v-row>
+                            <v-col>
+                                <v-btn @click="getIdentityCard">Drukuj Identyfikator(TODO)</v-btn>
+                            </v-col>
+                            <v-col>
+                                <v-btn @click="handleDelete">Usuń Użytkownika</v-btn>
+                            </v-col>
+                            <v-col>
+                                <v-btn>Otwórz chat(TODO)</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-card-actions>
                 </v-card>
                 <v-card>
@@ -125,29 +143,28 @@
                         </v-card>
 
                         <v-card class="mb-3" v-for="taker in userExams" :key="taker.id">
-                            <v-card-subtitle>Dodaj nowy</v-card-subtitle>
                             <v-card-text>
-                                {{taker.examCategoryName}}
+                                <v-text-field readonly label="Egzamin:" v-model="taker.examCategoryName" name="taker.examCategoryName"></v-text-field>
                                 <v-datetime-picker label="Start Egzaminu"
                                                    v-model="taker.startDate">
                                 </v-datetime-picker>
-                                <v-text-field label="Ocena" v-model="taker.score" name="taker.score" type="number"></v-text-field>
-                                <v-select v-model="taker.teacherId"
+                                <v-text-field class="col-sm-12 col-md-3" label="Ocena" v-model="taker.score" name="taker.score" type="number"></v-text-field>
+                                <v-select class="col-sm-12 col-md-9"
+                                          v-model="taker.teacherId"
                                           :items="teachers"
                                           label="Nauczyciel oceniający"
                                           item-text="name"
                                           @change="setDefaultDate()"
                                           item-value="id"></v-select>
+                                <div>
+                                    <v-btn @click="saveExamTaker(taker)">
+                                        Zapisz
+                                    </v-btn>
+                                    <v-btn @click="removeExamTaker(taker)">
+                                        Usuń
+                                    </v-btn>
+                                </div>
                             </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn @click="saveExamTaker(taker)">
-                                    Zapisz
-                                </v-btn>
-                                <v-btn @click="removeExamTaker(taker)">
-                                    Usuń
-                                </v-btn>
-                            </v-card-actions>
                         </v-card>
 
 

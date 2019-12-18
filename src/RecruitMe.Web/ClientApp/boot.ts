@@ -3,6 +3,7 @@ import 'bootstrap';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
+//@ts-ignore - package does not provide types definition but we reference it only here
 import DatetimePicker from 'vuetify-datetime-picker/dist'
 
 Vue.use(DatetimePicker)

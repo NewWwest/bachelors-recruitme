@@ -2,6 +2,7 @@
 import { Component, Watch } from 'vue-property-decorator';
 import { SystemEntity, IExamCategory, ExamTypeDisplayName, IExam } from '../../../models/administraion.models';
 import { ApiGateway } from '../../../api/api.gateway';
+import { toLocalTime } from '../../../helpers/datetime.helper';
 
 @Component({})
 export default class ManageComponent extends Vue {
@@ -145,7 +146,7 @@ export default class ManageComponent extends Vue {
                             examTypeName: ExamTypeDisplayName(category.examType)
                         };
                     }, (err: any) => {
-                        console.log(err);
+                        console.error(err);
                     });
                     this.rowsTotal = resp.length;
                     this.pagination.page = 1;
@@ -165,7 +166,7 @@ export default class ManageComponent extends Vue {
                             this.examCategories = categories;
                             this.mapExams(exams);
                         }, (err: any) => {
-                            console.log(err);
+                            console.error(err);
                         });
                     } else {
                         this.mapExams(exams);
@@ -195,7 +196,7 @@ export default class ManageComponent extends Vue {
             return {
                 id: e.id,
                 seatCount: e.seatCount,
-                startDateTime: e.startDateTime,
+                startDateTime: toLocalTime(e.startDateTime).toLocaleDateString("pl") + " " + toLocalTime(e.startDateTime).toLocaleTimeString("pl"),
                 durationInMinutes: e.durationInMinutes,
                 examCategory: this.examCategories.find(ec => ec.id == e.examCategoryId)?.name
             };

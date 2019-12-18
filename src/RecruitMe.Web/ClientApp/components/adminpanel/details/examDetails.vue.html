@@ -16,8 +16,8 @@
                 </v-card-title>
                 <v-card-text>
                     <p>
-                        Edytowanie lub usuwanie egzaminów w czasie rekrutacji może być niemożliwe, jeśli są do nich przypisani kandytaci.
-                        Upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                        Usunięcie egzaminu usunie również terminy wszystkim kandydatom. Jeśli chcesz usunąć użytkownika skorzystaj z panelu poniżej.
+                        Aby ułatwić korzystanie z sytemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
                     </p>
                     <v-text-field readonly label="Id" v-model="exam.id" name="exam.id " type="number"></v-text-field>
                     <v-datetime-picker label="Start Egzaminu"
@@ -55,19 +55,19 @@
                     <div v-for="examTaker in examTakers">
                         <v-card>
                             <v-card-text>
-                                <span>
-                                    {{examTaker.userDisplayName}}
-                                </span>
-                                <span>
-                                    {{examTaker.startDate}}
-                                </span>
-                                <span v-if="examTaker.score">
-                                    {{examTaker.score}}
-                                </span>
-                                <span v-if="examTaker.teacherDisplayName">
-                                    {{examTaker.teacherDisplayName}}
-                                </span>
-                                <v-btn @click="deleteUserTaker(examTaker.id)">Usuń   <v-icon>delete</v-icon></v-btn>
+                                <p>
+                                    Kandydate: {{examTaker.userDisplayName}}
+                                </p>
+                                <p>
+                                    Zaczyna o godzinie: {{examTaker.startDate.toLocaleDateString("pl")}} {{examTaker.startDate.toLocaleTimeString("pl")}}
+                                </p>
+                                <p v-if="examTaker.score">
+                                    Otrzymał ocenę: {{examTaker.score}}
+                                </p>
+                                <p v-if="examTaker.teacherDisplayName">
+                                    Ocenę wystawił: {{examTaker.teacherDisplayName}}
+                                </p>
+                                <v-btn @click="deleteUserTaker(examTaker.userId, examTaker.id)">Usuń   <v-icon>delete</v-icon></v-btn>
                             </v-card-text>
                         </v-card>
                     </div>

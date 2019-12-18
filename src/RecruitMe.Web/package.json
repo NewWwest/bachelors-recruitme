@@ -36,6 +36,7 @@
         "webpack-merge": "^4.1.0"
     },
     "dependencies": {
+        "@types/file-saver": "^2.0.1",
         "@types/node": "^12.12.8",
         "ajv": "^6.10.2",
         "axios": "^0.19.0",
