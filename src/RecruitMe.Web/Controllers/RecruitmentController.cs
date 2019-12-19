@@ -36,7 +36,7 @@ namespace RecruitMe.Web.Controllers
         [Route("Profile")]
         public async Task<ActionResult> GetPersonalData()
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
             ProfileDataDto result = await _getProfileDataQuery.Execute(user.Id);
             return Json(result);
         }
@@ -45,7 +45,7 @@ namespace RecruitMe.Web.Controllers
         [Route("PersonalData")]
         public async Task<ActionResult> UpdatePersonalData([FromBody] ProfileDataDto personalData)
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
             OperationResult cmdResult = await _addOrUpdateProfileDataCommand.Execute(new AddOrUpdateProfileDataCommandRequest() { UserId = user.Id, Data = personalData });
             if (cmdResult.Success)
             {
@@ -62,7 +62,7 @@ namespace RecruitMe.Web.Controllers
         [Route("ProfilePicture")]
         public async Task<ActionResult> ProfilePicture(IFormFile picture)
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
             
             using (var stream = picture.OpenReadStream())
             {
@@ -80,7 +80,7 @@ namespace RecruitMe.Web.Controllers
         [Route("document")]
         public async Task<ActionResult> AddPersonalDocument(IFormFile file)
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
 
             using (var stream = file.OpenReadStream())
             {
@@ -99,7 +99,7 @@ namespace RecruitMe.Web.Controllers
         [Route("document/{fileid}")]
         public async Task<ActionResult> DeletePersonalDocument(int fileid)
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
             var result = await _deleteFileCommand.Execute((user.Id, fileid));
 
             if (result.Success)

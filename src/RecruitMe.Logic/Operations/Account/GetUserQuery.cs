@@ -17,7 +17,7 @@ namespace RecruitMe.Logic.Operations.Account
         {
         }
 
-        protected override Task<User> DoExecute(int id)
+        public override Task<User> Execute(int id)
         {
             return _dbContext.Users.SingleAsync(u => u.Id == id);
         }

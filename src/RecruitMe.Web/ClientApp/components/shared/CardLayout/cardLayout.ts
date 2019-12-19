@@ -6,10 +6,7 @@ import { Component, Prop } from 'vue-property-decorator';
 })
 export default class CardLayout extends Vue {
     @Prop()
-    maxWidth: string | undefined;
-    @Prop()
-    minWidth: string | undefined;
+    className: string | undefined;
 
-    defaultMaxWidth: string = "344px";
-    defaultMinWidth: string = "344px";
+    defaultClassName: string = "col-sm-3 col-xs-6";
 }

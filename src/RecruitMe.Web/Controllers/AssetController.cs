@@ -27,7 +27,7 @@ namespace RecruitMe.Web.Controllers
         [Route("image/{fileid}")]
         public async Task<ActionResult> GetImage(int fileid)
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
 
             using (GetFileQueryResult stream = await _getFileQuery.Execute((user.Id, fileid)))
             using (Image image = Image.FromStream(stream.Data))
@@ -48,10 +48,18 @@ namespace RecruitMe.Web.Controllers
 
         [HttpGet]
         [Route("{fileid}")]
-        public async Task<ActionResult> GetFile(int fileid)
+        public async Task<ActionResult> GetFile(int fileid, [FromQuery]int? userId)
         {
-            User user = await GetUser();
-            GetFileQueryResult stream = await _getFileQuery.Execute((user.Id, fileid));
+            if(userId.HasValue && userId > 0)
+            {
+                await AuthenticateAdmin();
+            }
+            else
+            {
+                User user = await AuthenticateUser();
+                userId = user.Id;
+            }
+            GetFileQueryResult stream = await _getFileQuery.Execute((userId.Value, fileid));
             return new FileStreamResult(stream.Data, stream.ContentType);
         }
     }

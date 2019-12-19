@@ -1,0 +1,48 @@
+﻿<template>
+    <div>
+        <v-toolbar dense dark>
+            <v-btn @click="changeEntity(SystemEntityEnum.Candidate)" :depressed="SystemEntityEnum.Candidate==currentSystemEntity">
+                Kandydaci
+            </v-btn>
+            <v-btn @click="changeEntity(SystemEntityEnum.Exam)" :depressed="SystemEntityEnum.Exam==currentSystemEntity">
+                Egzaminy
+            </v-btn>
+            <v-btn @click="changeEntity(SystemEntityEnum.ExamCategory)" :depressed="SystemEntityEnum.ExamCategory==currentSystemEntity">
+                Kategorie egzaminów
+            </v-btn>
+            <v-btn @click="changeEntity(SystemEntityEnum.Teacher)" :depressed="SystemEntityEnum.Teacher==currentSystemEntity">
+                Nauczyciele
+            </v-btn>
+        </v-toolbar>
+
+        <card-layout className="col-md-10">
+            <v-card-title>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Candidate==currentSystemEntity">
+                    Kandydaci
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Exam==currentSystemEntity">
+                    Egzaminy
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
+                    Kategorie egzaminów
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Teacher==currentSystemEntity">
+                    Nauczyciele
+                </h3>
+                <v-btn  class="ml-3" v-if="SystemEntityEnum.Candidate!=currentSystemEntity"
+                       :to="'/adminPanel/add/'+currentSystemEntity">
+                    Dodaj
+                </v-btn>
+            </v-card-title>
+            <v-card-text>
+                <v-data-table :headers="headers()"
+                              :items="items"
+                              :options.sync="pagination"
+                              @click:row="handleSelect"
+                              :server-items-length="rowsTotal">
+                </v-data-table>
+            </v-card-text>
+        </card-layout>
+    </div>
+</template>
+<script src="./manage.ts"></script>

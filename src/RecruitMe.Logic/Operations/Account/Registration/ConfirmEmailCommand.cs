@@ -21,7 +21,7 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             _sendEmailCommand = sendEmailCommand;
         }
 
-        protected  override async Task<string> DoExecute(Guid request)
+        public override async Task<string> Execute(Guid request)
         {
             var email = _dbContext.ConfirmationEmails
                 .Include(ce=>ce.User)

@@ -30,7 +30,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
             _fileStorage = fileStorage;
         }
 
-        protected override async Task<GetFileQueryResult> DoExecute((int UserId, int FileId) request)
+        public override async Task<GetFileQueryResult> Execute((int UserId, int FileId) request)
         {
             var doc = await _dbContext.PersonalDocuments
                 .FirstOrDefaultAsync(d => d.UserId == request.UserId && d.Id == request.FileId);

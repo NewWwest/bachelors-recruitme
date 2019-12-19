@@ -8,6 +8,8 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 {
     public class ProfileDataDto
     {
+        public int UserId { get; set; }
+
         public string Email { get; set; }
 
         public string Name { get; set; }
@@ -48,6 +50,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 
             var result = new ProfileDataDto()
             {
+                UserId = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,

@@ -8,6 +8,10 @@ using RecruitMe.Logic.Operations.Account.Registration;
 using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
 using RecruitMe.Logic.Operations.Account.SetNewPassword;
+using RecruitMe.Logic.Operations.Administration.Candidate;
+using RecruitMe.Logic.Operations.Administration.Exam;
+using RecruitMe.Logic.Operations.Administration.ExamCategory;
+using RecruitMe.Logic.Operations.Administration.Teacher;
 using RecruitMe.Logic.Operations.Email;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
@@ -19,7 +23,7 @@ namespace RecruitMe.Web.Configuration
     {
         public static void AddDependencInjection(this IServiceCollection services)
         {
-            services.AddTransient<ILogger,ConsoleLogger>();
+            services.AddTransient<ILogger, ConsoleLogger>();
             services.AddTransient<BaseDbContext, ApplicationDbContext>();
 
 
@@ -59,6 +63,36 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<DeleteFileCommand>();
 
             services.AddTransient<GetFileQuery>();
+
+            //admin panel
+            services.AddTransient<AddExamCategoryCommand>();
+            services.AddTransient<DeleteExamCategoryCommand>();
+            services.AddTransient<GetExamCategoriesQuery>();
+            services.AddTransient<AddExamCategoryValidator>();
+            services.AddTransient<UpdateExamCategoryValidator>();
+            services.AddTransient<UpdateExamCategoryCommand>();
+
+            services.AddTransient<AddTeacherCommand>();
+            services.AddTransient<DeleteTeacherCommand>();
+            services.AddTransient<GetTeachersQuery>();
+            services.AddTransient<AddTeacherValidator>();
+            services.AddTransient<UpdateTeacherValidator>();
+            services.AddTransient<UpdateTeacherCommand>();
+
+            services.AddTransient<AddExamCommand>();
+            services.AddTransient<DeleteExamCommand>();
+            services.AddTransient<GetExamsQuery>();
+            services.AddTransient<AddExamValidator>();
+            services.AddTransient<UpdateExamValidator>();
+            services.AddTransient<UpdateExamCommand>();
+            services.AddTransient<GetExamDetailsQuery>(); 
+
+            services.AddTransient<GetCandidatesQuery>();
+            services.AddTransient<UpdateCandidateCommand>();
+            services.AddTransient<DeleteCandidateCommand>(); 
+            services.AddTransient<GetEnrolledExamsQuerry>();
+            services.AddTransient<AddOrUpdateExamTakerCommand>();
+            services.AddTransient<DeleteExamTakerCommand>();
         }
     }
 }

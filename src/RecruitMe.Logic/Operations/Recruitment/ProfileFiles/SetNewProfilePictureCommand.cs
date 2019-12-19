@@ -23,7 +23,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
             _pictureSaver = pictureSaver;
         }
 
-        protected override async Task<string> DoExecute(FileRequest request)
+        public override async Task<string> Execute(FileRequest request)
         {
             var profile = await _dbContext.PersonalData
                 .Include(p => p.ProfilePictureFile)
