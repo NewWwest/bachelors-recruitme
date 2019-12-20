@@ -3,7 +3,6 @@
         <ActionBar class="action-bar">
             <Label class="action-bar-title" text="Login"></Label>
         </ActionBar>
-
         <StackLayout class="loginPageBack">
             <Image class="logoImage"/>
 
@@ -16,10 +15,10 @@
                             </FormattedString>
                         </Label>
                         <TextField v-model="username" hint="Login"
-                         :class="[!validUserName() ? 'form-input' : 'error-input', 'input-width']"/>
+                        :class="[!validUserName() ? 'form-input' : 'error-input', 'input-width']"/>
                     </FlexboxLayout>
                     <Label v-show="validUserName()" class="error-label"
-                     text="Login jest wymagany" /> 
+                    text="Login jest wymagany" /> 
                 </StackLayout>
 
                 <StackLayout class="inputPasswordMargin">
@@ -30,10 +29,10 @@
                             </FormattedString>
                         </Label>
                         <TextField v-model="password" hint="Password" secure="true" 
-                         v-bind:class="[!validPassword() ? 'form-input' : 'error-input', 'input-width']" />
+                        v-bind:class="[!validPassword() ? 'form-input' : 'error-input', 'input-width']" />
                     </FlexboxLayout>
                     <Label v-show="validPassword()" class="error-label"
-                     text="Hasło jest wymagane" />
+                    text="Hasło jest wymagane" />
                 </StackLayout>
 
                 <Button text="Login" @tap="onLoginButtonTap" class="my-button" />
@@ -43,8 +42,7 @@
                     <Label @tap="$goto.ResetPassword()" text="Zresetuj hasło" />
                 </FlexBoxLayout>
             </StackLayout>
-        </StackLayout>
-        
+        </StackLayout>       
     </Page>
 </template>
 
@@ -53,6 +51,7 @@ import { UserService } from '../services/userService/userService';
 import { Component, Vue } from 'vue-property-decorator';
 import ConnectionService from '../services/common/connection';
 import PopupFactory from '@/services/popupFactory';
+import LoaderService from '@/services/loaderView/loader';
 
     @Component
     export default class Login extends Vue {
@@ -62,19 +61,26 @@ import PopupFactory from '@/services/popupFactory';
         userService: UserService = new UserService();
 
         onLoginButtonTap() {
-            //if (ConnectionService.IsConnectedToNetwork()) {
-                this.submitted = true;
-                
-                if (!this.username || !this.password)
+            this.submitted = true;
+            if (!this.username || !this.password) 
                     return;
 
+            if (ConnectionService.IsConnectedToNetwork()) {
+                LoaderService.showLoader();
+
                 this.userService.login(this.username, this.password).then(() => {
-                    // go to user dashboard
+                    LoaderService.hideLoader();
+                    this.$goto.CandidateDashboard();
+                }, err => {
+                    console.error(err);
+                    
+                    LoaderService.hideLoader();
+                    PopupFactory.GenericErrorPopup("" + err);
                 })
-            //}
-            //else {
-                //PopupFactory.ConnectionError();
-            //}
+            }
+            else {
+                PopupFactory.ConnectionError();
+            }
         }
 
         validPassword() {
@@ -92,17 +98,6 @@ import PopupFactory from '@/services/popupFactory';
 
     .fa {
         color: #cf995f;
-    }
-
-    .form-input {
-        color: white;
-        placeholder-color: white;
-        border-bottom-width: 1;
-        border-bottom-color: white;
-    }
-
-    .form-group {
-        margin-top: 15;
     }
 
     .input-width {

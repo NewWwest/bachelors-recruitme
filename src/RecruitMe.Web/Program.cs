@@ -18,9 +18,10 @@ namespace RecruitMe.Web
             BuildWebHost(args).Run();
         }
 
+        //Set launchSettings.json endpoint to 0.0.0.0:5000
+        //Set base address to your public IP (or most public)
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                //.UseUrls(EndpointConfig.BaseAddress)
                 .UseStartup<Startup>()
                 .Build();
     }

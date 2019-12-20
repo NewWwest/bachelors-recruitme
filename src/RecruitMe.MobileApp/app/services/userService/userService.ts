@@ -1,39 +1,42 @@
 import { ApiGateway } from "../common/apiGateway";
-import { LocalStorageService } from "./localStorageService";
+import { LocalStorageService } from "../localStorage/localStorageService";
 import { AxiosResponse } from "axios";
 import { IAuthenticationResult, IRegistrationRequest,
     IJwtClaims, IRemindLoginRequest,
     IResetPasswordRequest, ISetNewPassword } from "../../models/userFormModel";
 import PopupFactory from '../popupFactory';
+import { PersonalDataService } from '../personalData/personalDataService';
 
 export class UserService {
     private _apiGateway: ApiGateway = new ApiGateway();
 
     public login(email: string, password: string) {
         return this._apiGateway.login(email, password).then(
-            (response: AxiosResponse<IAuthenticationResult>) => {
+            async (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response != null && response.data != null) {
                     let jwt = this.parseJwt(response.data.access_token);
+
                     LocalStorageService.setEmail(jwt.email);
                     LocalStorageService.setJwtToken(response.data.access_token);
                     LocalStorageService.setUserId(jwt.userId);
+                    LocalStorageService.setFullname(jwt.name + ' ' + jwt.surname);
+
+                    const service: PersonalDataService = new PersonalDataService();
+                    await service.getProfileData();
                 }
-            },
-            (err: any) => {
-                console.error(err);
-                throw new Error(JSON.stringify(err));
             })
     }
 
-    public register(registrationModel: IRegistrationRequest): Promise<number> {
+    public register(registrationModel: IRegistrationRequest): Promise<void> {
         return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<number>) => {
                 if (response != null && response.data != null) {
-                    console.log(`Registration succesfull, internal ID: ${response.data}`)
+                    console.log(`Registration succesfull, internal ID: ${response.data}`);
                 }
             },(err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             });
     }
 
@@ -43,7 +46,8 @@ export class UserService {
                 PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji została wyslana wiadomosc z linkiem do zmiany hasla");
             }, (err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             });
     }
 
@@ -53,7 +57,8 @@ export class UserService {
 
             }, (err: any) => {
                 console.error(err);
-                throw new Error(JSON.stringify(err));
+
+                PopupFactory.GenericErrorPopup("" + err);
             });
     }
 
@@ -72,7 +77,7 @@ export class UserService {
             });
     }
 
-    public isLoggedIn(): boolean {
+    public static isLoggedIn(): boolean {
         return LocalStorageService.getUserId() ? true : false &&
             LocalStorageService.getEmail() ? true : false  &&
             LocalStorageService.getJwtToken() ? true : false;
@@ -82,7 +87,7 @@ export class UserService {
         try {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            var jsonPayload = decodeURIComponent(this.atobNS(base64).split('').map(function (c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
 
@@ -94,4 +99,10 @@ export class UserService {
         }
     }
 
+    private atobNS(str: string): string {
+        const data = android.util.Base64.decode(str, android.util.Base64.NO_WRAP);
+        const androidString =  new java.lang.String(data,  java.nio.charset.StandardCharsets.UTF_8 );
+
+        return '' + androidString;
+    }
 }

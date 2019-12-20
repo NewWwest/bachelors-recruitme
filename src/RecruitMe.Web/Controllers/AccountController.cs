@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Abstractions;
+using RecruitMe.Logic.Operations.Account;
+using RecruitMe.Logic.Operations.Account.Login;
 using RecruitMe.Logic.Operations.Account.Registration;
 using RecruitMe.Logic.Operations.Account.RemindLogin;
 using RecruitMe.Logic.Operations.Account.ResetPassword;
