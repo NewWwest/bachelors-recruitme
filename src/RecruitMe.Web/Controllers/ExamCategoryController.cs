@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Administration.ExamCategory;
 using System;
 using System.Collections.Generic;
@@ -10,29 +11,17 @@ namespace RecruitMe.Web.Controllers
     [Route("api/administration/examCategory/")]
     public class ExamCategoryController : RecruitMeBaseController
     {
-        private readonly AddExamCategoryCommand _AddExamCategoryCommand;
-        private readonly DeleteExamCategoryCommand _DeleteExamCategoryCommand;
-        private readonly GetExamCategoriesQuery _GetExamCategoriesQuery;
-        private readonly UpdateExamCategoryCommand _UpdateExamCategoryCommand;
-
-        public ExamCategoryController(
-AddExamCategoryCommand AddExamCategoryCommand,
-DeleteExamCategoryCommand DeleteExamCategoryCommand,
-GetExamCategoriesQuery GetExamCategoriesQuery,
-UpdateExamCategoryCommand UpdateExamCategoryCommand
-            )
+        public ExamCategoryController()
         {
-            _AddExamCategoryCommand = AddExamCategoryCommand;
-            _DeleteExamCategoryCommand = DeleteExamCategoryCommand;
-            _GetExamCategoriesQuery = GetExamCategoriesQuery;
-            _UpdateExamCategoryCommand = UpdateExamCategoryCommand;
         }
+
         [HttpGet]
         [Route("")]
         public async Task<ActionResult> List()
         {
-            var admin = await AuthenticateAdmin();
-            var result = await _GetExamCategoriesQuery.Execute();
+            await AuthenticateAdmin();
+
+            IEnumerable<ExamCategoryDto> result = await Get<GetExamCategoriesQuery>().Execute();
             return Json(result);
         }
 
@@ -40,9 +29,10 @@ UpdateExamCategoryCommand UpdateExamCategoryCommand
         [Route("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var admin = await AuthenticateAdmin();
-            var examCategories = await _GetExamCategoriesQuery.Execute();
-            var result = examCategories.Single(ec => ec.Id == id);
+            await AuthenticateAdmin();
+            IEnumerable<ExamCategoryDto> examCategories = await Get<GetExamCategoriesQuery>().Execute();
+            ExamCategoryDto result = examCategories.Single(ec => ec.Id == id);
+
             return Json(result);
         }
 
@@ -50,8 +40,9 @@ UpdateExamCategoryCommand UpdateExamCategoryCommand
         [Route("")]
         public async Task<ActionResult> Add([FromBody]ExamCategoryDto examCategory)
         {
-            var admin = await AuthenticateAdmin();
-            var result = await _AddExamCategoryCommand.Execute(examCategory);
+            await AuthenticateAdmin();
+
+            OperationResult result = await Get<AddExamCategoryCommand>().Execute(examCategory);
             if (result.Success)
             {
                 return Ok();
@@ -66,8 +57,9 @@ UpdateExamCategoryCommand UpdateExamCategoryCommand
         [Route("")]
         public async Task<ActionResult> Update([FromBody]ExamCategoryDto examCategory)
         {
-            var admin = await AuthenticateAdmin();
-            var result = await _UpdateExamCategoryCommand.Execute(examCategory);
+            await AuthenticateAdmin();
+
+            OperationResult result = await Get<UpdateExamCategoryCommand>().Execute(examCategory);
             if (result.Success)
             {
                 return Ok();
@@ -82,8 +74,9 @@ UpdateExamCategoryCommand UpdateExamCategoryCommand
         [Route("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var admin = await AuthenticateAdmin();
-            var result = await _DeleteExamCategoryCommand.Execute(id);
+            await AuthenticateAdmin();
+
+            OperationResult result = await Get<DeleteExamCategoryCommand>().Execute(id);
             if (result.Success)
             {
                 return Ok();

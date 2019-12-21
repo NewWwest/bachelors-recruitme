@@ -15,15 +15,18 @@ namespace RecruitMe.Logic.Operations.Account.Registration
     {
         private readonly PasswordHasher _passwordHasher;
         private readonly SendEmailCommand _sendEmailCommand;
+        private readonly EndpointConfig _endpointConfig;
 
         public RegisterUserCommand(ILogger logger,
             RegisterRequestValidator validator,
             BaseDbContext dbContext,
             PasswordHasher passwordHasher,
-            SendEmailCommand sendEmailCommand) : base(logger, validator, dbContext)
+            SendEmailCommand sendEmailCommand, 
+            EndpointConfig endpointConfig) : base(logger, validator, dbContext)
         {
             _passwordHasher = passwordHasher;
             _sendEmailCommand = sendEmailCommand;
+            _endpointConfig = endpointConfig;
         }
 
         protected async override Task<int> DoExecute(RegisterDto request)
@@ -52,7 +55,7 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             Guid token = await GenerateEmailConfirmationToken(result.Entity.Id);
             _sendEmailCommand.Execute(new EmailDto()
             {
-                Body = url(token),
+                Body = _endpointConfig.ConfirmEmail(token.ToString()),
                 Title = "Complete Recruit Me registration",
                 To = user.Email
             });
@@ -70,11 +73,6 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             });
             await _dbContext.SaveChangesAsync();
             return token;
-        }
-
-        private string url(Guid token)
-        {
-            return EndpointConfig.BaseAddress + EndpointConfig.ConfirmEmail + "/" + token.ToString();
         }
     }
 }

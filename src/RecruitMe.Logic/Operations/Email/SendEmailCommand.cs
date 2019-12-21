@@ -9,16 +9,18 @@ namespace RecruitMe.Logic.Operations.Email
 {
     public class SendEmailCommand : BaseOperation<OperationResult, EmailDto>
     {
+        private readonly BusinessConfiguration _businessConfiguration;
 
-        public SendEmailCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        public SendEmailCommand(ILogger logger, BaseDbContext dbContext, BusinessConfiguration businessConfiguration) : base(logger, dbContext)
         {
+            _businessConfiguration = businessConfiguration;
         }
 
         public override OperationResult Execute(EmailDto request)
         {
             var client = new SmtpClient("smtp.gmail.com", 587)
             {
-                Credentials = new NetworkCredential(BusinessConfiguration.Email, BusinessConfiguration.EmailPassword),
+                Credentials = new NetworkCredential(_businessConfiguration.Email, _businessConfiguration.EmailPassword),
                 EnableSsl = true
             };
             client.Send("RecruitMeSystem@gmail.com", request.To, request.Title, request.Body);

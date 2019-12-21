@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
@@ -14,14 +15,17 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
 {
     public class GetCandidatesQuery : BaseOperation<PagedResponse<GetCandidatesResultDto>, PagingParameters>
     {
-        public GetCandidatesQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        private readonly BusinessConfiguration _businessConfiguration;
+
+        public GetCandidatesQuery(ILogger logger, BaseDbContext dbContext, BusinessConfiguration businessConfiguration) : base(logger, dbContext)
         {
+            this._businessConfiguration = businessConfiguration;
         }
 
         public override PagedResponse<GetCandidatesResultDto> Execute(PagingParameters request)
         {
             var dataTask = Get(_dbContext.Users
-                .Where(u => u.CandidateId != Configuration.BusinessConfiguration.AdminLogin), request)
+                .Where(u => u.CandidateId != _businessConfiguration.AdminLogin), request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();

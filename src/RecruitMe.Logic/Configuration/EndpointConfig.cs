@@ -1,15 +1,20 @@
-﻿using System;
+﻿using RecruitMe.Logic.Operations.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace RecruitMe.Logic.Configuration
 {
-    public class EndpointConfig
+    public class EndpointConfig : IAutoComponent
     {
-        public static string BaseAddress => "http://*:5000/";//"http://localhost:5000";//"http://192.168.0.52:5000/";
-        
-        public static string ConfirmEmail => "/api/account/confirmEmail";
-        public static string SetNewPassword => "/account/SetNewPassword";
-        public static string EmailVerified(string candidateId) => $"/account/EmailVerified?candidateId={candidateId}";
+        public EndpointConfig(BusinessConfiguration businessConfiguration)
+        {
+            BaseAddress = businessConfiguration.BaseAddress;
+        }
+
+        public string BaseAddress { get; private set; }
+        public string ConfirmEmail(string guid) => BaseAddress + $"/api/account/confirmEmail/{guid}";
+        public string SetNewPassword(string id) => BaseAddress + $"/account/SetNewPassword?token={id}";
+        public string EmailVerified(string candidateId) => BaseAddress + $"/account/EmailVerified?candidateId={candidateId}";
     }
 }

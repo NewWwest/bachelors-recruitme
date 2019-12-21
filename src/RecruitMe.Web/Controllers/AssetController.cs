@@ -16,11 +16,8 @@ namespace RecruitMe.Web.Controllers
     [Route("api/asset/")]
     public class AssetController : RecruitMeBaseController
     {
-        private readonly GetFileQuery _getFileQuery;
-
-        public AssetController(GetFileQuery getFileQuery)
+        public AssetController()
         {
-            _getFileQuery = getFileQuery;
         }
 
         [HttpGet]
@@ -29,7 +26,7 @@ namespace RecruitMe.Web.Controllers
         {
             User user = await AuthenticateUser();
 
-            using (GetFileQueryResult stream = await _getFileQuery.Execute((user.Id, fileid)))
+            using (GetFileQueryResult stream = await Get<GetFileQuery>().Execute((user.Id, fileid)))
             using (Image image = Image.FromStream(stream.Data))
             using (MemoryStream m = new MemoryStream())
             {
@@ -50,7 +47,7 @@ namespace RecruitMe.Web.Controllers
         [Route("{fileid}")]
         public async Task<ActionResult> GetFile(int fileid, [FromQuery]int? userId)
         {
-            if(userId.HasValue && userId > 0)
+            if (userId.HasValue && userId > 0)
             {
                 await AuthenticateAdmin();
             }
@@ -59,7 +56,7 @@ namespace RecruitMe.Web.Controllers
                 User user = await AuthenticateUser();
                 userId = user.Id;
             }
-            GetFileQueryResult stream = await _getFileQuery.Execute((userId.Value, fileid));
+            GetFileQueryResult stream = await Get<GetFileQuery>().Execute((userId.Value, fileid));
             return new FileStreamResult(stream.Data, stream.ContentType);
         }
     }
