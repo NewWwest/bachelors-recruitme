@@ -22,6 +22,11 @@
                 </StackLayout>
     
                 <StackLayout class="form-group">
+                    <Label class="dateHeader" text="Data urodzenia" />
+                    <DatePicker v-model="userData.birthDate" :minDate="minDate" :maxDate="maxDate" />
+                </StackLayout>
+
+                <StackLayout class="form-group">
                     <TextField v-model="userData.email" class="form-input" hint="Adres e-mail" />
                     <TextField v-model="userData.password" class="form-input" hint="Hasło" :secure="true" />
                     <TextField v-model="userData.confirmPassword" class="form-input" hint="Powtórz hasło" :secure="true" />
@@ -37,15 +42,18 @@
 </template>
 
 <script lang="ts">
-    import { IRegistrationRequest } from "@/models/userFormModel";
-    import { Component, Vue } from 'vue-property-decorator';
-    import { UserService } from '@/services/userService/userService';
-    import { AxiosResponse } from 'axios';
-    import ConnectionService from "@/services/common/connection";
-    import PopupFactory from "@/services/popupFactory";
+import { IRegistrationRequest } from "@/models/userFormModel";
+import { Component, Vue } from 'vue-property-decorator';
+import { UserService } from '@/services/userService/userService';
+import { AxiosResponse } from 'axios';
+import ConnectionService from "@/services/common/connection";
+import PopupFactory from "@/services/popupFactory";
+import LoaderService from '../services/loaderView/loader';
 
     @Component
     export default class Register extends Vue {
+        minDate: Date = new Date(2000, 0, 1);
+        maxDate: Date = new Date(2004, 11, 31);
         userData: IRegistrationRequest = {
            email: "",
            password: "",
@@ -54,14 +62,23 @@
            surname: "",
            pesel: "",
            noPesel: false,
+           birthDate: new Date(2000, 0, 1)
         }
         userService: UserService = new UserService();
 
         onRegisterTap() {
             if (ConnectionService.IsConnectedToNetwork()) {
-                this.userService.register(this.userData).then((data) => {
-                    console.log("register ok");
-                }).catch(error => console.log(error));
+                LoaderService.showLoader();
+                
+                this.userService.register(this.userData).then(data => {
+                    LoaderService.hideLoader();
+                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji został wysłany mail z informacjami");
+                }).catch(err => {
+                    console.log(err);
+
+                    LoaderService.hideLoader();
+                    PopupFactory.GenericErrorPopup("" + err);
+                });
             }
             else {
                 PopupFactory.ConnectionError();
@@ -78,12 +95,6 @@
     @import '../app-common';
     @import '../app-variables';
 
-    .pageBack {
-        background-image: linear-gradient(to right, $login-left-color, $login-right-color);
-        padding-left: 30;
-        padding-right: 30;
-    }
-
     .form-input {
         color: white;
         placeholder-color: white;
@@ -94,6 +105,12 @@
 
     .form-group {
         margin-top: 15;
+    }
+
+    .dateHeader {
+        margin-bottom: -30;
+        font-size: 18px;
+        color: #FFFFFF;
     }
 
     Label {

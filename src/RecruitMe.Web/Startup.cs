@@ -1,21 +1,15 @@
-using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-using System.Text;
 using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using RecruitMe.Logic.Configuration;
-using RecruitMe.Logic.Data.Entities;
+using RecruitMe.Logic.Utilities;
 using RecruitMe.Web.Configuration;
 using RecruitMe.Web.Services;
 using RecruitMe.Web.Services.Data;
@@ -31,21 +25,19 @@ namespace RecruitMe.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = "server=127.0.0.1;database=db1;user=app1;password=test-test-test";
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            BusinessConfiguration config = services.AddSingletonConfiguration<BusinessConfiguration>(Configuration);
 
             services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
-                optionsBuilder.UseMySql(connectionString)
+                optionsBuilder.UseMySql(Configuration["ConnectionString"])
             );
             services.AddCors();
             services.AddMvc();
             services.AddMvcCore().AddAuthorization();
 
             services.AddIdentityServer(options =>
-                    options.IssuerUri = EndpointConfig.BaseAddress
+                    options.IssuerUri = config.BaseAddress
                 )
                 .AddDeveloperSigningCredential(true, "IdentityServer.rsa.json")
                 .AddInMemoryIdentityResources(ISConfig.GetIdentityResources())
@@ -58,7 +50,7 @@ namespace RecruitMe.Web
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = EndpointConfig.BaseAddress;
+                    options.Authority = config.BaseAddress;
                     options.ApiName = ISConfig.AuthScope;
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = SupportedTokens.Jwt;
@@ -97,11 +89,6 @@ namespace RecruitMe.Web
 
             app.UseMvc(routes =>
             {
-                //routes.MapRoute(
-                //    name: "areas",
-                //    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                //);
-
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
@@ -112,6 +99,8 @@ namespace RecruitMe.Web
             });
 
             app.UseStaticFiles();
+
+            dbContext.EnsureCreated();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileFiles
             _fileStorage = fileStorage;
         }
 
-        protected override async Task<string> DoExecute(FileRequest request)
+        public override async Task<string> Execute(FileRequest request)
         {
             var fileId = await _fileStorage.SaveAsync(request.File, request.FileName);
             var newFileRecord = new PersonalDocument()

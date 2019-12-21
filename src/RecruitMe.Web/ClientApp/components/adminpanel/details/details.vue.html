@@ -1,0 +1,82 @@
+﻿<template>
+    <div>
+        <v-container v-if="SystemEntityEnum.Exam==currentSystemEntity">
+            <exam-details :id="entityId"></exam-details>
+        </v-container>
+
+        <v-container v-if="SystemEntityEnum.Candidate==currentSystemEntity">
+            <candidate-details :candidateId="entityId"></candidate-details>
+        </v-container>
+
+        <v-container v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
+            <card-layout className="col-md-10">
+                <v-card-title>
+                    <h3 class="d-inline-block">
+                        Edycja kategorii egzaminu
+                    </h3>
+                    <v-btn class="ml-3"
+                           :to="'/adminPanel/manage/'+currentSystemEntity">
+                        Wróć
+                    </v-btn>
+                </v-card-title>
+
+                <v-card-text>
+                    <p>
+                        Usunięcie kategorii usunie również wszystkie egzaminy oraz terminy wszystkich kandydatów.
+                        Jeśli chcesz usunąć pojedynczy egzamin lub termin kandydata skorzystaj z panelu egzaminy.
+                    </p>
+                    <p>
+                        Aby ułatwić korzystanie z sytemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                    </p>
+                    <v-text-field readonly label="Id" v-model="examCategory.id" name="examCategory.id"></v-text-field>
+                    <v-text-field label="Nazwa kategorii" v-model="examCategory.name" name="examCategory.name"></v-text-field>
+                    <v-select v-model="examCategory.examType"
+                              :items="examTypes"
+                              item-text="name"
+                              item-value="id"
+                              label="Typ egzaminu">
+                    </v-select>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn @click="handleDelete">
+                        Usun
+                    </v-btn>
+                    <v-btn @click="handleSubmit">
+                        Zapisz
+                    </v-btn>
+                </v-card-actions>
+            </card-layout>
+        </v-container>
+
+        <v-container v-if="SystemEntityEnum.Teacher==currentSystemEntity">
+            <card-layout className="col-md-10">
+                <v-card-title>
+                    <h3 class="d-inline-block">
+                        Edycja danych nauczyciela
+                    </h3>
+                    <v-btn class="ml-3"
+                           :to="'/adminPanel/manage/'+currentSystemEntity">
+                        Wróć
+                    </v-btn>
+                </v-card-title>
+
+                <v-card-text>
+                    <v-text-field readonly label="Id" v-model="teacher.id" name="teacher.id"></v-text-field>
+                    <v-text-field label="Imię" v-model="teacher.name" name="teacher.name"></v-text-field>
+                    <v-text-field label="Nazwisko" v-model="teacher.surname" name="teacher.surname"></v-text-field>
+                    <v-text-field label="Email" v-model="teacher.email" name="teacher.email"></v-text-field>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-btn @click="handleDelete">
+                        Usun
+                    </v-btn>
+                    <v-btn @click="handleSubmit">
+                        Zapisz
+                    </v-btn>
+                </v-card-actions>
+            </card-layout>
+        </v-container>
+    </div>
+</template>
+<script src="./details.ts"></script>

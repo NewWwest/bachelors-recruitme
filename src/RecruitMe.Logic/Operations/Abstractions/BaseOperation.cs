@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Abstractions
 {
-    public abstract class BaseOperation
+    public abstract class BaseOperation : IAutoComponent
     {
         protected readonly ILogger _logger;
         protected readonly BaseDbContext _dbContext;
@@ -19,18 +19,31 @@ namespace RecruitMe.Logic.Operations.Abstractions
         }
     }
 
+    public abstract class BaseOperation<TResult> : BaseOperation
+    {
+        public BaseOperation(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        {
+        }
+
+        public abstract TResult Execute();
+    }
+
+    public abstract class BaseAsyncOperation<TResult> : BaseOperation
+    {
+        public BaseAsyncOperation(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        {
+        }
+
+        public abstract Task<TResult> Execute();
+    }
+
     public abstract class BaseOperation<TResult, TRequest> : BaseOperation
     {
         public BaseOperation(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
-        public TResult Execute(TRequest request)
-        {
-            return DoExecute(request);
-        }
-
-        protected abstract TResult DoExecute(TRequest request);
+        public abstract TResult Execute(TRequest request);
     }
 
     public abstract class BaseAsyncOperation<TResult, TRequest> : BaseOperation
@@ -39,12 +52,7 @@ namespace RecruitMe.Logic.Operations.Abstractions
         {
         }
 
-        public Task<TResult> Execute(TRequest request)
-        {
-            return DoExecute(request);
-        }
-
-        protected abstract Task<TResult> DoExecute(TRequest request);
+        public abstract Task<TResult> Execute(TRequest request);
     }
 
     public abstract class BaseOperation<TResult, TRequest, TValidator> : BaseOperation where TValidator : BaseValidator<TRequest>

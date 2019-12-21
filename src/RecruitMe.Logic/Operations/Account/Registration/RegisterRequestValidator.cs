@@ -6,7 +6,7 @@ namespace RecruitMe.Logic.Operations.Account.Registration
 {
     public class RegisterRequestValidator : BaseValidator<RegisterDto>
     {
-        public RegisterRequestValidator()
+        public RegisterRequestValidator(BusinessConfiguration businessConfiguration)
         {
             RuleFor(a => a.Email).EmailAddress();
             RuleFor(a => a.Password).MinimumLength(7);
@@ -14,7 +14,7 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             RuleFor(a => a.Name).NotEmpty();
             RuleFor(a => a.Surname).NotEmpty();
             RuleFor(a => a.BirthDate).NotNull()
-                .InclusiveBetween(BusinessConfiguration.LowestRegistrationDate, BusinessConfiguration.HighestRegistrationDate);
+                .InclusiveBetween(businessConfiguration.LowestRegistrationDate, businessConfiguration.HighestRegistrationDate);
         }
     }
 }

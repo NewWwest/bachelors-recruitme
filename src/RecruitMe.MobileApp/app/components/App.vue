@@ -1,32 +1,26 @@
 <template>
-    <Page>
-        <ActionBar title="Welcome to NativeScript-Vue!"/>
-        <GridLayout columns="*" rows="*">
-            <Label class="message" :text="msg" col="0" row="0"/>
-        </GridLayout>
-    </Page>
+  <RadSideDrawer ref="drawer" drawerLocation="Left" :gesturesEnabled="areGesturesEnabled"
+    :drawerTransition="transition">
+    <StackLayout ~drawerContent backgroundColor="#ffffff">
+      <slot name="drawerContent"></slot>
+    </StackLayout>
+    <Frame ~mainContent ref="drawerMainContent">
+      <slot name="mainContent"></slot>
+    </Frame>
+  </RadSideDrawer>
 </template>
 
 <script lang="ts">
-  export default {
-    data() {
-      return {
-        msg: 'Hello World!'
-      }
-    }
+import { Component, Vue } from "vue-property-decorator";
+import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
+import { UserService } from '../services/userService/userService';
+
+@Component
+export default class App extends Vue {
+  transition = new SlideInOnTopTransition();
+
+  get areGesturesEnabled() {
+    return UserService.isLoggedIn();
   }
+}
 </script>
-
-<style scoped>
-    ActionBar {
-        background-color: #53ba82;
-        color: #ffffff;
-    }
-
-    .message {
-        vertical-align: center;
-        text-align: center;
-        font-size: 20;
-        color: #333333;
-    }
-</style>

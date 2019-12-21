@@ -24,6 +24,7 @@ import { UserService } from '../services/userService/userService';
 import { IResetPasswordRequest } from '../models/userFormModel';
 import PopupFactory from '../services/popupFactory';
 import ConnectionService from '@/services/common/connection';
+import LoaderService from '../services/loaderView/loader';
 
 @Component
 export default class ResetPassword extends Vue {
@@ -34,7 +35,14 @@ export default class ResetPassword extends Vue {
 
     onResetTap() {
         if (ConnectionService.IsConnectedToNetwork()) {
-            this.userService.resetPassword(this.resetData);
+            LoaderService.showLoader();
+            this.userService.resetPassword(this.resetData).then(() => {
+                LoaderService.hideLoader();
+                PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji został wysłany mail z informacjami");
+            }, err => {
+                LoaderService.hideLoader();
+                PopupFactory.GenericErrorPopup("" + err);
+            });
         }
         else {
             PopupFactory.ConnectionError();
@@ -46,13 +54,7 @@ export default class ResetPassword extends Vue {
 <style scoped lang="scss">
     @import '../app-common';
     @import '../app-variables';
-
-    .pageBack {
-        background-image: linear-gradient(to right, $login-left-color, $login-right-color);
-        padding-left: 30;
-        padding-right: 30;
-    }
-
+    
     .form-input {
         color: white;
         placeholder-color: white;

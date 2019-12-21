@@ -5,6 +5,7 @@ using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using RecruitMe.Web.Configuration;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Web.Controllers
@@ -12,32 +13,17 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Recruitment")]
     public class RecruitmentController : RecruitMeBaseController
     {
-        private readonly GetProfileDataQuery _getProfileDataQuery;
-        private readonly AddOrUpdateProfileDataCommand _addOrUpdateProfileDataCommand;
-        private readonly SetNewProfilePictureCommand _setNewProfilePictureCommand;
-        private readonly SaveFileCommand _saveFileCommand;
-        private readonly DeleteFileCommand _deleteFileCommand;
-
-        public RecruitmentController(GetProfileDataQuery GetProfileDataQuery, 
-            AddOrUpdateProfileDataCommand AddOrUpdateProfileDataCommand,
-            SetNewProfilePictureCommand SetNewProfilePictureCommand,
-            SaveFileCommand saveFileCommand,
-            DeleteFileCommand deleteFileCommand
-            ) : base()
+        public RecruitmentController()
         {
-            _getProfileDataQuery = GetProfileDataQuery;
-            _addOrUpdateProfileDataCommand = AddOrUpdateProfileDataCommand;
-            _setNewProfilePictureCommand = SetNewProfilePictureCommand;
-            _saveFileCommand = saveFileCommand;
-            _deleteFileCommand = deleteFileCommand;
         }
 
         [HttpGet]
         [Route("Profile")]
         public async Task<ActionResult> GetPersonalData()
         {
-            User user = await GetUser();
-            ProfileDataDto result = await _getProfileDataQuery.Execute(user.Id);
+            User user = await AuthenticateUser();
+
+            ProfileDataDto result = await Get<GetProfileDataQuery>().Execute(user.Id);
             return Json(result);
         }
 
@@ -45,11 +31,17 @@ namespace RecruitMe.Web.Controllers
         [Route("PersonalData")]
         public async Task<ActionResult> UpdatePersonalData([FromBody] ProfileDataDto personalData)
         {
-            User user = await GetUser();
-            OperationResult cmdResult = await _addOrUpdateProfileDataCommand.Execute(new AddOrUpdateProfileDataCommandRequest() { UserId = user.Id, Data = personalData });
+            User user = await AuthenticateUser();
+            OperationResult cmdResult = await Get<AddOrUpdateProfileDataCommand>().Execute(
+                new AddOrUpdateProfileDataCommandRequest()
+                {
+                    UserId = user.Id,
+                    Data = personalData
+                });
+
             if (cmdResult.Success)
             {
-                ProfileDataDto result = await _getProfileDataQuery.Execute(user.Id);
+                ProfileDataDto result = await Get<GetProfileDataQuery>().Execute(user.Id);
                 return Json(result);
             }
             else
@@ -57,21 +49,23 @@ namespace RecruitMe.Web.Controllers
                 return BadRequest();
             }
         }
-        
+
         [HttpPost]
         [Route("ProfilePicture")]
         public async Task<ActionResult> ProfilePicture(IFormFile picture)
         {
-            User user = await GetUser();
-            
-            using (var stream = picture.OpenReadStream())
+            User user = await AuthenticateUser();
+
+            using (Stream stream = picture.OpenReadStream())
             {
-                var result = await _setNewProfilePictureCommand.Execute(new FileRequest() { 
-                    ContentType = picture.ContentType,
-                    File = stream, 
-                    FileName = picture.FileName,
-                    UserId = user.Id 
-                });
+                string result = await Get<SetNewProfilePictureCommand>().Execute(
+                    new FileRequest()
+                    {
+                        ContentType = picture.ContentType,
+                        File = stream,
+                        FileName = picture.FileName,
+                        UserId = user.Id
+                    });
             }
             return Ok();
         }
@@ -80,17 +74,18 @@ namespace RecruitMe.Web.Controllers
         [Route("document")]
         public async Task<ActionResult> AddPersonalDocument(IFormFile file)
         {
-            User user = await GetUser();
+            User user = await AuthenticateUser();
 
-            using (var stream = file.OpenReadStream())
+            using (Stream stream = file.OpenReadStream())
             {
-                var result = await _saveFileCommand.Execute(new FileRequest()
-                {
-                    ContentType = file.ContentType,
-                    File = stream,
-                    FileName = file.FileName,
-                    UserId = user.Id
-                });
+                string result = await Get<SaveFileCommand>().Execute(
+                    new FileRequest()
+                    {
+                        ContentType = file.ContentType,
+                        File = stream,
+                        FileName = file.FileName,
+                        UserId = user.Id
+                    });
             }
             return Ok();
         }
@@ -99,8 +94,8 @@ namespace RecruitMe.Web.Controllers
         [Route("document/{fileid}")]
         public async Task<ActionResult> DeletePersonalDocument(int fileid)
         {
-            User user = await GetUser();
-            var result = await _deleteFileCommand.Execute((user.Id, fileid));
+            User user = await AuthenticateUser();
+            OperationResult result = await Get<DeleteFileCommand>().Execute((user.Id, fileid));
 
             if (result.Success)
             {

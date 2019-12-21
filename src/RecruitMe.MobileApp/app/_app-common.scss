@@ -1,5 +1,6 @@
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
+@import 'app-variables';
 
 // Font icon
 .fa {
@@ -9,6 +10,12 @@
 ActionBar {
    background-color: #7e99a8;
    //background-image: linear-gradient(to right, #EAE4C5, #7e99a8);
+}
+
+.pageBack {
+   background-image: linear-gradient(to right, $login-left-color, $login-right-color);
+   padding-left: 30;
+   padding-right: 30;
 }
 
 .my-button {
@@ -34,4 +41,14 @@ ActionBar {
 
 .error-label {
    color: rgb(165, 0, 0);
+}
+
+.form-input {
+   color: white;
+   placeholder-color: white;
+   border-bottom-width: 1;
+   border-bottom-color: white;
+}
+.form-group {
+   margin-top: 15;
 }

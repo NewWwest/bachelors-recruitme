@@ -1,19 +1,28 @@
 import axios, { AxiosResponse } from 'axios';
-import { LocalStorageService } from '../userService/localStorageService';
+import { LocalStorageService } from '../localStorage/localStorageService';
 import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
+import { IProfileData } from '@/models/personalDataModel';
+import { Request, session, Task } from 'nativescript-background-http';
 
 export class ApiGateway {
-    private baseURL = "192.168.0.2"; // base url
+    private baseURL = "http://192.168.0.2:5000"; // base url
 
     private makeRequest(type: RequestType, url: string, data: any, headers?: any): Promise<AxiosResponse> {
         url = this.baseURL + url;
-        
+        //this.indicator.show(this.options);
+
         switch(type) {
             case RequestType.GET: 
-               return axios.get(url, data);
+               return axios.get(url, data).then( (response) => {
+                   //this.indicator.hide();
+                   return response;
+               });
             case RequestType.POST:
-               return axios.post(url, data, headers);
+               return axios.post(url, data, headers).then( (response) => {
+                   //this.indicator.hide();
+                   return response;
+               });
             default: throw new Error("something bad has happened");
         }
     }
@@ -31,23 +40,66 @@ export class ApiGateway {
         return this.makeRequest(RequestType.POST, '/connect/token', data, this.ContentTypeFormUrlencoded());
     }
 
-    public register(registrationModel: IRegistrationRequest): any {
+    public register(registrationModel: IRegistrationRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, '/api/Account/Register', registrationModel)
     }
 
-    public resetPassword(resetPasswordRequest: IResetPasswordRequest): any {
+    public resetPassword(resetPasswordRequest: IResetPasswordRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/ResetPassword', resetPasswordRequest)
     }
 
-    public setNewPassword(resetPasswordRequest: ISetNewPassword): any {
+    public setNewPassword(resetPasswordRequest: ISetNewPassword): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/SetNewPassword', resetPasswordRequest)
     }
 
-    public remindLogin(remindModel: IRemindLoginRequest): any {
+    public remindLogin(remindModel: IRemindLoginRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/RemindLogin', remindModel)
+    }
+
+    public getProfileData() : Promise<AxiosResponse> {
+        return this.makeRequest(RequestType.GET,
+            '/api/Recruitment/Profile', this.authHeader());
+    }
+
+    public setProfileData(personalDataModel: IProfileData) : Promise<AxiosResponse> {
+        console.log(personalDataModel);
+        
+        return this.makeRequest(RequestType.POST,
+            '/api/Recruitment/PersonalData', personalDataModel, this.authHeader());
+    }
+
+    public getProfilePicture(fileId: number) : Promise<AxiosResponse> {
+        return this.makeRequest(RequestType.GET,
+            '/api/asset/image/' + fileId, this.authHeader());
+    }
+    public setProfilePicture(filePath: string, fileName: string) : Task {
+        let opt = {
+            "Content-Type": "application/octet-stream",
+            "File-Name": fileName
+        }
+
+        let s = session("picture");
+        const options: Request = {
+            url: this.baseURL + '/api/Recruitment/ProfilePicture',
+            method: 'POST',
+            headers: Object.assign(opt, this.authHeader().headers),
+            description: 'Trwa przesyłanie zdjęcia',
+            androidAutoDeleteAfterUpload: true,
+            androidNotificationTitle: "Przesyłanie zdjęcia",
+            //androidDisplayNotificationProgress: false,
+            //androidAutoClearNotification: false,
+        }
+        
+        const data = {
+            name: 'picture',
+            filename: filePath,
+            mimeType: "image/png"
+        }
+
+        return s.multipartUpload([data], options);
     }
 
     /// private helpers
@@ -55,7 +107,7 @@ export class ApiGateway {
     private authHeader() {
         return {
             headers: {
-                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`
+                Authorization: `Bearer ${LocalStorageService.getJwtToken()}`,
             }
         }
     }

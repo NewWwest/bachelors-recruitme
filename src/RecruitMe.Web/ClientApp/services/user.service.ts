@@ -83,7 +83,7 @@ export class UserService {
         let name = LocalStorageService.getName();
         let surname = LocalStorageService.getSurname();
         //User should have both or neither
-        return name ? name + surname : "";
+        return name ? name + " " + surname : "";
     }
 
     public isLoggedIn(): boolean {

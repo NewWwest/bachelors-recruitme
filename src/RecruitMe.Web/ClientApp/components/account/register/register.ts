@@ -51,9 +51,8 @@ export default class Register extends Vue {
                 this.registrationCompleted = true;
             }, (err) => {
                 this.fetching = false;
-                console.log(err);
+                console.error(err);
                 let lines = err.data.split('\n');
-
                 this.backendError = lines.map((line:string)=>`<p>${line}</p>`).join('');
             }
         )

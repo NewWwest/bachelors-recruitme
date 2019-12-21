@@ -1,7 +1,7 @@
 <template>
     <div id='app-root' class="container-fluid">
         <v-app>
-            <menu-component @user-logged-in="setCurretUser" :userLoggedIn="userLoggedIn"/>
+            <menu-component @user-logged-in="setCurretUser" :userLoggedIn="userLoggedIn" :displayName="displayName"/>
             <router-view @user-logged-in="setCurretUser"></router-view>
         </v-app>
     </div>

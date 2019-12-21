@@ -1,11 +1,8 @@
 import store from '@/store';
+import { IProfileData } from "../../models/personalDataModel";
 
 export class LocalStorageService {
     static setUserId(userId: number): void {
-        // if (userId == null || userId == 0)
-        //     return;
-        // localStorage.setItem('userId', userId.toString());
-
         store.commit('setUserId', userId);
     }
 
@@ -27,6 +24,22 @@ export class LocalStorageService {
 
     static getEmail(): string {
         return store.getters.getEmail;
+    }
+
+    static setFullname(fullname: string): void {
+        store.commit('setFullname', fullname);
+    }
+
+    static getFullname(): string {
+        return store.getters.getFullname;
+    }
+
+    static setProfileData(profileData: IProfileData): void {
+        store.commit('setProfileData', profileData);
+    }
+
+    static getProfileData(): IProfileData | null {
+        return store.getters.getProfileData;
     }
 
 }

@@ -3,7 +3,10 @@ import 'bootstrap';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
+//@ts-ignore - package does not provide types definition but we reference it only here
+import DatetimePicker from 'vuetify-datetime-picker/dist'
 
+Vue.use(DatetimePicker)
 Vue.use(Vuetify)
 Vue.use(VueRouter);
 Vue.component('card-layout', require('./components/shared/CardLayout/cardLayout.vue.html').default)
@@ -42,6 +45,9 @@ const routes: any[] = [
     { path: '/payments/makepayments', component: require('./components/payments/makePayment/makePayment.vue.html').default },
     { path: '/payments/thankyou', component: require('./components/payments/thankYou/thankYou.vue.html').default },
     
+    { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default },
+    { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default },
+    { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default },
 ];
 
 new Vue({

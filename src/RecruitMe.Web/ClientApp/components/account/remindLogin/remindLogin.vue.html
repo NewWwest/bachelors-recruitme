@@ -1,6 +1,6 @@
 ﻿<template>
     <v-container fluid>
-        <card-layout v-if="!loginReminded" minWidth="600px">
+        <card-layout v-if="!loginReminded">
 
             <v-card-text>
                 <h2>Przypomnij login</h2>
@@ -21,7 +21,7 @@
             </v-card-actions>
         </card-layout>
 
-        <card-layout v-if="loginReminded" maxWidth="344px">
+        <card-layout v-if="loginReminded">
             <v-card-text>
                 Jesli wskazane dane zgadzaja sie z uzytkowniekiem w bazie, na adres email podany przy rejestracji został wyslany Twoj login.
             </v-card-text>

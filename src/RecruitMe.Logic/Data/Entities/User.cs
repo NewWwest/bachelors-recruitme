@@ -9,7 +9,7 @@ namespace RecruitMe.Logic.Data.Entities
     {
         public int Id { get; set; }
 
-        public string  Email { get; set; }
+        public string Email { get; set; }
 
         public string Name { get; set; }
 
@@ -26,8 +26,11 @@ namespace RecruitMe.Logic.Data.Entities
         public bool EmailVerified { get; set; }
 
         public virtual PersonalData PersonalData { get; set; }
-
+        public virtual ConfirmationEmail ConfirmationEmail { get; set; }
+        public virtual PasswordReset PasswordReset { get; set; }
         public virtual IEnumerable<PersonalDocument> PersonalDocuments { get; set; }
+        public virtual IEnumerable<ExamTaker> ExamTakers { get; set; }
+        
 
         public override bool Equals(object obj)
         {
