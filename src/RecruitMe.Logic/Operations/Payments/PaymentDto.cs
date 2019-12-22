@@ -7,12 +7,6 @@ namespace RecruitMe.Logic.Operations.Payments
 {
     public class PaymentDto
     {
-        public PaymentDto(EndpointConfig endpointConfig)
-        {
-            Url = endpointConfig.BaseAddress + endpointConfig.AfterPayment;
-            Urlc = endpointConfig.BaseAddress + endpointConfig.SuccessfulMoneyTransfer;
-        }
-
         public int Id => PaymentConfiguration.Id;
         public decimal Amount => PaymentConfiguration.RegistrationFee;
         public string Currency => PaymentConfiguration.Currency;
@@ -23,7 +17,14 @@ namespace RecruitMe.Logic.Operations.Payments
         public int Redirection_Type => 0;
         public string Url { get; private set; }
         public string Urlc { get; private set; }
-        public PayerDto Payer { get; set; }
+        public PayerDto Payer { get; private set; }
+
+        public void SetPayerAndUrls(PayerDto payerDto, EndpointConfig endpointConfig)
+        {
+            Payer = payerDto;
+            Url = endpointConfig.BaseAddress + endpointConfig.AfterPayment;
+            Urlc = endpointConfig.BaseAddress + endpointConfig.SuccessfulMoneyTransfer;
+        }
     }
 
     public class PayerDto

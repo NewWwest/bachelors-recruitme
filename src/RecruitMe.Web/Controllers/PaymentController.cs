@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Payments;
 using RecruitMe.Logic.Operations.Payments.Payment;
@@ -15,13 +16,16 @@ namespace RecruitMe.Web.Controllers
 
         [HttpPost]
         [Route("processPayment")]
-        public async Task<ActionResult> ProcessPayment([FromBody] PaymentDto paymentDto)
+        public async Task<ActionResult> ProcessPayment([FromBody] PayerDto payerDto)
         {
             User user = await AuthenticateUser();
+
+            PaymentDto paymentDto = new PaymentDto();
             paymentDto.Description = Get<GetNewPaymentDescriptionQuery>().Execute(user.Id);
+            paymentDto.SetPayerAndUrls(payerDto, Get<EndpointConfig>());
 
             string redirectUrl = await Get<CreatePaymentLinkCommand>().Execute(paymentDto);
-            return RedirectPermanent(redirectUrl);
+            return Json(redirectUrl);
         }
 
         // redirect after payment method
