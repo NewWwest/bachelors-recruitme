@@ -42,13 +42,13 @@ namespace RecruitMe.Web.Controllers
         // method for dotpay to call after successful money transfer
         [HttpPost]
         [Route("successfulMoneyTransfer")]
-        public async Task<ActionResult> SuccessfulMoneyTransfer(dynamic data)
+        public async Task<ActionResult> SuccessfulMoneyTransfer([FromQuery] PaymentResponseDto response)
         {
-            int userId = -1;
-
             //insert successful payment
+            await Get<UpdateSuccessfulPaymentCommand>().Execute(response);
 
             //delete previously used link
+            int userId = int.Parse(response.Control);
             int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
 
             if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");

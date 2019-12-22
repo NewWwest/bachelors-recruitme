@@ -88,7 +88,7 @@ export class ApiGateway {
 
     // Payments calls
     public makePayment() {
-        let data: any = {};
+        let data: any = {}; // payer's data - might not use it after all, but let's keep it
 
         return axios.post('/api/payment/processPayment', data, this.authHeader());
     }

@@ -83,21 +83,9 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
         private HttpContent GetRequestContent(PaymentDto request)
         {
             string userId = GetUserIdFromDscription(request.Description);
+            request.Control = userId;
 
-            var obj = new
-            {
-                id = request.Id,
-                amount = request.Amount,
-                currency = request.Currency,
-                description = request.Description,
-                control = userId,
-                language = request.Language,
-                ignore_last_payment_channel = request.Ignore_Last_Payment_Channel,
-                url = request.Url,
-                urlc = request.Urlc,
-            };
-
-            string content = JsonConvert.SerializeObject(obj);
+            string content = JsonConvert.SerializeObject(request);
 
             return new StringContent(content, Encoding.UTF8, "application/json");
         }

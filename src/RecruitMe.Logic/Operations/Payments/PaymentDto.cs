@@ -1,4 +1,5 @@
-﻿using RecruitMe.Logic.Configuration;
+﻿using Newtonsoft.Json;
+using RecruitMe.Logic.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,17 +8,50 @@ namespace RecruitMe.Logic.Operations.Payments
 {
     public class PaymentDto
     {
+        [JsonProperty("id")]
         public int Id => PaymentConfiguration.Id;
+        
+        [JsonProperty("amount")]
         public decimal Amount => PaymentConfiguration.RegistrationFee;
+        
+        [JsonProperty("currency")]
         public string Currency => PaymentConfiguration.Currency;
+        
+        [JsonProperty("description")]
         public string Description { get; set; }
+        
+        [JsonProperty("control")]
         public string Control { get; set; }
+        
+        [JsonProperty("language")]
         public string Language => "pl";
-        public int Ignore_Last_Payment_Channel => 1;
-        public int Redirection_Type => 0;
+        
+        [JsonProperty("ignore_last_payment_channel")]
+        public bool IgnoreLastPaymentChannel => true;
+        
+        [JsonProperty("type")]
+        public int Type => 0;
+        
+        [JsonProperty("buttontext")]
+        public string ButtonText => "Wróć do RecruitMe";
+        
+        [JsonProperty("url")]
         public string Url { get; private set; }
+
+        [JsonProperty("urlc")]
         public string Urlc { get; private set; }
+
+        [JsonProperty("p_info")]
+        public string DisplayName => "Nazwa szkoły";
+
+        [JsonProperty("p_email")]
+        public string DisplayEmail => "aa@aa.aa";
+        
+        [JsonProperty("payer")]
         public PayerDto Payer { get; private set; }
+
+        [JsonProperty("api_version")]
+        public string ApiVersion => "dev";
 
         public void SetPayerAndUrls(PayerDto payerDto, EndpointConfig endpointConfig)
         {
