@@ -11,28 +11,16 @@ namespace RecruitMe.Web.Controllers
     [Route("api/payment/")]
     public class PaymentController : RecruitMeBaseController
     {
-        private readonly CreatePaymentLinkCommand _createPaymentLinkCommand;
-        private readonly GetNewPaymentDescriptionQuery _getNewPaymentDescriptionQuery;
-        private readonly RemoveExistingPaymentLink _removeExistingPaymentLink;
-
-        public PaymentController(
-            CreatePaymentLinkCommand createPaymentLinkCommand,
-            GetNewPaymentDescriptionQuery getNewPaymentDescriptionQuery,
-            RemoveExistingPaymentLink removeExistingPaymentLink)
-        {
-            _createPaymentLinkCommand = createPaymentLinkCommand;
-            _getNewPaymentDescriptionQuery = getNewPaymentDescriptionQuery;
-            _removeExistingPaymentLink = removeExistingPaymentLink;
-        }
+        public PaymentController() { }
 
         [HttpPost]
         [Route("processPayment")]
         public async Task<ActionResult> ProcessPayment([FromBody] PaymentDto paymentDto)
         {
-            User user = await GetUser();
-            paymentDto.Description = _getNewPaymentDescriptionQuery.Execute(user.Id);
+            User user = await AuthenticateUser();
+            paymentDto.Description = Get<GetNewPaymentDescriptionQuery>().Execute(user.Id);
 
-            string redirectUrl = await _createPaymentLinkCommand.Execute(paymentDto);
+            string redirectUrl = await Get<CreatePaymentLinkCommand>().Execute(paymentDto);
             return RedirectPermanent(redirectUrl);
         }
 
@@ -57,7 +45,7 @@ namespace RecruitMe.Web.Controllers
             //insert successful payment
 
             //delete previously used link
-            int rows = await _removeExistingPaymentLink.Execute(userId);
+            int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
 
             if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
 

@@ -61,7 +61,7 @@ namespace RecruitMe.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext, EndpointConfig endpointConfig)
         {
             if (env.IsDevelopment())
             {
@@ -78,7 +78,7 @@ namespace RecruitMe.Web
             }
 
 
-            List<string> origins = new List<string> { EndpointConfig.DotpayBaseAddress };
+            List<string> origins = new List<string> { endpointConfig.DotpayBaseAddress };
 
             app.UseCors(
                 options => options.WithOrigins(origins.ToArray()).AllowAnyMethod().WithHeaders("authorization", "accept", "content-type", "origin")

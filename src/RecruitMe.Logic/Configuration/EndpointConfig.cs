@@ -16,10 +16,12 @@ namespace RecruitMe.Logic.Configuration
         public string ConfirmEmail(string guid) => BaseAddress + $"/api/account/confirmEmail/{guid}";
         public string SetNewPassword(string id) => BaseAddress + $"/account/SetNewPassword?token={id}";
         public string EmailVerified(string candidateId) => BaseAddress + $"/account/EmailVerified?candidateId={candidateId}";
-    
-        public static string DotpayBaseAddress => BaseAddress + "https://ssl.dotpay.pl";
-        public static string DotpayProductionAddress => BaseAddress + "/s2/login/api/v1";
-        public static string DotpayTestAddress => BaseAddress + "/test_seller/api/v1";
-        public static string CreatePaymentLink => BaseAddress + $"/accounts/{PaymentConfiguration.Id}/payment_links/";
+        public string SuccessfulMoneyTransfer => "/api/payment/successfulMoneyTransfer";
+        public string AfterPayment => "/api/payment/afterPayment";
+
+        public string DotpayBaseAddress => "https://ssl.dotpay.pl";
+        public string DotpayProductionAddress => DotpayBaseAddress + "/s2/login/api/v1";
+        public string DotpayTestAddress => DotpayBaseAddress + "/test_seller/api/v1";
+        public string CreatePaymentLink => $"/accounts/{PaymentConfiguration.Id}/payment_links/";
     }
 }

@@ -14,9 +14,10 @@ namespace RecruitMe.Logic.Operations.Payments.Payment
     {
         public GetNewPaymentDescriptionQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
+
         }
 
-        protected override string DoExecute(int userId)
+        public override string Execute(int userId)
         {
             int year = DateTime.Today.Year;
             int count = _dbContext.Payments.Count(p => p.IssueDate.Year == year);

@@ -15,15 +15,17 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
 {
     public class CreatePaymentLinkCommand : BaseAsyncOperation<string, PaymentDto>
     {
+        EndpointConfig _endpointConfig;
         GetExistingPaymentLinkQuery _getExistingPaymentLinkQuery;
 
-        public CreatePaymentLinkCommand(ILogger logger, BaseDbContext dbContext,
+        public CreatePaymentLinkCommand(ILogger logger, BaseDbContext dbContext, EndpointConfig endpointConfig,
             GetExistingPaymentLinkQuery getExistingPaymentLinkQuery) : base(logger, dbContext)
         {
+            _endpointConfig = endpointConfig;
             _getExistingPaymentLinkQuery = getExistingPaymentLinkQuery;
         }
 
-        protected override async Task<string> DoExecute(PaymentDto request)
+        public override async Task<string> Execute(PaymentDto request)
         {
             int userId = int.Parse(GetUserIdFromDscription(request.Description));
             string paymentLink = _getExistingPaymentLinkQuery.Execute(userId);
@@ -51,17 +53,17 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
             {
                 string dataUrl = "";
 #if DEBUG
-                dataUrl = EndpointConfig.DotpayTestAddress;
+                dataUrl = _endpointConfig.DotpayTestAddress;
 #else
-                dataUrl = EndpointConfig.DotpayProductionAddress;
+                dataUrl = _endpointConfig.DotpayProductionAddress;
 #endif
 
-                client.BaseAddress = new Uri(EndpointConfig.DotpayBaseAddress);
+                client.BaseAddress = new Uri(_endpointConfig.DotpayBaseAddress);
                 client.SetToken("Basic", PaymentConfiguration.AuthToken);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Post,
-                    dataUrl + EndpointConfig.CreatePaymentLink);
+                    dataUrl + _endpointConfig.CreatePaymentLink);
                 httpRequest.Content = GetRequestContent(request);
 
                 HttpResponseMessage response = await client.SendAsync(httpRequest);
