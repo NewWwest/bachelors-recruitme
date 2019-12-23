@@ -29,7 +29,7 @@ namespace RecruitMe.Logic.Operations.Payments
         [JsonProperty("ignore_last_payment_channel")]
         public bool IgnoreLastPaymentChannel => true;
         
-        [JsonProperty("type")]
+        [JsonProperty("redirection_type")]
         public int Type => 0;
         
         [JsonProperty("buttontext")]
