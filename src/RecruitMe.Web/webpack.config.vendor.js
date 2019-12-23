@@ -8,13 +8,11 @@ module.exports = (env) => {
 
     return [{
         stats: { modules: false },
-        resolve: { extensions: [ '.js' ] },
+        resolve: { extensions: ['.js'] },
         entry: {
             vendor: [
                 'bootstrap',
                 'bootstrap/dist/css/bootstrap.css',
-                'event-source-polyfill',
-                'isomorphic-fetch',
                 'jquery',
                 'vue',
                 'vue-router'
@@ -22,11 +20,11 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) },
+                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader' }) },
                 { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
             ]
         },
-        output: { 
+        output: {
             path: path.join(__dirname, 'wwwroot', 'dist'),
             publicPath: 'dist/',
             filename: '[name].js',
@@ -42,8 +40,6 @@ module.exports = (env) => {
                 path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'
             })
-        ].concat(isDevBuild ? [] : [
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+        ]
     }];
 };
