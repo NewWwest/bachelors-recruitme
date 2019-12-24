@@ -31,7 +31,7 @@ namespace RecruitMe.Web.Controllers
         // redirect after payment method
         [HttpGet]
         [Route("afterPayment")]
-        public async Task<ActionResult> AfterPayment(dynamic data)
+        public async Task<ActionResult> AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
             // redirect to web or mobile, depending on data
             string redirectUrl = "http://localhost:5000/payments/thankyou";
