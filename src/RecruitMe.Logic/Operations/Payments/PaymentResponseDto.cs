@@ -49,7 +49,7 @@ namespace RecruitMe.Logic.Operations.Payments
         /// w przekierowaniu Kupującego do serwisu Dotpay. 
         /// </summary>
         [JsonProperty("operation_original_amount")]
-        public string OperationOriginalAmount { get; set; }
+        public decimal OperationOriginalAmount { get; set; }
 
         /// <summary>
         /// Waluta operacji (transakcji) pobrana z parametru <i>currency</i> jaki został przesłany przez serwis sprzedawcy

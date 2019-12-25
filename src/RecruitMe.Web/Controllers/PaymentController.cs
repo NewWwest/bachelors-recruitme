@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Payments;
+using RecruitMe.Logic.Operations.Payments.Enums;
 using RecruitMe.Logic.Operations.Payments.Payment;
 using RecruitMe.Logic.Operations.Payments.PaymentLink;
 
@@ -34,7 +35,12 @@ namespace RecruitMe.Web.Controllers
         public async Task<ActionResult> AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
             // redirect to web or mobile, depending on data
-            string redirectUrl = "http://localhost:5000/payments/thankyou";
+            string redirectUrl = Get<EndpointConfig>().BaseAddress + "/payments/thankyou";
+
+            if (IsMobileBrowser())
+            {
+                redirectUrl = "recruitme://" + redirectUrl;
+            }
 
             return RedirectPermanent(redirectUrl);
         }
@@ -44,16 +50,33 @@ namespace RecruitMe.Web.Controllers
         [Route("successfulMoneyTransfer")]
         public async Task<ActionResult> SuccessfulMoneyTransfer([FromQuery] PaymentResponseDto response)
         {
-            //insert successful payment
-            await Get<UpdateSuccessfulPaymentCommand>().Execute(response);
+            // check what we received from Dotpay
+            if (CheckPaymentResponse(response))
+            {
+                //insert successful payment
+                await Get<UpdateSuccessfulPaymentCommand>().Execute(response);
 
-            //delete previously used link
-            int userId = int.Parse(response.Control);
-            int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
+                //delete previously used link
+                int userId = int.Parse(response.Control);
+                int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
+                if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
+                
+                return Ok("OK");
+            }
 
-            if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
+            return BadRequest();
+        }
 
-            return Ok();
+        private bool CheckPaymentResponse(PaymentResponseDto response)
+        {
+            // should check for signature also, but have no assurance that all properties in
+            // PaymentResponseDto were hashed in response.Signature
+            // so we check what we can
+            return response.Type == OperationType.Payment &&
+                response.Status == OperationStatus.Completed &&
+                response.OperationAmount == response.OperationOriginalAmount &&
+                response.OperationCurrency == response.OperationOriginalCurrency; //&&
+                //response.Signature == 
         }
     }
 }
