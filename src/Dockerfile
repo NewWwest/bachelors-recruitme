@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.2-sdk
+FROM microsoft/dotnet:2.2-sdk AS builder
 COPY . /src
 WORKDIR /src
 RUN apt-get update && apt-get install -y curl \
@@ -8,5 +8,7 @@ RUN apt-get update && apt-get install -y curl \
   && apt-get install -y libpng-dev \
   && apt-get install -y build-essential
 RUN npm install -g node-gyp
-RUN dotnet publish -c Release -o / RecruitMe.Web
+RUN dotnet publish -c Release -o /recruitme RecruitMe.Web
+FROM microsoft/dotnet:2.2-sdk AS runtime
+COPY --from=builder /recruitme .
 ENTRYPOINT ["dotnet", "RecruitMe.Web.dll"]
