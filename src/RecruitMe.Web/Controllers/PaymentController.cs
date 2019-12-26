@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
+using RecruitMe.Logic.Operations.Administration.Exam;
 using RecruitMe.Logic.Operations.Payments;
 using RecruitMe.Logic.Operations.Payments.Enums;
 using RecruitMe.Logic.Operations.Payments.Payment;
@@ -53,6 +54,8 @@ namespace RecruitMe.Web.Controllers
             // check what we received from Dotpay
             if (CheckPaymentResponse(response))
             {
+                User user = await AuthenticateUser();
+
                 //insert successful payment
                 await Get<UpdateSuccessfulPaymentCommand>().Execute(response);
 
@@ -60,7 +63,10 @@ namespace RecruitMe.Web.Controllers
                 int userId = int.Parse(response.Control);
                 int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
                 if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
-                
+
+                //auto-assign candidate to all exams
+                await Get<AssignCandidateToExamsCommand>().Execute(user);
+
                 return Ok("OK");
             }
 
