@@ -21,10 +21,18 @@ export default class PictureInput extends Vue {
     file: any = null;
     fileBase64: string = "";
     processing: boolean = false;
+    cameraMode: boolean = false;
 
+    video: any;
+    canvas: any;
+    captures: any = [];
 
     constructor() {
         super();
+    }
+
+    mounted() {
+        this.video = this.$refs.video;
     }
 
     updated() {
@@ -71,6 +79,12 @@ export default class PictureInput extends Vue {
         this.$emit("picture-selected", this.file);
     }
 
+    capture() {
+        this.canvas = this.$refs.canvas;
+        var context = this.canvas.getContext("2d").drawImage(this.video, 0, 0, 640, 480);
+        this.captures.push(this.canvas.toDataURL("image/png"));
+    }
+
     PictureConfirmed(evt: any) {
         if (this.processing || this.file == null) {
             return;
@@ -94,9 +108,17 @@ export default class PictureInput extends Vue {
         }
     }
 
-    TakePhoto() {
-        alert("integrate webcam");
+    switchCameraMode() {
+        this.cameraMode = !this.cameraMode;
+        if (this.cameraMode) {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({video:true, audio:false}).then((stream:any) => {
+                    this.video.srcObject = stream;
+                    this.video.play();
+                }, (err: any) => {
+                        console.error(err);
+                });
+            }
+        }
     }
-
-    doNothing() { }
 }

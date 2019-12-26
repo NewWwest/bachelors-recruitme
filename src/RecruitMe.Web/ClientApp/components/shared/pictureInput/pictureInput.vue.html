@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form mothod="post" @submit.prevent="doNothing">
+        <v-container v-if="!cameraMode">
             <div class="h288 w288 picture-container" :style="getdisplayedImage()" @click="$refs.PicInput.click()">
                 <div class="picture-name">{{getdisplayedName()}}</div>
                 <input type="file" @change="PictureSelected" accept="image/*" style="display: none;" ref="PicInput">
@@ -8,12 +8,28 @@
                     <span>Kliknij na zdjęcie aby załadować nowe.</span>
                 </div>
             </div>
-        </form>
+        </v-container>
+        <div :class="{ hidden: !cameraMode}">
+            <div>
+                <video ref="video" id="video" width="640" height="480" autoplay></video>
+            </div>
+            <div>
+                <button id="snap" v-on:click="capture()">Snap Photo</button>
+            </div>
+            <canvas ref="canvas" id="canvas" width="640" height="480"></canvas>
+        </div>
+
         <div>
             <v-btn class="w288 " @click="PictureConfirmed">Zapisz zdjęcie</v-btn>
         </div>
-        <v-btn class="w288 " @click="TakePhoto">Zrób zdjęcie teraz</v-btn>
-
+        <v-btn class="w288" @click="switchCameraMode">
+            <v-container v-if="!cameraMode">
+                Zrób zdjęcie kamerką
+            </v-container>
+            <v-container v-if="cameraMode">
+                Anuluj
+            </v-container>
+        </v-btn>
     </div>
 </template>
 
