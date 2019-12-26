@@ -69,9 +69,6 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec Command="npm install" />
-    <!-- Because fibers doesn't contain script for docker-Linux by default we simply reinstall it to get required version -->
-    <Exec Command="npm uninstall fibers" />
-    <Exec Command="npm install fibers" />
     <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --mode production" />
     <Exec Command="node node_modules/webpack/bin/webpack.js --mode production" />
 
