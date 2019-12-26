@@ -232,6 +232,11 @@ export class ApiGateway {
         });
     }
 
+    public downloadIdCard(userId: number) {
+        return axios.get(`api/administration/candidates/${userId}/idcard`, this.blobResponseAuthHeader()).then((response) => {
+            saveAs(new Blob([response.data]), `IdCard_${userId}.pdf`)
+        });
+    }
 
 
 

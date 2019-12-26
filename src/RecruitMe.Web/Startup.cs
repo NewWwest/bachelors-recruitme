@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,7 @@ namespace RecruitMe.Web
         public void ConfigureServices(IServiceCollection services)
         {
             BusinessConfiguration config = services.AddSingletonConfiguration<BusinessConfiguration>(Configuration);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
                 optionsBuilder.UseMySql(Configuration["ConnectionString"])
