@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y curl \
   && apt-get install -y build-essential
 RUN npm install -g node-gyp
 RUN dotnet publish -c Release -o /recruitme RecruitMe.Web
+
 FROM microsoft/dotnet:2.2-sdk AS runtime
 COPY --from=builder /recruitme .
+EXPOSE 443
+EXPOSE 80
+ENV ASPNETCORE_ENVIRONMENT Release
 ENTRYPOINT ["dotnet", "RecruitMe.Web.dll"]

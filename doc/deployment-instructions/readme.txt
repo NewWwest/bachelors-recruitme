@@ -31,7 +31,7 @@ quit
 #
 
 docker build -t rm-api-image . 
-docker run -d --net=recruit-me-network --name rm-api -p 80:80 --expose=80 rm-api-image
+docker run -d --net=recruit-me-network --name rm-api -p 80:80 -p 443:443 --expose=80 --expose=443 rm-api-image
 
 
 #

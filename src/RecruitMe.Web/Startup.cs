@@ -1,8 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Security;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,10 +42,26 @@ namespace RecruitMe.Web
             services.AddMvc();
             services.AddMvcCore().AddAuthorization();
 
-            services.AddIdentityServer(options =>
-                    options.IssuerUri = config.BaseAddress
-                )
-                .AddDeveloperSigningCredential(true, "IdentityServer.rsa.json")
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(60);
+            });
+
+            if (bool.TrueString == Configuration["UseHttpsRedirection"])
+            {
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = int.Parse(Configuration["https_port"]);
+                });
+            }
+
+
+            services.AddIdentityServer(options => options.IssuerUri = config.BaseAddress)
+                .AddSigningCredential(new X509Certificate2(Configuration["SslCertificate"], Configuration["SslCertificatePassword"]))
+                .AddValidationKey(new X509Certificate2(Configuration["SslCertificate"], Configuration["SslCertificatePassword"]))
                 .AddInMemoryIdentityResources(ISConfig.GetIdentityResources())
                 .AddInMemoryApiResources(ISConfig.GetApiResources())
                 .AddInMemoryClients(ISConfig.GetClients())
@@ -47,10 +69,11 @@ namespace RecruitMe.Web
                 .AddResourceOwnerValidator<CustomResourceOwnerPasswordValidator>()
                 .AddJwtBearerClientAuthentication();
 
+
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = config.BaseAddress;
+                    options.Authority = config.BaseAddressNoSsl;
                     options.ApiName = ISConfig.AuthScope;
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = SupportedTokens.Jwt;
@@ -65,28 +88,30 @@ namespace RecruitMe.Web
         {
             if (env.IsDevelopment())
             {
-                IdentityModelEventSource.ShowPII = true;
-                app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     HotModuleReplacement = true
                 });
+            }
+
+            if (bool.TrueString == Configuration["ShowErrorDetails"])
+            {
+                IdentityModelEventSource.ShowPII = true;
+                app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-
-            List<string> origins = new List<string> { "" };
-
-            app.UseCors(
-                options => options.WithOrigins(origins.ToArray()).AllowAnyMethod().WithHeaders("authorization", "accept", "content-type", "origin")
-            );
+            app.UseHsts();
+            if (bool.TrueString == Configuration["UseHttpsRedirection"])
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseIdentityServer();
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -97,9 +122,7 @@ namespace RecruitMe.Web
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-
             app.UseStaticFiles();
-
             dbContext.EnsureCreated();
         }
     }
