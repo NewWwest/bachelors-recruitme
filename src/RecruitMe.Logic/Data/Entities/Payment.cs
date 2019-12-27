@@ -11,6 +11,8 @@ namespace RecruitMe.Logic.Data.Entities
         [Key]
         public int Id { get; set; }
 
+        public string DotpayOperationNumber { get; set; }
+
         public DateTime IssueDate { get; set; }
 
         public DateTime? PaidDate { get; set; }

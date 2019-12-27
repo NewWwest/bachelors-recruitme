@@ -22,8 +22,11 @@ namespace RecruitMe.Web.Controllers
         {
             User user = await AuthenticateUser();
 
+            Payment payment = await Get<InsertNewPaymentCommand>().Execute(user);
+
             PaymentDto paymentDto = new PaymentDto();
-            paymentDto.Description = Get<GetNewPaymentDescriptionQuery>().Execute(user.Id);
+            paymentDto.Description = payment.Description;
+            paymentDto.Control = $"{payment.Id}:{payment.UserId}";
             paymentDto.SetPayerAndUrls(payerDto, Get<EndpointConfig>());
 
             string redirectUrl = await Get<CreatePaymentLinkCommand>().Execute(paymentDto);
@@ -36,7 +39,11 @@ namespace RecruitMe.Web.Controllers
         public async Task<ActionResult> AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
             // redirect to web or mobile, depending on data
-            string redirectUrl = Get<EndpointConfig>().BaseAddress + "/payments/thankyou";
+            string query = "";
+            if ("OK" != redirectDto.StatusCode?.ToUpperInvariant())
+                query = $"?error={redirectDto.ErrorCode.ToString()}";
+
+            string redirectUrl = Get<EndpointConfig>().BaseAddress + "/payments/thankyou" + query;
 
             if (IsMobileBrowser())
             {
@@ -60,7 +67,8 @@ namespace RecruitMe.Web.Controllers
                 await Get<UpdateSuccessfulPaymentCommand>().Execute(response);
 
                 //delete previously used link
-                int userId = int.Parse(response.Control);
+                string usr = response.Control.Substring(0, response.Control.IndexOf(':'));
+                int userId = int.Parse(usr);
                 int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
                 if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
 
