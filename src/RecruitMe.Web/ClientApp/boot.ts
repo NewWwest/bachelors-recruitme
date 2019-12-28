@@ -31,23 +31,80 @@ const vuetify =  new Vuetify({
 });
 
 const routes: any[] = [
-    { path: '/', component: require('./components/home/home.vue.html').default },
-    { path: '/account/login', component: require('./components/account/login/login.vue.html').default },
-    { path: '/account/register', component: require('./components/account/register/register.vue.html').default },
-    { path: '/account/EmailVerified', component: require('./components/account/emailverified/emailverified.vue.html').default },
+    // home
+    { 
+        path: '/', 
+        component: require('./components/home/home.vue.html').default,
+        meta: { title: "Strona główna" }, 
+    },
 
-    { path: '/account/resetPassword', component: require('./components/account/resetPassword/resetPassword.vue.html').default },
-    { path: '/account/setnewPassword', component: require('./components/account/setNewPassword/setNewPassword.vue.html').default },
-    { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default },
+    // account
+    { 
+        path: '/account/login', 
+        component: require('./components/account/login/login.vue.html').default,
+        meta: { title: "Logowanie" }, 
+    },
+    { 
+        path: '/account/register', 
+        component: require('./components/account/register/register.vue.html').default,
+        meta: { title: "Rejestracja" }, 
+    },
+    { 
+        path: '/account/EmailVerified', 
+        component: require('./components/account/emailverified/emailverified.vue.html').default, 
+        meta: { title: "E-mail zweryfikowany" }, 
+    },    
+    { 
+        path: '/account/resetPassword', 
+        component: require('./components/account/resetPassword/resetPassword.vue.html').default, 
+        meta: { title: "Reset hasła" }, 
+    },
+    { 
+        path: '/account/setnewPassword', 
+        component: require('./components/account/setNewPassword/setNewPassword.vue.html').default, 
+        meta: { title: "Nowe hasło" }, 
+    },
+    { 
+        path: '/account/remindLogin', 
+        component: require('./components/account/remindLogin/remindLogin.vue.html').default, 
+        meta: { title: "Przypomnij login" }, 
+    },
     
-    { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default },
+    // recruitment
+    { 
+        path: '/recruitment/profile', 
+        component: require('./components/recruitment/profile/profile.vue.html').default, 
+        meta: { title: "Profil kandydata" },
+    },
 
-    { path: '/payments/makepayments', component: require('./components/payments/makePayment/makePayment.vue.html').default },
-    { path: '/payments/thankyou', component: require('./components/payments/thankYou/thankYou.vue.html').default },
+    // payments
+    { 
+        path: '/payments/makepayment', 
+        component: require('./components/payments/makePayment/makePayment.vue.html').default, 
+        meta: { title: "Status płatności" }, 
+    },
+    { 
+        path: '/payments/thankyou', 
+        component: require('./components/payments/thankYou/thankYou.vue.html').default, 
+        meta: { title: "Dziękujemy za płatność" },
+    },
     
-    { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default },
-    { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default },
-    { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default },
+    // admin panel
+    { 
+        path: '/adminPanel/manage/:entityType', 
+        component: require('./components/adminpanel/manage/manage.vue.html').default, 
+        meta: { title: "Zarządzaj" }, 
+    },
+    { 
+        path: '/adminPanel/add/:entityType', 
+        component: require('./components/adminpanel/add/add.vue.html').default, 
+        meta: { title: "Dodaj" }, 
+    },
+    { 
+        path: '/adminPanel/details/:entityType/:id', 
+        component: require('./components/adminpanel/details/details.vue.html').default, 
+        meta: { title: "Szczegóły" }, 
+    },
 ];
 
 new Vue({
