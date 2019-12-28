@@ -1,18 +1,18 @@
 ﻿<template>
     <div>
-        <card-layout className="col-lg-7 col-md-8 col-sm-10 col-xs-10">
+        <card-layout v-if="status" className="col-lg-7 col-md-8 col-sm-10 col-xs-10">
             <v-card-title>
                 Status rekrutacji
             </v-card-title>
             <v-card-text>
                 <p v-if="RecrutationStatusEnum.Registration==status">
-                    Dziękujemy za zarejstrowanie się w systemie. 
-                    Prosimy o wypełnienie danych w profilu i przesłanie wymaganych dokumentów. 
-                    Następnie po dokonaniu płatności zostaniesz przypisany do egzaminów. 
+                    Dziękujemy za zarejstrowanie się w systemie.
+                    Prosimy o wypełnienie danych w profilu i przesłanie wymaganych dokumentów.
+                    Następnie po dokonaniu płatności zostaniesz przypisany do egzaminów.
                 </p>
                 <p v-if="RecrutationStatusEnum.Examination==status">
-                    Ukończyłeś rejestrację i zostałeś przypisany do egzaminów wypisanych poniżej. 
-                    Jeśli nie możesz uczestniczyć w którymś terminie skontaktuj się z administratorem. 
+                    Ukończyłeś rejestrację i zostałeś przypisany do egzaminów wypisanych poniżej.
+                    Jeśli nie możesz uczestniczyć w którymś terminie skontaktuj się z administratorem.
                     Kiedy sprawdzimy Twoje egzaminy zobaczysz tutaj naszą decyzję.
                 </p>
                 <p v-if="RecrutationStatusEnum.Accepted==status">
@@ -46,6 +46,14 @@
                 </v-card>
             </v-card-text>
         </card-layout>
+
+
+        <v-snackbar v-model="snackbar">
+            {{ errorMessage }}
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
     </div>
 </template>
 <script src="./yourExams.ts"></script>

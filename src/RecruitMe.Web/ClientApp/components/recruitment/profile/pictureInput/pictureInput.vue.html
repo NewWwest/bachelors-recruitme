@@ -38,6 +38,14 @@
                 </v-card-actions>
             </div>
         </v-card-text>
+
+
+        <v-snackbar v-model="snackbar">
+            {{ errorMessage }}
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
     </v-card>
 </template>
 

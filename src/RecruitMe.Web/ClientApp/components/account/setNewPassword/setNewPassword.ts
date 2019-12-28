@@ -10,19 +10,14 @@ export default class SetNewPassword extends Vue {
     newPassword: string = "";
     confirmPassword: string = "";
 
-    submitted: boolean = false;
     fetching: boolean = false;
     newPasswordSet: boolean = false;
-    backendError: string = "";
+    snackbar: boolean = false;
+    errorMessage: string = "";
 
     userService: UserService = new UserService();
 
-    constructor() {
-        super();
-    }
-
     handleSubmit() {
-        this.submitted = true;
         this.fetching = true;
 
         let tokenTemp = this.$route.query.token as string;
@@ -39,7 +34,8 @@ export default class SetNewPassword extends Vue {
                 this.newPasswordSet = true;
             }, (err) => {
                 this.fetching = false;
-                this.backendError = "Something went wrong";
+                this.snackbar = true;
+                this.errorMessage = getErrorMessage(err);
             }
         )
     }

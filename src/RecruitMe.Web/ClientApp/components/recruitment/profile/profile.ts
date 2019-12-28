@@ -6,10 +6,12 @@ import { RecruitmentService } from '../../../services/recruitment.service';
 import { PictureConfirmedEvent } from './pictureInput/pictureConfirmed.event';
 import { IProfileData } from '../../../models/recruit.models';
 import { ApiGateway } from '../../../api/api.gateway';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
-@Component({components: {
-    "PictureInput": require('./pictureInput/pictureInput.vue.html').default
-  }
+@Component({
+    components: {
+        "PictureInput": require('./pictureInput/pictureInput.vue.html').default
+    }
 })
 export default class ProfileComponent extends Vue {
     adress: string = "";
@@ -21,8 +23,10 @@ export default class ProfileComponent extends Vue {
 
     profile: IProfileData = {} as IProfileData;
     birthDate: string = "";
-    submitted: boolean = false;
     fetching: boolean = false;
+
+    snackbar: boolean = false;
+    errorMessage: string = "";
 
     file: any = null;
 
@@ -30,25 +34,26 @@ export default class ProfileComponent extends Vue {
     recruitmentService: RecruitmentService = new RecruitmentService();
     apiGateway: ApiGateway = new ApiGateway();
 
-    constructor() {
-        super();
-    }
-    
     mounted() {
         if (!this.userService.isLoggedIn()) {
             var router = new VueRouter();
             router.go(-1);
         }
-        this.recruitmentService.getProfile().then(this.updateLocals);
+        this.recruitmentService.getProfile().then(this.updateLocals, this.showError);
     }
 
     PictureConfirmed(a: PictureConfirmedEvent): void {
-        this.recruitmentService.setNewProfilePicture(a.pictureName, a.pictureFile).then(this.updateLocals);
+        if (this.fetching)
+            return;
+        this.fetching = true;
+
+        this.recruitmentService.setNewProfilePicture(a.pictureName, a.pictureFile).then(this.updateLocals, this.showError);
     }
 
     handleSubmit() {
         if (this.fetching)
             return;
+        this.fetching = true;
 
         let request = {
             adress: this.adress,
@@ -57,33 +62,43 @@ export default class ProfileComponent extends Vue {
             primarySchool: this.primarySchool,
         }
 
-        this.recruitmentService.updatePersonalData(request).then(this.updateLocals);
+        this.recruitmentService.updatePersonalData(request).then(this.updateLocals, this.showError);
     }
 
     uploadDocument() {
         if (this.fetching)
             return;
+        if (!this.file) {
+            this.snackbar = true;
+            this.errorMessage = "Nie wybrano dokumentu.";
+            return;
+        }
 
         this.fetching = true;
-        this.recruitmentService.uploadDocument(this.file.name, this.file).then(this.updateLocals);
+        this.recruitmentService.uploadDocument(this.file.name, this.file).then(this.updateLocals, this.showError);
     }
 
     downloadDocument(fileId: number) {
         let doc = this.profile.documents.find(d => d.id == fileId);
         if (doc) {
-            this.apiGateway.downloadDocument(fileId, doc.name);
+            if (this.fetching)
+                return;
+            this.fetching = true;
+            this.apiGateway.downloadDocument(fileId, doc.name).then(() => { this.fetching = false; }, this.showError)
         }
     }
 
     deleteDocument(fileId: number) {
         if (this.fetching)
             return;
-
         this.fetching = true;
-        this.recruitmentService.deleteDocument(fileId).then(this.updateLocals);
+
+        this.recruitmentService.deleteDocument(fileId).then(this.updateLocals, this.showError);
     }
 
     updateLocals(resp: IProfileData) {
+        this.fetching = false;
+
         this.profile = resp;
         this.birthDate = new Date(resp.birthDate).toLocaleDateString("pl");
         this.adress = resp.adress;
@@ -92,6 +107,12 @@ export default class ProfileComponent extends Vue {
         this.primarySchool = resp.primarySchool;
         this.profilePicName = resp.profilePictureName;
         this.profilePictureFileId = resp.profilePictureFileId ? resp.profilePictureFileId : -1;
+    }
+
+    showError(err: any) {
         this.fetching = false;
+
+        this.snackbar = true;
+        this.errorMessage = getErrorMessage(err);
     }
 }

@@ -1,8 +1,8 @@
 ﻿<template>
-    <v-container>
+    <div class="mt-2">
         <h2>Profil</h2>
-        <div>
-            <div class="profile-data col-sm-6">
+        <div class="row">
+            <div class="col-sm-6">
                 <v-card class="mb-3">
                     <v-card-subtitle>
                         Dane podstawowe
@@ -19,6 +19,7 @@
                         </p>
                     </v-card-text>
                 </v-card>
+
                 <v-card class="mb-3">
                     <v-card-subtitle>
                         Dane dodatkowe
@@ -29,9 +30,8 @@
                         <v-text-field label="Imię i nazwisko rodzica 2" v-model="motherName" name="motherName"></v-text-field>
                         <v-text-field label="Szkoła podstawowa" v-model="primarySchool" name="primarySchool"></v-text-field>
                         <div class="form-group">
-                            <v-btn :disabled="fetching" @click="handleSubmit">Zapisz dane</v-btn>
-                            <img v-show="fetching" />
-                        </div>                        
+                            <v-btn @click="handleSubmit">Zapisz dane</v-btn>
+                        </div>
                         <p v-if="!adress || !fatherName || !motherName || !primarySchool">
                             Pamiętaj aby uzupełnić te pola przed końcem rekrutacji.
                         </p>
@@ -58,7 +58,6 @@
                                 Prześlij document
                             </v-btn>
                         </div>
-
                         <div v-for="document in profile.documents">
                             <v-card>
                                 <v-card-subtitle>{{document.name}}</v-card-subtitle>
@@ -77,6 +76,14 @@
                 </v-card>
             </div>
         </div>
-    </v-container>
+
+
+        <v-snackbar v-model="snackbar">
+            {{ errorMessage }}
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
+    </div>
 </template>
 <script src="./profile.ts"></script>

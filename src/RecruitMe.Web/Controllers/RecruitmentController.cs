@@ -14,10 +14,6 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Recruitment")]
     public class RecruitmentController : RecruitMeBaseController
     {
-        public RecruitmentController()
-        {
-        }
-
         [HttpGet]
         [Route("Profile")]
         public async Task<ActionResult> GetPersonalData()

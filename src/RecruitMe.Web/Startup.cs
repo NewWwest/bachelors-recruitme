@@ -41,7 +41,10 @@ namespace RecruitMe.Web
                 optionsBuilder.UseMySql(Configuration["ConnectionString"])
             );
             services.AddCors();
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ValidationFailedExceptionFilter());
+            });
             services.AddMvcCore().AddAuthorization();
 
             services.AddHsts(options =>

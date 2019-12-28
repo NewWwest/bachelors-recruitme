@@ -18,60 +18,33 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Account")]
     public class AccountController : RecruitMeBaseController
     {
-        public AccountController()
-        {
-        }
-
         [HttpPost]
         [Route("Register")]
         public async Task<ActionResult> Register([FromBody] RegisterDto model)
         {
-            try
-            {
-                int result = await Get<RegisterUserCommand>().Execute(model);
-                return Ok(result);
-            }
-            catch (ValidationFailedException e)
-            {
-                return BadRequest(string.Join("\n", e.ValidationResult.Errors));
-            }
+            int result = await Get<RegisterUserCommand>().Execute(model);
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("ConfirmEmail/{token}")]
         public async Task<ActionResult> ConfirmEmail(Guid token)
         {
-            try
+            string candidateId = await Get<ConfirmEmailCommand>().Execute(token);
+            if (string.IsNullOrWhiteSpace(candidateId))
             {
-                string candidateId = await Get<ConfirmEmailCommand>().Execute(token);
-
-                if (!string.IsNullOrWhiteSpace(candidateId))
-                    return Redirect(Get<EndpointConfig>().EmailVerified(candidateId));
-                else
-                    return BadRequest();
-            }
-            catch
-            {
-                return BadRequest();
+                throw new Exception("Returned login was empty");
             }
 
+            return Redirect(Get<EndpointConfig>().EmailVerified(candidateId));
         }
 
         [HttpPost]
         [Route("SetNewPassword")]
         public async Task<ActionResult> SetNewPassword([FromBody]SetNewPasswordDto request)
         {
-            try
-            {
-                await Get<SetNewPasswordCommand>().Execute(request);
-                return Ok();
-
-            }
-            catch
-            {
-                return BadRequest();
-            }
-
+            await Get<SetNewPasswordCommand>().Execute(request);
+            return Ok();
         }
 
         [HttpPost]
@@ -84,12 +57,18 @@ namespace RecruitMe.Web.Controllers
                 return Ok();
 
             }
-            catch
+            catch (Exception e)
             {
-                //Hide error to block looking up emails
-                return Ok();
+                if (e is ValidationFailedException exc)
+                {
+                    return BadRequest(exc.ValidationResult.Errors);
+                }
+                else
+                {
+                    //Hide error to block looking up emails
+                    return Ok();
+                }
             }
-
         }
 
         [HttpPost]
@@ -100,12 +79,18 @@ namespace RecruitMe.Web.Controllers
             {
                 await Get<RemindLoginCommand>().Execute(request);
                 return Ok();
-
             }
-            catch
+            catch (Exception e)
             {
-                //Hide error to block looking up emails
-                return Ok();
+                if (e is ValidationFailedException exc)
+                {
+                    return BadRequest(exc.ValidationResult.Errors);
+                }
+                else
+                {
+                    //Hide error to block looking up emails
+                    return Ok();
+                }
             }
         }
     }

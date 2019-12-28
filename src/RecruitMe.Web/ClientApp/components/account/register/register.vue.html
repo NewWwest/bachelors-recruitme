@@ -37,8 +37,6 @@
 
                 <v-text-field label="Hasło" v-model="password" name="password" type="password" :rules="notEmptyRule"></v-text-field>
                 <v-text-field label="Powtórz hasło" v-model="confirmPassword" name="confirmPassword" type="password" :rules="notEmptyRule"></v-text-field>
-
-                <v-alert type="error" v-show="backendError" v-html="backendError"></v-alert>
             </v-card-text>
             <v-card-actions>
                 <div class="form-group">
@@ -58,5 +56,13 @@
                 </v-btn>
             </v-card-actions>
         </card-layout>
+        <v-snackbar v-model="snackbar">
+            <div v-html="errorMessage">
+
+            </div>
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
     </v-container>
 </template>

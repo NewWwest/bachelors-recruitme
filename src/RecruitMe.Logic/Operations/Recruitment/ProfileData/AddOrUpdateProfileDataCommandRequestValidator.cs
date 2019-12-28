@@ -7,6 +7,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
     {
         public AddOrUpdateProfileDataCommandRequestValidator()
         {
+            //No translation - only technical fields validation
             RuleFor(a => a.UserId).GreaterThan(0);
             RuleFor(a => a.Data).NotNull();
         }

@@ -7,14 +7,20 @@ export class RecruitmentService {
     updatePersonalData(request: IPersonalData): Promise<IProfileData> {
         return this.apiGateway.updatePersonalData(request).then(
             (d) => d.data,
-            (err) => console.error(err)
+            (err) => {
+                console.error(err);
+                throw err;
+            });
         );
     }
 
     getProfile(): Promise<IProfileData> {
         return this.apiGateway.getProfile().then(
             (d) => d.data,
-            (err) => console.error(err)
+            (err) => {
+                console.error(err);
+                throw err;
+            });
         );
     }
 

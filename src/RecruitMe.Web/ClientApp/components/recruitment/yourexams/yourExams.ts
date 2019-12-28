@@ -6,8 +6,9 @@ import { ApiGateway } from '../../../api/api.gateway';
 import { IExamDataDto, RecrutationStatus } from '../../../models/recruit.models';
 import { toLocalTime } from '../../../helpers/datetime.helper';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
-@Component({ })
+@Component({})
 export default class YourExamsComponent extends Vue {
     RecrutationStatusEnum = RecrutationStatus;
     userService: UserService = new UserService();
@@ -15,8 +16,10 @@ export default class YourExamsComponent extends Vue {
     apiGateway: ApiGateway = new ApiGateway();
     exams: IExamDataDto[] = [];
     examsFormatted: any[] = [];
-    status: RecrutationStatus | undefined;
+    status: RecrutationStatus | null = null;
 
+    snackbar: boolean = false;
+    errorMessage: string = "";
 
     mounted() {
         this.recruitmentService.examsAndStatus().then(d => {
@@ -34,6 +37,8 @@ export default class YourExamsComponent extends Vue {
             });
         }, err => {
             console.error(err);
+            this.snackbar = true;
+            this.errorMessage = getErrorMessage(err);
         });
     }
 }
