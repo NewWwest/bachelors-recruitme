@@ -32,21 +32,7 @@ export default class AppComponent extends Vue {
         const title: string = "RecruitMe";
         
         if (to.path.includes("adminPanel")) {
-            if (to.path.includes("examCategory")) {
-                prefix = "Kategorie egzaminów - ";
-            }
-            else if (to.path.includes("exam")) {
-                prefix = "Egzaminy - ";
-            }
-            else if (to.path.includes("candidate")) {
-                prefix = "Kandydaci - ";
-            }
-            else if (to.path.includes("teacher")) {
-                prefix = "Nauczyciele - ";
-            }
-            else {
-                // do nothing
-            }
+            prefix = "Admin Panel - ";
         }
         else {
             prefix = to.meta.title + " - ";
