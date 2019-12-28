@@ -1,0 +1,43 @@
+<template>
+    <v-card>
+        <v-card-subtitle>
+            Zdjęcie Profilowe
+        </v-card-subtitle>
+        <v-card-text class="justify-center">
+            <v-container v-if="!cameraMode">
+                <span class="picture-name">{{getdisplayedName()}}</span>
+                <div class="h288 w288 picture-container" :style="getdisplayedImage()" @click="$refs.PicInput.click()">
+                    <input type="file" @change="pictureSelected" accept="image/*" style="display: none;" ref="PicInput">
+                </div>
+            </v-container>
+            <div :hidden="cameraMode ? undefined : 'hidden'" >
+                <div>
+                    <video ref="video" id="video" width="288" height="288" autoplay></video>
+                </div>
+                <canvas ref="canvas" id="canvas" hidden width="288" height="288"></canvas>
+            </div>
+
+            <v-card-actions>
+                <v-container>
+                    <v-btn v-if="!cameraMode" @click="$refs.PicInput.click()">
+                        Wczytaj zdjęcie
+                    </v-btn>
+                    <v-btn v-if="cameraMode" @click="capture()">
+                        Zrób zdjęcie
+                    </v-btn>
+                </v-container>
+                <v-container>
+                    <v-btn v-if="cameraMode" @click="switchCameraMode(false)">
+                        Anuluj
+                    </v-btn>
+                    <v-btn v-if="!cameraMode" @click="switchCameraMode(true)">
+                        Aparat
+                    </v-btn>
+                </v-container>
+            </v-card-actions>
+        </v-card-text>
+    </v-card>
+</template>
+
+<script src="./pictureInput.ts"></script>
+<style src="./pictureInput.css"></style>

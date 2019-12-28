@@ -3,12 +3,12 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import VueRouter from 'vue-router';
 import { RecruitmentService } from '../../../services/recruitment.service';
-import { PictureConfirmedEvent } from '../../shared/pictureInput/PictureConfirmedEvent';
+import { PictureConfirmedEvent } from './pictureInput/pictureConfirmed.event';
 import { IProfileData } from '../../../models/recruit.models';
 import { ApiGateway } from '../../../api/api.gateway';
 
 @Component({components: {
-    "PictureInput": require('../../shared/pictureInput/pictureInput.vue.html').default
+    "PictureInput": require('./pictureInput/pictureInput.vue.html').default
   }
 })
 export default class ProfileComponent extends Vue {
