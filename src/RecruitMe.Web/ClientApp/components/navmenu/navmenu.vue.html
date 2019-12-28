@@ -1,11 +1,15 @@
 <template>
     <div>
         <v-toolbar>
-            <div class="left-menu">
                 <router-link to="/">
                     <v-toolbar-title>RecruitMe.Web</v-toolbar-title>
-                </router-link>
-            </div>
+            </router-link>
+            <router-link to="/about">
+                <span>O szkole</span>
+            </router-link>
+            <router-link to="/terms">
+                <span>Regulamin</span>
+            </router-link>
             <v-spacer />
 
             <template v-if="!userLoggedIn">

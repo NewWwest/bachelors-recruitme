@@ -15,15 +15,15 @@ const vuetify =  new Vuetify({
     theme: {
         themes: {
             light: {
-                primary: '#673ab7',
-                secondary: '#3f51b5',
-                accent: '#2196f3',
-                error: '#03a9f4',
-                warning: '#00bcd4',
-                info: '#e91e63',
-                success: '#4caf50'
-            },
-        },
+                primary: '#2196f3',
+                secondary: '#03a9f4',
+                accent: '#3f51b5',
+                error: '#e91e63',
+                warning: '#ffc107',
+                info: '#607d8b',
+                success: '#8bc34a'
+            }
+        }
     },
     icons: {
         iconfont: 'md',
@@ -31,7 +31,10 @@ const vuetify =  new Vuetify({
 });
 
 const routes: any[] = [
-    { path: '/', component: require('./components/home/home.vue.html').default },
+    { path: '/', component: require('./components/staticpages/home.vue.html').default },
+    { path: '/terms', component: require('./components/staticpages/termsOfService.vue.html').default },
+    { path: '/about', component: require('./components/staticpages/about.vue.html').default },
+
     { path: '/account/login', component: require('./components/account/login/login.vue.html').default },
     { path: '/account/register', component: require('./components/account/register/register.vue.html').default },
     { path: '/account/EmailVerified', component: require('./components/account/emailverified/emailverified.vue.html').default },

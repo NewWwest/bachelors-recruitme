@@ -33,12 +33,11 @@ export default class ProfileComponent extends Vue {
     constructor() {
         super();
     }
-
+    
     mounted() {
         if (!this.userService.isLoggedIn()) {
             var router = new VueRouter();
             router.go(-1);
-            alert("unathorized");
         }
         this.recruitmentService.getProfile().then(this.updateLocals);
     }

@@ -1,9 +1,11 @@
 .picture-container {
     background-size: cover !important;
 }
-.h288 {
+.s288 {
     height: 288px;
-}
-.w288 {
     width: 288px;
+}
+
+.min-w-342 {
+    min-width: 342px;
 }

@@ -8,5 +8,5 @@ export default class CardLayout extends Vue {
     @Prop()
     className: string | undefined;
 
-    defaultClassName: string = "col-sm-3 col-xs-6";
+    defaultClassName: string = "col-lg-5 col-md-6 col-sm-8 col-xs-10";
 }

@@ -4,6 +4,9 @@
         <div class="row">
             <div class="profile-data col-sm-6">
                 <v-card class="mb-3">
+                    <v-card-subtitle>
+                        Dane podstawowe
+                    </v-card-subtitle>
                     <v-card-text>
                         <v-text-field readonly label="Login" v-model="profile.candidateId" name="profile.candidateId"></v-text-field>
                         <v-text-field readonly label="Imię" v-model="profile.name" name="profile.name"></v-text-field>
@@ -17,6 +20,9 @@
                     </v-card-text>
                 </v-card>
                 <v-card class="mb-3">
+                    <v-card-subtitle>
+                        Dane dodatkowe
+                    </v-card-subtitle>
                     <v-card-text>
                         <v-text-field label="Adres" v-model="adress" name="adress"></v-text-field>
                         <v-text-field label="Imię i nazwisko rodzica 1" v-model="fatherName" name="fatherName"></v-text-field>
@@ -25,7 +31,10 @@
                         <div class="form-group">
                             <v-btn :disabled="fetching" @click="handleSubmit">Zapisz dane</v-btn>
                             <img v-show="fetching" />
-                        </div>
+                        </div>                        
+                        <p v-if="!adress || !fatherName || !motherName || !primarySchool">
+                            Pamiętaj aby uzupełnić te pola przed końcem rekrutacji.
+                        </p>
                     </v-card-text>
                 </v-card>
             </div>
@@ -35,8 +44,10 @@
                     <PictureInput @picture-confirmed="PictureConfirmed" :fileId="profilePictureFileId" :fileName="profilePicName"></PictureInput>
                 </div>
 
-
                 <v-card>
+                    <v-card-subtitle>
+                        Dokumenty
+                    </v-card-subtitle>
                     <v-card-text>
                         <div class="mb-3">
                             <v-file-input v-model="file"
@@ -48,20 +59,20 @@
                             </v-btn>
                         </div>
 
-                            <div v-for="document in profile.documents">
-                                <v-card>
-                                    <v-card-subtitle>{{document.name}}</v-card-subtitle>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn @click="downloadDocument(document.id)">
-                                            Pobierz   <v-icon>file_download</v-icon>
-                                        </v-btn>
-                                        <v-btn @click="deleteDocument(document.id)">
-                                            Usuń   <v-icon>delete</v-icon>
-                                        </v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </div>
+                        <div v-for="document in profile.documents">
+                            <v-card>
+                                <v-card-subtitle>{{document.name}}</v-card-subtitle>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="downloadDocument(document.id)">
+                                        Pobierz   <v-icon>file_download</v-icon>
+                                    </v-btn>
+                                    <v-btn @click="deleteDocument(document.id)">
+                                        Usuń   <v-icon>delete</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
                     </v-card-text>
                 </v-card>
             </div>
