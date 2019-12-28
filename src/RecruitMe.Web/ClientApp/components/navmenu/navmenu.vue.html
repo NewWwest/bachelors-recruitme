@@ -1,57 +1,140 @@
 <template>
     <div>
-        <v-toolbar>
-                <router-link to="/">
-                    <v-toolbar-title>RecruitMe.Web</v-toolbar-title>
+        <v-toolbar class="d-none d-md-block">
+            <router-link to="/">
+                <v-toolbar-title><strong>RecruitMe.Web</strong></v-toolbar-title>
             </router-link>
+
             <router-link to="/about">
-                <span>O szkole</span>
+                <span class="m-2">O szkole</span>
             </router-link>
-            <router-link to="/terms">
+            <router-link class="m-2" to="/terms">
                 <span>Regulamin</span>
             </router-link>
+
             <v-spacer />
 
-            <template v-if="!userLoggedIn">
-                <v-toolbar-items>
-                    <v-btn to="/account/register">
-                        <span>Zarejestruj się   <v-icon>exit_to_app</v-icon></span>
-                    </v-btn>
-                    <v-btn to="/account/login">
-                        <span>Zaloguj   <v-icon>account_circle</v-icon></span>
-                    </v-btn>
-                </v-toolbar-items>
-            </template>
+            <v-toolbar-items v-if="!userLoggedIn">
+                <v-btn to="/account/register">
+                    <span>Zarejestruj się   <v-icon>exit_to_app</v-icon></span>
+                </v-btn>
+                <v-btn to="/account/login">
+                    <span>Zaloguj   <v-icon>account_circle</v-icon></span>
+                </v-btn>
+            </v-toolbar-items>
 
-            <template v-if="userLoggedIn && displayName!='Administrator RecruitMeSystem@gmail.com'">
-                <v-toolbar-items>
-                    <!--<div>
-                        {{displayName}}
-                    </div>-->
-                    <v-btn to="/recruitment/profile">
-                        <span>Profil   <v-icon>account_circle</v-icon></span>
-                    </v-btn>
-                    <v-btn v-on:click="logout()">
-                        <span>Wyloguj   <v-icon>lock</v-icon></span>
-                    </v-btn>
-                </v-toolbar-items>
-            </template>
+            <v-toolbar-items v-if="userLoggedIn && displayName!='Administrator RecruitMeSystem@gmail.com'">
+                <v-btn to="/chatwith/admin">
+                    <span>Chat   <v-icon>chat</v-icon></span>
+                </v-btn>
+                <v-btn to="/recruitment/yourexams">
+                    <span>Egzaminy   <v-icon>school</v-icon></span>
+                </v-btn>
+                <v-btn to="/recruitment/profile">
+                    <span>Profil   <v-icon>account_circle</v-icon></span>
+                </v-btn>
+                <v-btn v-on:click="logout()">
+                    <span>Wyloguj   <v-icon>lock</v-icon></span>
+                </v-btn>
+            </v-toolbar-items>
 
-            <template v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
-                <v-toolbar-items>
-                    <div>
-                        {{displayName}}
-                    </div>
-                    <v-btn to="/adminPanel/manage/any">
-                        <span>Zarządzaj   <v-icon>account_circle</v-icon></span>
+            <v-toolbar-items v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
+                <v-alert>
+                    Zalogowany jako Admin
+                </v-alert>
+                <v-btn to="/adminPanel/manage/any">
+                    <span>Zarządzaj   <v-icon>account_circle</v-icon></span>
+                </v-btn>
+                <v-btn v-on:click="logout()">
+                    <span>Wyloguj   <v-icon>lock</v-icon></span>
+                </v-btn>
+            </v-toolbar-items>
+
+        </v-toolbar>
+        <v-toolbar class="d-block d-md-none">
+            <router-link to="/">
+                <v-toolbar-title><strong>RecruitMe.Web</strong></v-toolbar-title>
+            </router-link>
+
+            <v-spacer />
+            <v-toolbar-items v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
+                <v-alert>
+                    Zalogowany jako Admin
+                </v-alert>
+            </v-toolbar-items>
+            <v-menu offset-y="true">
+                <template v-slot:activator="{ on }">
+                    <v-btn color="primary" dark v-on="on">
+                        Menu <v-icon>menu</v-icon>
                     </v-btn>
-                    <v-btn v-on:click="logout()">
-                        <span>Wyloguj   <v-icon>lock</v-icon></span>
-                    </v-btn>
-                </v-toolbar-items>
-            </template>
+                </template>
+
+                <v-list flat>
+                    <v-list-item-group>
+                        <v-list-item to="/about">
+                            <v-list-item-title>
+                                O szkole
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item to="/terms">
+                            <v-list-item-title>
+                                Regulamin
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list-item-group>
+                    <v-divider ></v-divider>
+                    <v-list-item-group v-if="!userLoggedIn">
+                        <v-list-item to="/account/register">
+                            <v-list-item-title>
+                                Zarejestruj się
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item to="/account/login">
+                            <v-list-item-title>
+                                Zaloguj
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list-item-group>
+
+                    <v-list-item-group v-if="userLoggedIn && displayName!='Administrator RecruitMeSystem@gmail.com'">
+                        <v-list-item to="/chatwith/admin">
+                            <v-list-item-title>
+                                Chat
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item to="/recruitment/yourexams">
+                            <v-list-item-title>
+                                Egzaminy
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item to="/recruitment/profile">
+                            <v-list-item-title>
+                                Profil
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="logout()">
+                            <v-list-item-title>
+                                Wyloguj
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list-item-group>
+
+                    <v-list-item-group v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
+                        <v-list-item to="/adminPanel/manage/any">
+                            <v-list-item-title>
+                                Zarządzaj
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="logout()">
+                            <v-list-item-title>
+                                Wyloguj
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list-item-group>
+                </v-list>
+            </v-menu>
         </v-toolbar>
     </div>
 </template>
 
-<script src="./navmenu.ts" />
+<script src="./navmenu.ts"></script>

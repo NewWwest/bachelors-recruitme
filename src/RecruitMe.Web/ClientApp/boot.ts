@@ -42,12 +42,15 @@ const routes: any[] = [
     { path: '/account/resetPassword', component: require('./components/account/resetPassword/resetPassword.vue.html').default },
     { path: '/account/setnewPassword', component: require('./components/account/setNewPassword/setNewPassword.vue.html').default },
     { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default },
-    
+
+    { path: '/recruitment/yourexams', component: require('./components/recruitment/yourexams/yourExams.vue.html').default },
     { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default },
 
     { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default },
     { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default },
     { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default },
+
+    { path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default }
 ];
 
 new Vue({
