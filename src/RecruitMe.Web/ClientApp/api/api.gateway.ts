@@ -93,6 +93,10 @@ export class ApiGateway {
         return axios.post('/api/payment/processPayment', data, this.authHeader());
     }
 
+    public isPaymentDone() {
+        return axios.get('/api/payment/isPaymentDone', this.authHeader());
+    }
+
     // Admin Panel calls
     public listExamCategories() {
         return axios.get(`/api/administration/examCategory`, this.authHeader()).then((resp) => {

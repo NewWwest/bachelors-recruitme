@@ -92,5 +92,15 @@ namespace RecruitMe.Web.Controllers
                 response.OperationCurrency == response.OperationOriginalCurrency; //&&
                 //response.Signature == 
         }
+
+        [HttpGet]
+        [Route("isPaymentDone")]
+        public async Task<ActionResult> IsPaymentDone()
+        {
+            User user = await AuthenticateUser();
+            bool result = await Get<IsPaymentDoneQuery>().Execute(user);
+
+            return Json(result ? 1 : 0);
+        }
     }
 }

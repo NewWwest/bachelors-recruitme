@@ -8,5 +8,12 @@ export class PaymentsService {
             (d) => d.data,
             (err) => console.error(err)
         );
-    } 
+    }
+
+    public isPaymentDone() : Promise<boolean> {
+        return this.apiGateway.isPaymentDone().then(
+            (d) => d.data,
+            (err) => console.error(err)
+        )
+    }
 }
