@@ -1,7 +1,8 @@
 ﻿import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType, ExamTypeDisplayName } from '../../../models/administraion.models';
+import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType } from '../../../models/administraion.models';
 import { ApiGateway } from '../../../api/api.gateway';
+import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 
 @Component({
     components: {

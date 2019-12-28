@@ -55,6 +55,10 @@ export class ApiGateway {
 
         return axios.post('/api/Recruitment/ProfilePicture', data, this.authHeader());
     }
+
+    public examsAndStatus() {
+        return axios.get('/api/Recruitment/examsandstatus', this.authHeader());
+    }
     
     public uploadDocument(fileName: string, file: any) {
         let data: FormData = new FormData();
