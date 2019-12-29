@@ -31,8 +31,8 @@ export default class YourExamsComponent extends Vue {
                     durationInMinutes: e.durationInMinutes,
                     startDate: tempDate.toLocaleDateString("pl"),
                     startHour: tempDate.toLocaleTimeString("pl"),
-                    categoryName: e.categoryName;
-                    examTypeName: `Egzamin ${ExamTypeDisplayName(e.examType)}`;
+                    categoryName: e.categoryName,
+                    examTypeName: `Egzamin ${ExamTypeDisplayName(e.examType)}`,
                 };
             });
         }, err => {

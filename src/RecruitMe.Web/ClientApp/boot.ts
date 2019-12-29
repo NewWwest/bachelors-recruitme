@@ -9,7 +9,8 @@ import DatetimePicker from 'vuetify-datetime-picker/dist'
 Vue.use(DatetimePicker)
 Vue.use(Vuetify)
 Vue.use(VueRouter);
-Vue.component('card-layout', require('./components/shared/CardLayout/cardLayout.vue.html').default)
+Vue.component('card-layout', require('./components/shared/cardlayout/cardLayout.vue.html').default)
+Vue.component('spinner', require('./components/shared/spinner/spinner.vue.html').default)
 
 const vuetify =  new Vuetify({
     theme: {

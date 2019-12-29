@@ -1,5 +1,8 @@
 ﻿<template>
     <div>
+        <!--I asume here status is the marker if page is loaded-->
+        <spinner v-if="!status"></spinner>
+
         <card-layout v-if="status" className="col-lg-7 col-md-8 col-sm-10 col-xs-10">
             <v-card-title>
                 Status rekrutacji
