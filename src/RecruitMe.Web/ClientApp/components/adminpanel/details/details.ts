@@ -2,6 +2,7 @@
 import { Component } from 'vue-property-decorator';
 import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType } from '../../../models/administraion.models';
 import { ApiGateway } from '../../../api/api.gateway';
+import { UserService } from '../../../services/user.service';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 
 @Component({
@@ -12,8 +13,9 @@ import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 })
 export default class DetailsComponent extends Vue {
     apiGateway = new ApiGateway();
+    userService = new UserService();
     SystemEntityEnum = SystemEntity;
-    
+
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
     entityId: number = 0;
 
@@ -45,7 +47,11 @@ export default class DetailsComponent extends Vue {
         this.entityId = id;
         this.currentSystemEntity = type as SystemEntity;
     }
+
     mounted() {
+        if (!this.userService.isAdmin()) {
+            this.$router.push("/");
+        }
         this.fetchItem();
     }
 

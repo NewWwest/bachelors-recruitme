@@ -26,7 +26,8 @@ export interface IJwtClaims {
     email: string;
     userId: number;
     name: string;
-    surname: string
+    surname: string;
+    isadmin: string;
 }
 
 export interface IRemindLoginRequest {

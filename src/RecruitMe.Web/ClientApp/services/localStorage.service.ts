@@ -64,4 +64,15 @@ export class LocalStorageService {
     static resetSurname(): void {
         localStorage.setItem('surname', '');
     }
+    
+    //JwtClaims.IsAdmin
+    static setIsAdmin(admin: boolean): void {
+        localStorage.setItem('isadmin', admin ? "1" : "0");
+    }
+    static getIsAdmin(): boolean {
+        return localStorage.getItem('isadmin') == "1";
+    }
+    static resetIsAdmin(): void {
+        localStorage.setItem('isadmin', '0');
+    }
 }

@@ -23,7 +23,7 @@
                 </v-btn>
             </v-toolbar-items>
 
-            <v-toolbar-items v-if="userLoggedIn && displayName!='Administrator RecruitMeSystem@gmail.com'">
+            <v-toolbar-items v-if="userLoggedIn && !userService.isAdmin()">
                 <v-btn to="/chatwith/admin">
                     <span>Chat   <v-icon>chat</v-icon></span>
                 </v-btn>
@@ -38,7 +38,7 @@
                 </v-btn>
             </v-toolbar-items>
 
-            <v-toolbar-items v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
+            <v-toolbar-items v-if="userLoggedIn && userService.isAdmin()">
                 <v-alert>
                     Zalogowany jako Admin
                 </v-alert>
@@ -57,7 +57,7 @@
             </router-link>
 
             <v-spacer />
-            <v-toolbar-items v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
+            <v-toolbar-items v-if="userLoggedIn && userService.isAdmin()">
                 <v-alert>
                     Zalogowany jako Admin
                 </v-alert>
@@ -96,7 +96,7 @@
                         </v-list-item>
                     </v-list-item-group>
 
-                    <v-list-item-group v-if="userLoggedIn && displayName!='Administrator RecruitMeSystem@gmail.com'">
+                    <v-list-item-group v-if="userLoggedIn && !userService.isAdmin()">
                         <v-list-item to="/chatwith/admin">
                             <v-list-item-title>
                                 Chat
@@ -119,7 +119,7 @@
                         </v-list-item>
                     </v-list-item-group>
 
-                    <v-list-item-group v-if="userLoggedIn && displayName=='Administrator RecruitMeSystem@gmail.com'">
+                    <v-list-item-group v-if="userLoggedIn && userService.isAdmin()">
                         <v-list-item to="/adminPanel/manage/any">
                             <v-list-item-title>
                                 Zarządzaj
