@@ -25,7 +25,7 @@ export default class YourExamsComponent extends Vue {
         this.recruitmentService.examsAndStatus().then(d => {
             this.exams = d.exams;
             this.status = d.status;
-            this.examsFormatted = d.exams.map(e => {
+            this.examsFormatted = d.exams.map((e: IExamDataDto,i:number) => {
                 let tempDate = toLocalTime(e.startTime);
                 return {
                     durationInMinutes: e.durationInMinutes,
@@ -33,6 +33,7 @@ export default class YourExamsComponent extends Vue {
                     startHour: tempDate.toLocaleTimeString("pl"),
                     categoryName: e.categoryName,
                     examTypeName: `Egzamin ${ExamTypeDisplayName(e.examType)}`,
+                    key: i
                 };
             });
         }, err => {

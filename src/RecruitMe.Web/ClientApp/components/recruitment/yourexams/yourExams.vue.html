@@ -29,7 +29,7 @@
                 Examiny
             </v-card-title>
             <v-card-text>
-                <v-card v-for="exam in examsFormatted" class="mb-3">
+                <v-card v-for="exam in examsFormatted" :key="exam.key" class="mb-3">
                     <v-card-text>
                         <v-card-title>
                             {{exam.categoryName}}

@@ -11,7 +11,6 @@ export class RecruitmentService {
                 console.error(err);
                 throw err;
             });
-        );
     }
 
     getProfile(): Promise<IProfileData> {
@@ -21,7 +20,6 @@ export class RecruitmentService {
                 console.error(err);
                 throw err;
             });
-        );
     }
 
     setNewProfilePicture(fileName: string, file: any): Promise<IProfileData> {

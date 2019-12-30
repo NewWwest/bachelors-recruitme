@@ -3,6 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword } from '../../../models/user.models';
 import { ValidationService } from '../../../services/validation.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class SetNewPassword extends Vue {
