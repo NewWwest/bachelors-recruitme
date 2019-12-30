@@ -12,6 +12,8 @@ using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Account.Login;
 using RecruitMe.Logic.Operations.Account.Helpers;
 using RecruitMe.Logic.Tests.Helpers.TestAsyncMocks;
+using System.Threading.Tasks;
+using RecruitMe.Logic.Configuration;
 
 namespace RecruitMe.Logic.Tests.Operations.Account.Login
 {
@@ -31,21 +33,23 @@ namespace RecruitMe.Logic.Tests.Operations.Account.Login
                             .UseInMemoryDatabase("InMemoryDb")
                             .UseInternalServiceProvider(serviceProvider);
 
-            DbContext = new Mock<BaseDbContext>(builder.Options);
+            DbContext = new Mock<BaseDbContext>(builder.Options, new BusinessConfiguration());
 
             Mock<DbSet<User>> userTable = MoqHelper.GetTableForAsync(new TestAsyncEnumerable<User>(GetUserCollection()));
             DbContext.Setup(t => t.Users).Returns(userTable.Object);
         }
 
         [Test]
-        public void ShouldReturnExistingUserOnValidCandidateIdAndPassword()
+        public async Task ShouldReturnExistingUserOnValidCandidateIdAndPassword()
         {
             ILogger logger = new ConsoleLogger();
             LoginRequestValidator validator = new LoginRequestValidator();
             PasswordHasher passwordHasher = new PasswordHasher();
             LoginDto loginDto = new LoginDto() { CandidateId = "aaabbb000", Password = "alaMaKota" };
 
-            Assert.That(async () => await new LoginUserQuery(logger, validator, DbContext.Object, passwordHasher).Execute(loginDto), Is.EqualTo(GetUserCollection()[0]));
+            var query = new LoginUserQuery(logger, validator, DbContext.Object, passwordHasher);
+            var result = await query.Execute(loginDto);
+            Assert.AreEqual(result, GetUserCollection()[0]);
         }
 
         [Test]

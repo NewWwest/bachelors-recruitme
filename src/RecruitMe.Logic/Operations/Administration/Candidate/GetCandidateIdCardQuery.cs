@@ -7,16 +7,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using PdfSharp;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
 using System.Drawing.Imaging;
 using RecruitMe.Logic.Configuration;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using RecruitMe.Logic.Data.Entities;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Drawing;
 
 namespace RecruitMe.Logic.Operations.Administration.Candidate
 {
@@ -100,7 +98,7 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
 
                     qrCodeImage.Save(tempStream, ImageFormat.Png);
                     tempStream.Seek(0, SeekOrigin.Begin);
-                    XImage image = XImage.FromStream(tempStream);
+                    XImage image = XImage.FromStream(() => tempStream);
 
                     gfx.DrawImage(image, 100, 250, 100, 100);
                 }
@@ -112,7 +110,7 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
             var imageUrl = user.PersonalData?.ProfilePictureFile?.FileUrl ?? _businessConfiguration.DefaultProfileImagePath;
             using (Stream profilePic = _fileRepository.Get(imageUrl))
             {
-                XImage image = XImage.FromStream(profilePic);
+                XImage image = XImage.FromStream(() => profilePic);
 
                 gfx.DrawImage(image, 50, 10, 200, 200);
             }
