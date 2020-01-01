@@ -13,9 +13,7 @@ namespace RecruitMe.Logic.Configuration
         public string EmailPassword { get; set; }
         public DateTime LowestRegistrationDate { get; set; }
         public DateTime HighestRegistrationDate { get; set; }
-        /// <summary>
-        /// Remember to check applicationUrl in launchsettings
-        /// </summary>
         public string BaseAddress { get; set; }
+        public string BaseAddressNoSsl { get; set; }
     }
 }
