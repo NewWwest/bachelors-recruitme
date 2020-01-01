@@ -14,6 +14,11 @@ namespace RecruitMe.Logic.Operations.Abstractions
             Errors = new List<string>();
         }
 
+        public ValidationResult(string error)
+        {
+            Errors = new List<string>() { error };
+        }
+
         public ValidationResult(IEnumerable<string> errors)
         {
             Errors = errors.ToList();

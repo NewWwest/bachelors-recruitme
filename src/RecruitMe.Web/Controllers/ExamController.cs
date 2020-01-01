@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Administration.Exam;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -83,6 +85,36 @@ namespace RecruitMe.Web.Controllers
             else
             {
                 return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/sheet")]
+        public async Task<ActionResult> DownloadExamSheet(int id)
+        {
+            await AuthenticateAdmin();
+
+            Stream result = await Get<GetExaminationSheetQuery>().Execute(id);
+            return new FileStreamResult(result, "application/pdf");
+        }
+
+        [HttpPost]
+        [Route("{id}/sheet")]
+        public async Task<ActionResult> UploadExamSheet(int id, IFormFile file)
+        {
+            await AuthenticateAdmin();
+            using (var fileStream = file.OpenReadStream())
+            {
+
+                OperationResult result = await Get<LoadExaminationSheetCommand>().Execute((id,fileStream));
+                if(result.Success)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
         }
     }

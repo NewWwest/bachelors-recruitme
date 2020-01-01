@@ -38,6 +38,13 @@
                     <v-btn @click="handleSubmit">
                         Zapisz
                     </v-btn>
+                    <v-btn @click="downloadExamSheet">
+                        Pobierz kartę egzaminacyjną
+                    </v-btn>
+                    <v-btn @click="$refs.sheetInput.click()">
+                        Wgraj kartę egzaminacyjną
+                        <input type="file" @change="uploadExamSheet" accept="image/*" style="display: none;" ref="sheetInput">
+                    </v-btn>
                 </v-card-actions>
             </v-card>
 
