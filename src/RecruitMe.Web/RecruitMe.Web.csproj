@@ -45,6 +45,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Sadly we cannot add this to logic library, because path wont match indev vs production -->
+    <None Update="Scripts\sheets_reader.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ssl\aspnetapp.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
