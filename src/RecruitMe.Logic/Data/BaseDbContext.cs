@@ -37,6 +37,8 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<ExamTaker> ExamTakers { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
         public BaseDbContext(DbContextOptions options, BusinessConfiguration businessConfiguration) : base(options)
         {
             this.businessConfiguration = businessConfiguration;
