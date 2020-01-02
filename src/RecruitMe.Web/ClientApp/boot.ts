@@ -5,6 +5,8 @@ import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 //@ts-ignore - package does not provide types definition but we reference it only here
 import DatetimePicker from 'vuetify-datetime-picker/dist'
+import { AuthenticatedGuard } from './helpers/authenticated.guard';
+import { AdminGuard } from './helpers/admin.guard';
 
 Vue.use(DatetimePicker)
 Vue.use(Vuetify)
@@ -44,22 +46,19 @@ const routes: any[] = [
     { path: '/account/setnewPassword', component: require('./components/account/setNewPassword/setNewPassword.vue.html').default },
     { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default },
 
-    { path: '/recruitment/yourexams', component: require('./components/recruitment/yourexams/yourExams.vue.html').default },
-    { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default },
+    { path: '/recruitment/yourexams', component: require('./components/recruitment/yourexams/yourExams.vue.html').default, beforeEnter: AuthenticatedGuard },
+    { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default, beforeEnter: AuthenticatedGuard },
 
-    { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default },
-    { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default },
-    { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default },
+    { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default, beforeEnter: AdminGuard },
+    { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default, beforeEnter: AdminGuard },
+    { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default, beforeEnter: AdminGuard },
 
-    { path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default }
+    { path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default, beforeEnter: AuthenticatedGuard }
 ];
 
 new Vue({
     vuetify: vuetify,
     el: '#app-root',
     router: new VueRouter({ mode: 'history', routes: routes }),
-    render: h => h(require('./components/app/app.vue.html').default),
-    components: {
-
-    }
+    render: h => h(require('./components/app/app.vue.html').default)
 });

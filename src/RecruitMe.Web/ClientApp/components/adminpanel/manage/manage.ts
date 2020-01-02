@@ -2,14 +2,12 @@
 import { Component, Watch } from 'vue-property-decorator';
 import { SystemEntity, IExamCategory, IExam } from '../../../models/administraion.models';
 import { ApiGateway } from '../../../api/api.gateway';
-import { UserService } from '../../../services/user.service';
 import { toLocalTime } from '../../../helpers/datetime.helper';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 
 @Component({})
 export default class ManageComponent extends Vue {
     apiGateway = new ApiGateway();
-    userService = new UserService();
 
     examCategories: IExamCategory[] = [];
     SystemEntityEnum = SystemEntity;
@@ -110,10 +108,6 @@ export default class ManageComponent extends Vue {
     }
 
     mounted() {
-        if (!this.userService.isAdmin()) {
-            this.$router.push("/");
-        }
-
         let type = this.$route.params.entityType;
         if (type == SystemEntity.Candidate ||
             type == SystemEntity.Exam ||

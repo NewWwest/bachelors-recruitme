@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
-import VueRouter from 'vue-router';
 import { RecruitmentService } from '../../../services/recruitment.service';
 import { PictureConfirmedEvent } from './pictureInput/pictureConfirmed.event';
 import { IProfileData } from '../../../models/recruit.models';
@@ -35,10 +34,6 @@ export default class ProfileComponent extends Vue {
     apiGateway: ApiGateway = new ApiGateway();
 
     mounted() {
-        if (!this.userService.isLoggedIn()) {
-            var router = new VueRouter();
-            router.go(-1);
-        }
         this.recruitmentService.getProfile().then(this.updateLocals, this.showError);
     }
 
