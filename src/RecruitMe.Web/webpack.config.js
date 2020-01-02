@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const bundleOutputDir = './wwwroot/dist';
 
 module.exports = (env) => {
@@ -65,7 +66,8 @@ module.exports = (env) => {
                 jQuery: 'jquery',
                 'window.jQuery': 'jquery',
                 Popper: ['popper.js', 'default']
-            })
+            }),
+            new VueLoaderPlugin()
         ].concat(isDevBuild ? [
             // Plugins that apply in development builds only
             new webpack.SourceMapDevToolPlugin({

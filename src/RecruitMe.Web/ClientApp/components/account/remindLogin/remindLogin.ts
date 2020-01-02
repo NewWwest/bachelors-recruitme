@@ -3,6 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRemindLoginRequest } from '../../../models/user.models';
 import { ValidationService } from '../../../services/validation.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class RemindLogin extends Vue {
@@ -15,21 +16,14 @@ export default class RemindLogin extends Vue {
     pesel: string = "";
     noPesel: boolean = false;
 
-    submitted: boolean = false;
     fetching: boolean = false;
-    backendError: string = "";
-
-
     loginReminded: boolean = false;
+    snackbar: boolean = false;
+    errorMessage: string = "";
 
     userService: UserService = new UserService();
 
-    constructor() {
-        super();
-    }
-
     handleSubmit() {
-        this.submitted = true;
         this.fetching = true;
 
         let remingLoginModel: IRemindLoginRequest;
@@ -56,7 +50,8 @@ export default class RemindLogin extends Vue {
                 this.loginReminded = true;
             }, (err) => {
                 this.fetching = false;
-                this.backendError = "Something went wrong";
+                this.snackbar = true;
+                this.errorMessage = getErrorMessage(err);
             }
         )
     }

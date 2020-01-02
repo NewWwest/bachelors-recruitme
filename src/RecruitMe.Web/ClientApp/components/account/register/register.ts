@@ -1,8 +1,9 @@
-import Vue from 'vue';
+﻿import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IRegistrationRequest } from '../../../models/user.models';
 import { ValidationService } from '../../../services/validation.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({ })
 export default class Register extends Vue {
@@ -19,10 +20,10 @@ export default class Register extends Vue {
     birthDate: Date | null = null;
 
     menu: boolean = false;
-    submitted: boolean = false;
     fetching: boolean = false;
     registrationCompleted: boolean = false;
-    backendError: string = "";
+    snackbar: boolean = false;
+    errorMessage: string = "";
 
     userService: UserService = new UserService();
 
@@ -31,7 +32,9 @@ export default class Register extends Vue {
     }
 
     handleSubmit() {
-        this.submitted = true;
+        if (this.fetching)
+            return;
+
         this.fetching = true;
 
         let registrationModel: IRegistrationRequest = {
@@ -51,9 +54,8 @@ export default class Register extends Vue {
                 this.registrationCompleted = true;
             }, (err) => {
                 this.fetching = false;
-                console.error(err);
-                let lines = err.data.split('\n');
-                this.backendError = lines.map((line:string)=>`<p>${line}</p>`).join('');
+                this.snackbar = true;
+                this.errorMessage = getErrorMessage(err, "Rejestracja się nie powiodła, spróbuj jeszcze raz lub skontaktuj się z administratorem");
             }
         )
     }

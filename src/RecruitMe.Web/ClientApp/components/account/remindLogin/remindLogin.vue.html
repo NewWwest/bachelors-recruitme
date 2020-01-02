@@ -4,19 +4,16 @@
 
             <v-card-text>
                 <h2>Przypomnij login</h2>
-                <form @submit.prevent="()=>{}">
-                    <v-text-field label="Adres email" v-model="email" name="email" :rules="notEmptyRule"></v-text-field>
-                    <v-checkbox v-model="noPesel" label="Nie mam numeru PESEL"></v-checkbox>
-                    <v-text-field v-if="!noPesel" label="Nr PESEL" v-model="pesel" name="pesel" :rules="peselHas11digit"></v-text-field>
-                    <v-text-field v-show="noPesel" label="Imię" v-model="name" name="name" :rules="notEmptyRule"></v-text-field>
-                    <v-text-field v-show="noPesel" label="Nazwisko" v-model="surname" name="surname" :rules="notEmptyRule"></v-text-field>
-                </form>
-
+                <v-text-field label="Adres email" v-model="email" name="email" :rules="notEmptyRule"></v-text-field>
+                <v-checkbox v-model="noPesel" label="Nie mam numeru PESEL"></v-checkbox>
+                <v-text-field v-if="!noPesel" label="Nr PESEL" v-model="pesel" name="pesel" :rules="peselHas11digit"></v-text-field>
+                <v-text-field v-show="noPesel" label="Imię" v-model="name" name="name" :rules="notEmptyRule"></v-text-field>
+                <v-text-field v-show="noPesel" label="Nazwisko" v-model="surname" name="surname" :rules="notEmptyRule"></v-text-field>
             </v-card-text>
+
             <v-card-actions>
                 <div class="form-group">
                     <v-btn :disabled="fetching" @click="handleSubmit">Sprawdz moj login</v-btn>
-                    <img v-show="fetching" />
                 </div>
             </v-card-actions>
         </card-layout>
@@ -31,6 +28,14 @@
                 </v-btn>
             </v-card-actions>
         </card-layout>
+
+
+        <v-snackbar v-model="snackbar">
+            {{ errorMessage }}
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
     </v-container>
 </template>
 

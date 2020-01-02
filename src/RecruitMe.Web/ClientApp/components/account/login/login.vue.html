@@ -1,24 +1,26 @@
 ﻿<script src="./login.ts"></script>
 <template>
-    <form @submit.prevent="()=>{}">
-        <card-layout>
+    <card-layout className="col-lg-4 col-md-6 col-sm-8 col-xs-10">
 
-            <v-card-text>
-                <h2>Logowanie</h2>
-                <v-text-field label="Login" v-model="login" name="login" :rules="notEmptyRule"></v-text-field>
-                <v-btn to="/account/remindLogin">Przypomnij login</v-btn>
-                <v-text-field label="Hasło" v-model="password" name="password" type="password" :rules="notEmptyRule"></v-text-field>
-                <v-btn class="mb-2" to="/account/resetpassword">Zresetuj hasło</v-btn>
-                <v-alert type="error" v-show="failed">Logowanie się nie powiodło, spróbuj jeszcze raz lub skontaktuj się z administratorem.</v-alert>
-            </v-card-text>
+        <v-card-text>
+            <h2>Logowanie</h2>
+            <v-text-field label="Login" v-model="login" name="login" :rules="notEmptyRule"></v-text-field>
+            <v-btn to="/account/remindLogin">Przypomnij login</v-btn>
+            <v-text-field label="Hasło" v-model="password" name="password" type="password" :rules="notEmptyRule"></v-text-field>
+            <v-btn class="mb-2" to="/account/resetpassword">Zresetuj hasło</v-btn>
+        </v-card-text>
 
-            <v-card-actions>
-                <div class="form-group">
-                    <v-btn :disabled="fetching" @click="handleSubmit">Zaloguj</v-btn>
-                    <img v-show="fetching" />
-                </div>
-            </v-card-actions>
+        <v-card-actions>
+            <div class="form-group">
+                <v-btn :disabled="fetching" @click="handleSubmit">Zaloguj</v-btn>
+            </div>
+        </v-card-actions>
 
-        </card-layout>
-    </form>
+        <v-snackbar v-model="snackbar">
+            {{ errorMessage }}
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
+    </card-layout>
 </template>

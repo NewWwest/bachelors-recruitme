@@ -7,8 +7,8 @@ namespace RecruitMe.Logic.Operations.Account.Login
     {
         public LoginRequestValidator() 
         {
-            RuleFor(a => a.CandidateId).NotEmpty();
-            RuleFor(a => a.Password).NotEmpty();
+            RuleFor(a => a.CandidateId).NotEmpty().WithMessage("Login jest wymagany.");
+            RuleFor(a => a.Password).NotEmpty().WithMessage("Hasło jest wymagane."); ;
         }
     }
 }

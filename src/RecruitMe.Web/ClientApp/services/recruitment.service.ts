@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { IPersonalData, IProfileData } from "../models/recruit.models";
+import { IPersonalData, IProfileData, IExamsAndStatusDto } from "../models/recruit.models";
 
 export class RecruitmentService {
     private apiGateway: ApiGateway = new ApiGateway();
@@ -7,15 +7,19 @@ export class RecruitmentService {
     updatePersonalData(request: IPersonalData): Promise<IProfileData> {
         return this.apiGateway.updatePersonalData(request).then(
             (d) => d.data,
-            (err) => console.error(err)
-        );
+            (err) => {
+                console.error(err);
+                throw err;
+            });
     }
 
     getProfile(): Promise<IProfileData> {
         return this.apiGateway.getProfile().then(
             (d) => d.data,
-            (err) => console.error(err)
-        );
+            (err) => {
+                console.error(err);
+                throw err;
+            });
     }
 
     setNewProfilePicture(fileName: string, file: any): Promise<IProfileData> {
@@ -39,6 +43,17 @@ export class RecruitmentService {
     deleteDocument(fileId: number): Promise<IProfileData> {
         return this.apiGateway.deleteDocument(fileId).then(
             r => this.getProfile(),
+            (err) => {
+                console.error(err);
+                throw err;
+            });
+    }
+
+    examsAndStatus(): Promise<IExamsAndStatusDto> {
+        return this.apiGateway.examsAndStatus().then(
+            r => {
+                return r.data;
+            },
             (err) => {
                 console.error(err);
                 throw err;

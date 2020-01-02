@@ -1,0 +1,11 @@
+.picture-container {
+    background-size: cover !important;
+}
+.s288 {
+    height: 288px;
+    width: 288px;
+}
+
+.min-w-342 {
+    min-width: 342px;
+}

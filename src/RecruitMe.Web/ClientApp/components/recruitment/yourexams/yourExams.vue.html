@@ -1,0 +1,62 @@
+﻿<template>
+    <div>
+        <!--I asume here status is the marker if page is loaded-->
+        <spinner v-if="!status"></spinner>
+
+        <card-layout v-if="status" className="col-lg-7 col-md-8 col-sm-10 col-xs-10">
+            <v-card-title>
+                Status rekrutacji
+            </v-card-title>
+            <v-card-text>
+                <p v-if="RecrutationStatusEnum.Registration==status">
+                    Dziękujemy za zarejstrowanie się w systemie.
+                    Prosimy o wypełnienie danych w profilu i przesłanie wymaganych dokumentów.
+                    Następnie po dokonaniu płatności zostaniesz przypisany do egzaminów.
+                </p>
+                <p v-if="RecrutationStatusEnum.Examination==status">
+                    Ukończyłeś rejestrację i zostałeś przypisany do egzaminów wypisanych poniżej.
+                    Jeśli nie możesz uczestniczyć w którymś terminie skontaktuj się z administratorem.
+                    Kiedy sprawdzimy Twoje egzaminy zobaczysz tutaj naszą decyzję.
+                </p>
+                <p v-if="RecrutationStatusEnum.Accepted==status">
+                    Gratulacje! Zostałeś przyjęty! Dalszych szczegółów możesz spodziewać się w krótce drogą mailową lub telefoniczną.
+                </p>
+                <p v-if="RecrutationStatusEnum.Declined==status">
+                    Niestety, ale nie jesteśmy w stanie przyjąć Ciebie do naszej szkoły.
+                </p>
+            </v-card-text>
+            <v-card-title>
+                Examiny
+            </v-card-title>
+            <v-card-text>
+                <v-card v-for="exam in examsFormatted" :key="exam.key" class="mb-3">
+                    <v-card-text>
+                        <v-card-title>
+                            {{exam.categoryName}}
+                        </v-card-title>
+                        <v-card-subtitle>
+                            {{exam.examTypeName}}
+                        </v-card-subtitle>
+                        <v-card-text>
+                            <p>
+                                Start: {{exam.startDate}} o godzinie: {{exam.startHour}}
+                            </p>
+                            <p>
+                                Czas trwania: {{exam.durationInMinutes}} minut.
+                            </p>
+                        </v-card-text>
+                    </v-card-text>
+                </v-card>
+            </v-card-text>
+        </card-layout>
+
+
+        <v-snackbar v-model="snackbar">
+            {{ errorMessage }}
+            <v-btn color="pink" text @click="snackbar = false">
+                Zamknij
+            </v-btn>
+        </v-snackbar>
+    </div>
+</template>
+<script src="./yourExams.ts"></script>

@@ -13,6 +13,7 @@ namespace RecruitMe.Logic.Configuration
         public string EmailPassword { get; set; }
         public DateTime LowestRegistrationDate { get; set; }
         public DateTime HighestRegistrationDate { get; set; }
+        public string DefaultProfileImagePath { get; set; }
         public string BaseAddress { get; set; }
         public string BaseAddressNoSsl { get; set; }
     }

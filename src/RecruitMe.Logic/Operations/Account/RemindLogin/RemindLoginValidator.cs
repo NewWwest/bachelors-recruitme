@@ -10,9 +10,9 @@ namespace RecruitMe.Logic.Operations.Account.RemindLogin
     {
         public RemindLoginValidator()
         {
-            RuleFor(a => a.Email).EmailAddress();
-            RuleFor(a => a.Surname).NotEmpty().When(a => a.Pesel == null);
-            RuleFor(a => a.Name).NotEmpty().When(a => a.Pesel == null);
+            RuleFor(a => a.Email).EmailAddress().WithMessage("Błędny adres email."); ;
+            RuleFor(a => a.Surname).NotEmpty().When(a => a.Pesel == null).WithMessage("Pesel jest wymagany lub imię i nazwisko są wymane.");
+            RuleFor(a => a.Name).NotEmpty().When(a => a.Pesel == null).WithMessage("Pesel jest wymagany lub imię i nazwisko są wymane.");
         }
     }
 }

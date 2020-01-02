@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using RecruitMe.Logic.Configuration;
 
 namespace RecruitMe.Web.Services
 {
@@ -16,11 +17,13 @@ namespace RecruitMe.Web.Services
     {
         private readonly GetUserQuery _getUserQuery;
         private readonly ILogger _logger;
+        private readonly BusinessConfiguration _config;
 
-        public CustomProfileService(GetUserQuery getUserQuery, ILogger logger)
+        public CustomProfileService(GetUserQuery getUserQuery, ILogger logger, BusinessConfiguration config)
         {
             _getUserQuery = getUserQuery;
             _logger = logger;
+            _config = config;
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -34,7 +37,8 @@ namespace RecruitMe.Web.Services
                 new Claim(JwtClaims.ClaimUserId, user.Id.ToString()),
                 new Claim(JwtClaims.ClaimName, user.Name.ToString()),
                 new Claim(JwtClaims.ClaimSurname, user.Surname.ToString()),
-                new Claim(JwtClaims.ClaimEmail, user.Email.ToString())
+                new Claim(JwtClaims.ClaimEmail, user.Email.ToString()),
+                new Claim(JwtClaims.IsAdmin, user.CandidateId == _config.AdminLogin ? "1" : "0")
             };
 
             context.IssuedClaims = claims;

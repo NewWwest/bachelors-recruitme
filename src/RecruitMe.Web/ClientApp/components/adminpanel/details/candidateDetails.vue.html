@@ -11,7 +11,8 @@
             <div class="profile-data col-sm-6">
                 <v-card class="mb-3">
                     <v-card-subtitle>
-                        Podczas edycji danych upewnij się, że zmiany nie zablokują dostępu kandydatowi.
+                        <p>Podczas edycji danych upewnij się, że zmiany nie zablokują dostępu kandydatowi.</p>
+                        <p>Pamiętaj, aby zapisać dane przyciskiem poniżej.</p>
                     </v-card-subtitle>
                     <v-card-text>
                         <v-text-field label="Login" v-model="profile.candidateId" name="profile.candidateId"></v-text-field>
@@ -59,13 +60,13 @@
                     <v-card-title>
                         Akcje:
                     </v-card-title>
-                    <v-card-text>
-                        <h4>Usunięcia uzytkownika nie da się cofnąć!</h4>
-                    </v-card-text>
+                    <v-card-subtitle>
+                        Usunięcia uzytkownika nie da się cofnąć!
+                    </v-card-subtitle>
                     <v-card-actions>
                         <v-row>
                             <v-col>
-                                <v-btn @click="getIdentityCard">Drukuj Identyfikator(TODO)</v-btn>
+                                <v-btn @click="getIdentityCard">Drukuj Identyfikator</v-btn>
                             </v-col>
                             <v-col>
                                 <v-btn @click="handleDelete">Usuń Użytkownika</v-btn>

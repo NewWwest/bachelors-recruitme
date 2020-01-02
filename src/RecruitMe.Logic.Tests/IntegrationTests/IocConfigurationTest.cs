@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using RecruitMe.Web;
 using System;
-using System.Collections.Generic;
 
 namespace RecruitMe.Logic.Tests.IntegrationTests
 {
@@ -14,7 +12,11 @@ namespace RecruitMe.Logic.Tests.IntegrationTests
         [Test]
         public void AllDependenciesPresentAndAccountedFor()
         {
-            var startup = new Startup(new FakeConfiguration());
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+
+            var startup = new Startup(config);
             var serviceCollection = new ServiceCollection();
 
             startup.ConfigureServices(serviceCollection);
@@ -27,29 +29,6 @@ namespace RecruitMe.Logic.Tests.IntegrationTests
                 {
                     Assert.NotNull(provider.GetService(serviceType));
                 }
-            }
-        }
-
-        class FakeConfiguration : IConfiguration
-        {
-            public string this[string key] {
-                get => throw new NotImplementedException(); 
-                set => throw new NotImplementedException(); 
-            }
-
-            public IEnumerable<IConfigurationSection> GetChildren()
-            {
-                throw new NotImplementedException();
-            }
-
-            public IChangeToken GetReloadToken()
-            {
-                throw new NotImplementedException();
-            }
-
-            public IConfigurationSection GetSection(string key)
-            {
-                throw new NotImplementedException();
             }
         }
     }

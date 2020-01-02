@@ -1,3 +1,5 @@
+import { ExamType } from "./administraion.models";
+
 export interface IPersonalData {
     adress: string;
     fatherName: string;
@@ -31,4 +33,23 @@ export interface IDocument {
     fileUrl: string;
     name: string;
     contentType: string;
+}
+
+export interface IExamDataDto {
+    durationInMinutes: number;
+    startTime: Date;
+    categoryName: string;
+    examType: ExamType;
+}
+
+export interface IExamsAndStatusDto {
+    status: RecrutationStatus;
+    exams: IExamDataDto[];
+}
+
+export enum RecrutationStatus {
+    Registration = 1,
+    Examination = 2,
+    Accepted = 3,
+    Declined = 4
 }
