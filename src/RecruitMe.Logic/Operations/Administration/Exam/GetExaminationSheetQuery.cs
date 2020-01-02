@@ -101,7 +101,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
             var formattedUserIds = string.Join(",", examTakers.Select(et => et.UserId.ToString()));
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
-                QRCodeData qrCodeData = qrGenerator.CreateQrCode("formattedUserIds", QRCodeGenerator.ECCLevel.Q);
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(formattedUserIds, QRCodeGenerator.ECCLevel.Q);
                 using (QRCode qrCode = new QRCode(qrCodeData))
                 using (var tempStream = new MemoryStream())
                 {

@@ -5,25 +5,50 @@ using RecruitMe.Logic.Operations.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using ZXing;
+using ZXing.Common;
+using ZXing.Windows.Compatibility;
 
 namespace RecruitMe.Logic.Operations.Administration.Exam
 {
-    public class LoadExaminationSheetCommand : BaseOperation<OperationResult, (int id, Stream fileStream)>
+    public class LoadExaminationSheetCommand : BaseOperation<OperationResult, LoadExaminationSheetRequest>
     {
         private static object lockTempFile = new object();
         public LoadExaminationSheetCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
-        public override OperationResult Execute((int id, Stream fileStream) request)
+        public override OperationResult Execute(LoadExaminationSheetRequest request)
         {
-            var exam = _dbContext.Exams.Include(e => e.ExamTakers).First(e => e.Id == request.id);
-            GetPoints(request.fileStream);
+            Data.Entities.Exam exam = _dbContext.Exams.Include(e => e.ExamTakers).First(e => e.Id == request.ExamId);
+            Data.Entities.Teacher teacher = _dbContext.Teachers.First(t => t.Id == request.TeacherId);
+
+            List<int> points = GetPoints(request.FileStream);
+            request.FileStream.Seek(0, SeekOrigin.Begin);
+            List<int> userIds = Decode(request.FileStream);
+
+            if(userIds.GroupBy(x => x).Any(g => g.Count() > 1))
+            {
+                throw new Exception("One user cannot take the same exam twice at the same moment");
+            }
+
+            if (points.Count != userIds.Count)
+            {
+                throw new Exception("User count and points count dont match up");
+            }
+
+            var examTakers = exam.ExamTakers.ToDictionary(et => et.UserId);
+            foreach (var item in points.Zip(userIds, (p, i) => (userId: i, points: p)))
+            {
+                var examTaker = examTakers[item.userId];
+                examTaker.Score = item.points;
+                examTaker.TeacherId = request.TeacherId;
+            }
+
+            _dbContext.SaveChanges();
             return new OperationSucceded();
         }
 
@@ -61,7 +86,8 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                         outputString = process.StandardOutput.ReadToEnd();
                     }
 
-                    List<int> grades = outputString.Trim()
+                    List<int> grades = outputString
+                        .Trim()
                         .Replace("[", "")
                         .Replace("]", "")
                         .Split(".", StringSplitOptions.RemoveEmptyEntries)
@@ -75,6 +101,24 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 {
                     File.Delete("Scripts/temp");
                 }
+            }
+        }
+
+        public List<int> Decode(Stream stream)
+        {
+            using (var image = (Bitmap)Bitmap.FromStream(stream))
+            {
+                var source = new BitmapLuminanceSource(image);
+                var binarizer = new HybridBinarizer(source);
+                var bitmapButFunnier = new BinaryBitmap(binarizer);
+                var qrCodeResult = new MultiFormatReader().decode(bitmapButFunnier);
+
+                return qrCodeResult.Text
+                            .Trim()
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                            .Select(s => s.Trim())
+                            .Select(s => int.Parse(s))
+                            .ToList();
             }
         }
     }

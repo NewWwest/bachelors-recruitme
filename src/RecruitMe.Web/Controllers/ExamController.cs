@@ -100,14 +100,20 @@ namespace RecruitMe.Web.Controllers
 
         [HttpPost]
         [Route("{id}/sheet")]
-        public async Task<ActionResult> UploadExamSheet(int id, IFormFile file)
+        public async Task<ActionResult> UploadExamSheet(int id, IFormFile file, int teacherId)
         {
             await AuthenticateAdmin();
             using (var fileStream = file.OpenReadStream())
             {
 
-                OperationResult result = Get<LoadExaminationSheetCommand>().Execute((id,fileStream));
-                if(result.Success)
+                OperationResult result = Get<LoadExaminationSheetCommand>().Execute(new LoadExaminationSheetRequest()
+                {
+                    ExamId = id,
+                    TeacherId = teacherId,
+                    FileStream = fileStream
+                });
+
+                if (result.Success)
                 {
                     return Ok();
                 }

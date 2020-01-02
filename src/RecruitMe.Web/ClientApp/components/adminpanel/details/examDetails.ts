@@ -1,7 +1,7 @@
 ﻿import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ApiGateway } from '../../../api/api.gateway';
-import { IExamCategory, IExamTaker, IExam } from '../../../models/administraion.models';
+import { IExamCategory, IExamTaker, IExam, ITeacher } from '../../../models/administraion.models';
 import { toLocalTime } from '../../../helpers/datetime.helper';
 
 @Component({})
@@ -13,6 +13,10 @@ export default class ExamDetails extends Vue {
     exam: IExam = {} as IExam;
     examCategories: IExamCategory[] = [];
     examTakers: IExamTaker[] = []
+    teachers: any[] = []
+
+    ratingTeacher: number = 0;
+    processingOmr: boolean = false;
 
     mounted() {
         if (this.id) {
@@ -25,6 +29,16 @@ export default class ExamDetails extends Vue {
             });
             this.apiGateway.listExamCategories().then(resp => {
                 this.examCategories = resp;
+            }, err => {
+                console.error(err);
+            });
+            this.apiGateway.listTeachers().then(resp => {
+                console.log(resp)
+                this.teachers = resp.map((t: ITeacher) => {
+                    id: t.id;
+                    name: t.name + " " + t.surname;
+                });
+                console.log(this.teachers)
             }, err => {
                 console.error(err);
             });
@@ -72,18 +86,22 @@ export default class ExamDetails extends Vue {
         }
     }
 
-    uploadExamSheet(evt:any) {
+    uploadExamSheet(evt: any) {
         if (this.id) {
+            this.processingOmr = true;
             let file = evt.target.files[0];
-            this.apiGateway.uploadExamSheet(this.id, file).then(r => {
+            this.apiGateway.uploadExamSheet(this.id, this.ratingTeacher, file).then(r => {
                 this.apiGateway.getExam(this.id as number).then(resp => {
                     this.exam = resp.exam;
                     this.exam.startDateTime = toLocalTime(this.exam.startDateTime);
                     this.setExamTakers(resp.examTakers)
+                    this.processingOmr = false;
                 }, err => {
+                    this.processingOmr = false;
                     console.error(err);
                 });
             }, err => {
+                this.processingOmr = false;
                 console.error(err);
             });
         }
