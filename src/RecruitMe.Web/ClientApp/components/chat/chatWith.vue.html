@@ -1,5 +1,5 @@
 ﻿<template>
-    <div>
+    <!-- <div>
         <h2>Chat</h2>
         <div>
             (tylko dla admina)Nieprzeczytane wiadomości: 
@@ -7,6 +7,36 @@
         <div>
             chat
         </div>
-    </div>
+    </div> -->
+    <card-layout className="col-md-10">
+        <v-toolbar dark>
+            <v-toolbar-title>Chat</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+            <v-list class="overflow-y-auto">
+                <template v-for="message in messages">
+                    
+                </template>
+            </v-list>
+        </v-card-text>
+        <v-card-actions>
+            <v-row>
+                <v-text-field v-model="msg" label="Wiadomość" single-line outlined class="textField">
+                </v-text-field>
+                <v-btn fab dark small color="primary" type="submit" class="sendBtn" @click="sendMessage">
+                    <v-icon dark>send</v-icon>
+                </v-btn>
+            </v-row>
+        </v-card-actions>
+    </card-layout>
 </template>
 <script src="./chatWith.ts"></script>
+<style scoped>
+    .sendBtn {
+        margin-top: 8px;
+        margin-left: 10px;
+    }
+    .textField {
+        margin-left: 8px!important;
+    }
+</style>

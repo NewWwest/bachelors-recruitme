@@ -21,13 +21,13 @@ namespace RecruitMe.Web.Controllers
             User user = await AuthenticateUser();
             int count = await Get<GetNewMessagesCountQuery>().Execute(user);
 
-            return Json(count > 0);
+            return Json(count);
         }
 
         [HttpGet]
         [Route("{withId}/")]
         public async Task<ActionResult> GetMessages(string withId, [FromQuery] PagingParameters parameters)
-        {
+        {   
             User user = await AuthenticateUser();
             int toId = await Get<GetAdminOrUserIdQuery>().Execute(withId);
 
@@ -52,9 +52,9 @@ namespace RecruitMe.Web.Controllers
                 sendDto.FromId = user.Id;
             }
 
-            await Get<SendNewMessageCommand>().Execute(sendDto);
+            MessageDto message = await Get<SendNewMessageCommand>().Execute(sendDto);
 
-            return Ok();
+            return Json(message);
         }
     }
 }

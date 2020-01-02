@@ -242,7 +242,26 @@ export class ApiGateway {
         });
     }
 
+    // messages
+    public checkNewMessages() {
+        return axios.get('/api/messages/checknewmessages', this.authHeader());
+    }
+    public getMessages(person: string, page: number, pageSize: number) {
+        let data = {
+            page: page,
+            pageSize: pageSize
+        };
 
+        return axios.post(`/api/messages/${person}`, data, this.authHeader());
+    }
+    public sendMessage(person: string, message: string) {
+        let data = {
+            toId: person,
+            message: message
+        };
+
+        return axios.post('/api/messages/send', data, this.authHeader());
+    }
 
     private authHeader() {
         return {

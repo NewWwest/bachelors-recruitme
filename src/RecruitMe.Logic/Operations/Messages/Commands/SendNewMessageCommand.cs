@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Messages.Commands
 {
-    public class SendNewMessageCommand : BaseAsyncOperation<OperationResult, SendDto, SendDtoValidator>
+    public class SendNewMessageCommand : BaseAsyncOperation<MessageDto, SendDto, SendDtoValidator>
     {
         private readonly GetAdminOrUserIdQuery _getAdminOrUserIdQuery;
 
@@ -24,7 +24,7 @@ namespace RecruitMe.Logic.Operations.Messages.Commands
             _getAdminOrUserIdQuery = getAdminOrUserIdQuery;
         }
 
-        protected async override Task<OperationResult> DoExecute(SendDto request)
+        protected async override Task<MessageDto> DoExecute(SendDto request)
         {
             int toId = await _getAdminOrUserIdQuery.Execute(request.ToId);
 
@@ -40,7 +40,12 @@ namespace RecruitMe.Logic.Operations.Messages.Commands
             await _dbContext.Messages.AddAsync(message);
             await _dbContext.SaveChangesAsync();
 
-            return new OperationSucceded();
+            return new MessageDto()
+            {
+                IsMine = true,
+                Message = message.Text,
+                Timestamp = message.Timestamp
+            };
         }
     }
 }

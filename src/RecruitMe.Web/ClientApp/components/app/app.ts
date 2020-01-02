@@ -1,9 +1,10 @@
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import { UserService } from '../../services/user.service';
 import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import { MessageService } from '../../services/message.service';
 
 @Component({
     components: {
@@ -13,6 +14,11 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 export default class AppComponent extends Vue {
     userLoggedIn: boolean = false;
     displayName: string = "";
+    messages: number = 0;
+
+    beforeMount() {
+        //setInterval(this.checkMessages, 30000);
+    }
 
     mounted() {
         this.userLoggedIn = new UserService().isLoggedIn();
@@ -24,5 +30,16 @@ export default class AppComponent extends Vue {
         this.displayName = new UserService().getDisplayName();
         this.$forceUpdate();
         this.$router.push("/");
+    }
+
+    checkMessages() {
+        if (!this.$route.path.includes('chat')) {
+            new MessageService().checkNewMessages().then(d => {
+                this.messages = d;
+            });
+        }
+        else {
+            this.messages = 0;
+        }
     }
 }

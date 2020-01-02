@@ -25,7 +25,12 @@
 
             <v-toolbar-items v-if="userLoggedIn && !userService.isAdmin()">
                 <v-btn to="/chatwith/admin">
-                    <span>Chat   <v-icon>chat</v-icon></span>
+                    <span>Chat   
+                        <v-badge color="purple" overlap>
+                            <span slot="badge" v-if="messages">{{messages}}</span>
+                            <v-icon>chat</v-icon>
+                        </v-badge>
+                    </span>
                 </v-btn>
                 <v-btn to="/recruitment/yourexams">
                     <span>Egzaminy   <v-icon>school</v-icon></span>
