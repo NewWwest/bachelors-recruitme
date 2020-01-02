@@ -106,7 +106,7 @@ namespace RecruitMe.Web.Controllers
             using (var fileStream = file.OpenReadStream())
             {
 
-                OperationResult result = await Get<LoadExaminationSheetCommand>().Execute((id,fileStream));
+                OperationResult result = Get<LoadExaminationSheetCommand>().Execute((id,fileStream));
                 if(result.Success)
                 {
                     return Ok();
