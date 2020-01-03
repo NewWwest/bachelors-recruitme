@@ -20,8 +20,9 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
 
         protected async override Task<PagedResponse<MessageDto>> DoExecute(GetMessagesDto request)
         {
-            var messagesTask = _dbContext.Messages.Where(m => m.FromId == request.From &&
-                                   m.ToId == request.To)
+            var messagesTask = _dbContext.Messages.Where(m =>
+                                    m.FromId == request.From && m.ToId == request.To ||
+                                    m.ToId == request.From && m.FromId == request.To)
                                .OrderByDescending(m => m.Timestamp)
                                .Skip((request.Parameters.Page - 1) * request.Parameters.PageSize)
                                .Take(request.Parameters.PageSize)

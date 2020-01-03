@@ -247,12 +247,7 @@ export class ApiGateway {
         return axios.get('/api/messages/checknewmessages', this.authHeader());
     }
     public getMessages(person: string, page: number, pageSize: number) {
-        let data = {
-            page: page,
-            pageSize: pageSize
-        };
-
-        return axios.post(`/api/messages/${person}`, data, this.authHeader());
+        return axios.get(`/api/messages/${person}?page=${page}&pageSize=${pageSize}`, this.authHeader());
     }
     public sendMessage(person: string, message: string) {
         let data = {

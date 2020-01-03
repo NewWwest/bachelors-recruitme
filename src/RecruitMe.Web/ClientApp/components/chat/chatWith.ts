@@ -7,14 +7,14 @@ import { isToday, toLocalTime, toLocaleDateTimeString } from '../../helpers/date
 
 @Component({})
 export default class ChatWithComponent extends Vue {
-    page: number = 0;
+    page: number = 1;
     person: string = '';
     readonly pageSize: number = 15;
     
     msg: string = "";
 
     readAll: boolean = false;
-    messages: IMessage[] = null;
+    messages: IMessage[] = [];
 
     userService: UserService = new UserService();
     messageService: MessageService = new MessageService();
@@ -35,49 +35,11 @@ export default class ChatWithComponent extends Vue {
     sendMessage() {
         this.messageService.sendMessage(this.person, this.msg).then(msg => {
             this.messages.push(msg);
+            this.msg = "";
         })
     }
 
     getMessages() {
-        this.messages = [
-            {
-                isMine: true,
-                message: 'cccc',
-                timestamp: new Date(2020, 0, 1)
-            },
-            {
-                isMine: false,
-                message: 'bbbb',
-                timestamp: new Date(2020, 0, 2)
-            },
-            {
-                isMine: true,
-                message: 'aaaaa',
-                timestamp: new Date(2020, 0, 3)
-            },
-            {
-                isMine: true,
-                message: '00000',
-                timestamp: new Date(2020, 0, 4)
-            },
-            {
-                isMine: true,
-                message: '-1-1-1',
-                timestamp: new Date(2020, 0, 5)
-            },
-            {
-                isMine: false,
-                message: '-2-2-2',
-                timestamp: new Date(2020, 0, 6)
-            },
-            {
-                isMine: true,
-                message: '-3-3-3',
-                timestamp: new Date(2020, 0, 7)
-            },
-            
-        ]
-
         this.messageService.getMessages(this.person, this.page, this.pageSize).then(d => {
             if (d.page * this.pageSize >= d.count) {
                 this.readAll = true;
@@ -89,13 +51,15 @@ export default class ChatWithComponent extends Vue {
 
     processMessages(messagesToAdd: IMessage[]) {
         //if (this.messages[0].timestamp )
-        for (let i = 0; i < messagesToAdd.length; i++) {
+        for (let i = messagesToAdd.length - 1; i >= 0; i--) {
             this.messages.push(messagesToAdd[i]);
         }
     }
 
     getDateText(timestamp: Date): string {
-        const date: Date = toLocalTime(timestamp);
+        const date: Date = new Date(timestamp);
+
+        console.log("data", date);
 
         if (isToday(date)) {
             return date.toLocaleTimeString();
