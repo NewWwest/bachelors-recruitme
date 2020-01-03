@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Operations.Abstractions;
+using RecruitMe.Logic.Operations.Recruitment.MyRecruitment;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using RecruitMe.Web.Configuration;
@@ -13,10 +14,6 @@ namespace RecruitMe.Web.Controllers
     [Route("api/Recruitment")]
     public class RecruitmentController : RecruitMeBaseController
     {
-        public RecruitmentController()
-        {
-        }
-
         [HttpGet]
         [Route("Profile")]
         public async Task<ActionResult> GetPersonalData()
@@ -105,6 +102,16 @@ namespace RecruitMe.Web.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet]
+        [Route("examsandstatus")]
+        public async Task<ActionResult> GetExamsAndStatus()
+        {
+            User user = await AuthenticateUser();
+
+            ExamsAndStatusDto result = await Get<GetExamsAndStatusQuery>().Execute(user.Id);
+            return Ok(result);
         }
     }
 }

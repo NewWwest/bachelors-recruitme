@@ -55,6 +55,10 @@ export class ApiGateway {
 
         return axios.post('/api/Recruitment/ProfilePicture', data, this.authHeader());
     }
+
+    public examsAndStatus() {
+        return axios.get('/api/Recruitment/examsandstatus', this.authHeader());
+    }
     
     public uploadDocument(fileName: string, file: any) {
         let data: FormData = new FormData();
@@ -244,6 +248,11 @@ export class ApiGateway {
         });
     }
 
+    public downloadIdCard(userId: number) {
+        return axios.get(`api/administration/candidates/${userId}/idcard`, this.blobResponseAuthHeader()).then((response) => {
+            saveAs(new Blob([response.data]), `IdCard_${userId}.pdf`)
+        });
+    }
 
 
 

@@ -58,7 +58,6 @@ namespace RecruitMe.Web.Controllers
             User user = await query.Execute(ParseUserId());
             if (user.CandidateId == Get<BusinessConfiguration>().AdminLogin)
             {
-
                 return user;
             }
             else

@@ -5,9 +5,8 @@ using RecruitMe.Logic.Operations.Administration.Exam;
 using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 using RecruitMe.Logic.Operations.Recruitment.ProfileFiles;
 using RecruitMe.Logic.Utilities.Paging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Web.Controllers
@@ -127,6 +126,16 @@ namespace RecruitMe.Web.Controllers
                 return Json(data);
             }
             return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("{id}/idcard")]
+        public async Task<ActionResult> GetIdCard(int id)
+        {
+            await AuthenticateAdmin();
+
+            Stream result = await Get<GetCandidateIdCardQuery>().Execute(id);
+            return new FileStreamResult(result, "application/pdf");
         }
     }
 }

@@ -8,14 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="IdentityServer.rsa.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="ClientApp\components\account\emailverified\emailverified.vue.html" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.5.3" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.5.3" />
@@ -24,15 +16,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="IdentityServer.rsa.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,13 +30,24 @@
 
   <ItemGroup>
     <Folder Include="assets\" />
-    <Folder Include="assets\recruitment" />
-    <Folder Include="assets\recruitment\images" />
+    <Folder Include="assets\recruitment\" />
+    <Folder Include="assets\recruitment\images\" />
     <Folder Include="wwwroot\recruitment\" />
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\components\account\emailverified\emailverified.vue.html" />
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ssl\aspnetapp.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
@@ -67,8 +67,8 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec Command="npm install" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --mode production" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --mode production" />
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>

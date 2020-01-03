@@ -1,7 +1,8 @@
 ﻿import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType, ExamTypeDisplayName } from '../../../models/administraion.models';
+import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType } from '../../../models/administraion.models';
 import { ApiGateway } from '../../../api/api.gateway';
+import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 
 @Component({
     components: {
@@ -12,7 +13,7 @@ import { ApiGateway } from '../../../api/api.gateway';
 export default class DetailsComponent extends Vue {
     apiGateway = new ApiGateway();
     SystemEntityEnum = SystemEntity;
-    
+
     currentSystemEntity: SystemEntity = SystemEntity.Candidate;
     entityId: number = 0;
 
@@ -44,6 +45,7 @@ export default class DetailsComponent extends Vue {
         this.entityId = id;
         this.currentSystemEntity = type as SystemEntity;
     }
+
     mounted() {
         this.fetchItem();
     }

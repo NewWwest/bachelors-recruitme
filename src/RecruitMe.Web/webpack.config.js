@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const bundleOutputDir = './wwwroot/dist';
 
 module.exports = (env) => {
@@ -44,7 +45,7 @@ module.exports = (env) => {
                     ],
                 },
                 { test: /\.ts$/, include: /ClientApp/, use: isDevBuild ? 'awesome-typescript-loader' : 'awesome-typescript-loader?silent=true' },
-                { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
+                { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader' }) },
                 { test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf)$/, use: 'url-loader?limit=100000' }
             ]
         },
@@ -65,7 +66,8 @@ module.exports = (env) => {
                 jQuery: 'jquery',
                 'window.jQuery': 'jquery',
                 Popper: ['popper.js', 'default']
-            })
+            }),
+            new VueLoaderPlugin()
         ].concat(isDevBuild ? [
             // Plugins that apply in development builds only
             new webpack.SourceMapDevToolPlugin({
@@ -73,8 +75,6 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(bundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            // Plugins that apply in production builds only
-            new webpack.optimize.UglifyJsPlugin(),
             new ExtractTextPlugin('site.css')
         ])
     }];

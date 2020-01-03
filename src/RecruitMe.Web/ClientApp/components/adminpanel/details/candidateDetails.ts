@@ -71,7 +71,10 @@ export default class CandidateDetailsComponent extends Vue {
     }
 
     getIdentityCard() {
-        alert("GENERATE QR CODE");
+        this.apiGateway.downloadIdCard(this.profile.userId).then(d => {
+        }, err => {
+            console.error(err);
+        });
     }
 
     handleDelete() {

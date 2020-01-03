@@ -4,11 +4,12 @@ import { UserService } from '../../services/user.service';
 
 @Component({})
 export default class Navmenu extends Vue {
+    userService: UserService = new UserService();
+
     @Prop()
     userLoggedIn: boolean | undefined;
     @Prop()
     displayName: string | undefined;
-    userService: UserService = new UserService();
 
     constructor() {
         super();

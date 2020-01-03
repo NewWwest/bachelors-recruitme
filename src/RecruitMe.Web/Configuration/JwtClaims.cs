@@ -10,5 +10,6 @@ namespace RecruitMe.Web.Configuration
         public static readonly string ClaimName = "name";
         public static readonly string ClaimSurname = "surname";
         public static readonly string ClaimEmail = "email";
+        public static readonly string IsAdmin = "isadmin";
     }
 }

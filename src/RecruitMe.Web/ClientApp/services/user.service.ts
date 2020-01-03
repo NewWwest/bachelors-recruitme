@@ -19,6 +19,7 @@ export class UserService {
                 LocalStorageService.setUserId(jwt.userId);
                 LocalStorageService.setName(jwt.name);
                 LocalStorageService.setSurname(jwt.surname);
+                LocalStorageService.setIsAdmin(jwt.isadmin == "1");
 
                 return true;
             },
@@ -77,6 +78,7 @@ export class UserService {
         LocalStorageService.resetUserId();
         LocalStorageService.resetName();
         LocalStorageService.resetSurname();
+        LocalStorageService.resetIsAdmin();
     }
 
     public getDisplayName(): string {
@@ -90,6 +92,10 @@ export class UserService {
         return LocalStorageService.getUserId() != null &&
             LocalStorageService.getEmail() != '' &&
             LocalStorageService.getJwtToken() != '';
+    }
+
+    public isAdmin(): boolean {
+        return LocalStorageService.getIsAdmin();
     }
 
     private parseJwt(token: string): IJwtClaims {
