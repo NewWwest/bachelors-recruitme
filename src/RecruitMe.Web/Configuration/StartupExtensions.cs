@@ -2,6 +2,7 @@
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Utilities;
+using RecruitMe.Logic.Utilities.Dates;
 using RecruitMe.Web.Services.Data;
 
 namespace RecruitMe.Web.Configuration
@@ -16,6 +17,8 @@ namespace RecruitMe.Web.Configuration
             services.AddTransient<IFileSaver, LocalFileStorage>();
             services.AddTransient<IPictureSaver, LocalFileStorage>();
             services.AddTransient<IFileRepository, LocalFileStorage>();
+
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 
             services.RegisterAutoComponents();
         }

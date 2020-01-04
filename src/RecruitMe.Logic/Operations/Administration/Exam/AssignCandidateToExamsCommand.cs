@@ -25,14 +25,16 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 .Include(e => e.ExamTakers)
                 .ToListAsync();
 
-            IEnumerable<Task> tasks = exams.Select(exam => AddExamTaker(exam, user));
-            await Task.WhenAll(tasks);
+            foreach (var exam in exams)
+            {
+                AddExamTaker(exam, user);
+            }
 
             await _dbContext.SaveChangesAsync();
             return new OperationSucceded();
         }
 
-        private Task<EntityEntry<ExamTaker>> AddExamTaker(Data.Entities.Exam exam, User user)
+        private void AddExamTaker(Data.Entities.Exam exam, User user)
         {
             DateTime startDate;
 
@@ -51,7 +53,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 StartDate = startDate
             };
 
-            return _dbContext.ExamTakers.AddAsync(examTaker);
+            _dbContext.ExamTakers.Add(examTaker);
         }
     }
 }

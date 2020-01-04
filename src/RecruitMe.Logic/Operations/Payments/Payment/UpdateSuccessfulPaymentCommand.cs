@@ -1,17 +1,20 @@
 ﻿using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
+using RecruitMe.Logic.Utilities.Dates;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RecruitMe.Logic.Operations.Payments.Payment
 {
     public class UpdateSuccessfulPaymentCommand : BaseAsyncOperation<OperationResult, PaymentResponseDto>
     {
-        public UpdateSuccessfulPaymentCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        private readonly IDateTimeProvider _dateTimeProvider;
+
+        public UpdateSuccessfulPaymentCommand(ILogger logger, BaseDbContext dbContext,
+            IDateTimeProvider dateTimeProvider) : base(logger, dbContext)
         {
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async override Task<OperationResult> Execute(PaymentResponseDto response)
@@ -22,7 +25,8 @@ namespace RecruitMe.Logic.Operations.Payments.Payment
             if (payment != null)
             {
                 payment.DotpayOperationNumber = response.Number;
-                payment.PaidDate = response.OperationDatetime != DateTime.MinValue ? response.OperationDatetime : DateTime.Now;
+                payment.PaidDate = response.OperationDatetime != DateTime.MinValue ?
+                    response.OperationDatetime : _dateTimeProvider.Now;
 
                 _dbContext.Payments.Update(payment);
                 await _dbContext.SaveChangesAsync();

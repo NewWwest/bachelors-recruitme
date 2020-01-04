@@ -4,7 +4,6 @@ using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Payments.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,8 +14,8 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
 {
     public class CreatePaymentLinkCommand : BaseAsyncOperation<string, PaymentDto>
     {
-        EndpointConfig _endpointConfig;
-        GetExistingPaymentLinkQuery _getExistingPaymentLinkQuery;
+        private readonly EndpointConfig _endpointConfig;
+        private readonly GetExistingPaymentLinkQuery _getExistingPaymentLinkQuery;
 
         public CreatePaymentLinkCommand(ILogger logger, BaseDbContext dbContext, EndpointConfig endpointConfig,
             GetExistingPaymentLinkQuery getExistingPaymentLinkQuery) : base(logger, dbContext)
@@ -70,7 +69,8 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
 
                 if (response.IsSuccessStatusCode)
                 {
-                    PaymentLinkResponse linkResponse = await response.Content.ReadAsAsync<PaymentLinkResponse>();
+                    string respString = await response.Content.ReadAsStringAsync();
+                    PaymentLinkResponse linkResponse = JsonConvert.DeserializeObject<PaymentLinkResponse>(respString);
                     string chk = RequestHasher.GetControlChecksum(linkResponse);
 
                     return linkResponse.Payment_Url + $"&chk={chk}";

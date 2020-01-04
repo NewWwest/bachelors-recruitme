@@ -8,6 +8,7 @@ using RecruitMe.Logic.Operations.Payments;
 using RecruitMe.Logic.Operations.Payments.Enums;
 using RecruitMe.Logic.Operations.Payments.Payment;
 using RecruitMe.Logic.Operations.Payments.PaymentLink;
+using RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer;
 
 namespace RecruitMe.Web.Controllers
 {
@@ -39,11 +40,11 @@ namespace RecruitMe.Web.Controllers
         public async Task<ActionResult> AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
             // redirect to web or mobile, depending on data
-            string query = "";
+            string err = "";
             if ("OK" != redirectDto.StatusCode?.ToUpperInvariant())
-                query = $"?error={redirectDto.ErrorCode.ToString()}";
+                err = redirectDto.ErrorCode.ToString();
 
-            string redirectUrl = Get<EndpointConfig>().BaseAddress + "/payments/thankyou" + query;
+            string redirectUrl = Get<EndpointConfig>().PaymentsThankYou(err);
 
             if (IsMobileBrowser())
             {
@@ -58,39 +59,15 @@ namespace RecruitMe.Web.Controllers
         [Route("successfulMoneyTransfer")]
         public async Task<ActionResult> SuccessfulMoneyTransfer([FromQuery] PaymentResponseDto response)
         {
-            // check what we received from Dotpay
-            if (CheckPaymentResponse(response))
+            SuccessfulMoneyTransferDto transferDto = new SuccessfulMoneyTransferDto()
             {
-                User user = await AuthenticateUser();
+                DotpayResponse = response,
+                User = await AuthenticateUser()
+            };
 
-                //insert successful payment
-                await Get<UpdateSuccessfulPaymentCommand>().Execute(response);
+            await Get<SuccessfulMoneyTransferCommand>().Execute(transferDto);
 
-                //delete previously used link
-                string usr = response.Control.Substring(0, response.Control.IndexOf(':'));
-                int userId = int.Parse(usr);
-                int rows = await Get<RemoveExistingPaymentLink>().Execute(userId);
-                if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
-
-                //auto-assign candidate to all exams
-                await Get<AssignCandidateToExamsCommand>().Execute(user);
-
-                return Ok("OK");
-            }
-
-            return BadRequest();
-        }
-
-        private bool CheckPaymentResponse(PaymentResponseDto response)
-        {
-            // should check for signature also, but have no assurance that all properties in
-            // PaymentResponseDto were hashed in response.Signature
-            // so we check what we can
-            return response.Type == OperationType.Payment &&
-                response.Status == OperationStatus.Completed &&
-                response.OperationAmount == response.OperationOriginalAmount &&
-                response.OperationCurrency == response.OperationOriginalCurrency; //&&
-                //response.Signature == 
+            return Ok("OK");
         }
 
         [HttpGet]
