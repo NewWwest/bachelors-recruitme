@@ -9,15 +9,11 @@ namespace RecruitMe.Logic.Operations.Payments.Helpers
 {
     public class RequestHasher
     {
-        public static string GetControlChecksum(PaymentLinkResponse response)
+        public static string GetControlChecksum(PaymentLinkResponse response, PaymentConfiguration paymentConfiguration)
         {
             using (SHA256 hasher = SHA256.Create())
             {
-                string neededParams = PaymentConfiguration.ProdPIN;
-#if DEBUG 
-                neededParams = PaymentConfiguration.TestPIN;
-#endif
-                neededParams += response.Token;
+                string neededParams = paymentConfiguration.PIN + response.Token;
 
                 byte[] hashedBytes = hasher.ComputeHash(Encoding.ASCII.GetBytes(neededParams));
 

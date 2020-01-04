@@ -35,6 +35,8 @@ namespace RecruitMe.Web
         public void ConfigureServices(IServiceCollection services)
         {
             BusinessConfiguration config = services.AddSingletonConfiguration<BusinessConfiguration>(Configuration);
+            services.AddSingletonConfiguration<PaymentConfiguration>(Configuration);
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
@@ -63,7 +65,6 @@ namespace RecruitMe.Web
                 });
             }
 
-
             services.AddIdentityServer(options => options.IssuerUri = config.BaseAddress)
                 .AddSigningCredential(new X509Certificate2(Configuration["SslCertificate"], Configuration["SslCertificatePassword"]))
                 .AddValidationKey(new X509Certificate2(Configuration["SslCertificate"], Configuration["SslCertificatePassword"]))
@@ -74,7 +75,6 @@ namespace RecruitMe.Web
                 .AddResourceOwnerValidator<CustomResourceOwnerPasswordValidator>()
                 .AddJwtBearerClientAuthentication();
 
-
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
@@ -83,7 +83,6 @@ namespace RecruitMe.Web
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = SupportedTokens.Jwt;
                 });
-
 
             services.AddDependencyInjection();
         }

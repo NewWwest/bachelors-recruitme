@@ -25,10 +25,13 @@ namespace RecruitMe.Web.Controllers
 
             Payment payment = await Get<InsertNewPaymentCommand>().Execute(user);
 
-            PaymentDto paymentDto = new PaymentDto();
-            paymentDto.Description = payment.Description;
-            paymentDto.Control = $"{payment.Id}:{payment.UserId}";
+            PaymentDto paymentDto = new PaymentDto
+            {
+                Description = payment.Description,
+                Control = $"{payment.Id}:{payment.UserId}"
+            };
             paymentDto.SetPayerAndUrls(payerDto, Get<EndpointConfig>());
+            paymentDto.SetPaymentsConfiguration(Get<PaymentConfiguration>());
 
             string redirectUrl = await Get<CreatePaymentLinkCommand>().Execute(paymentDto);
             return Json(redirectUrl);
@@ -37,7 +40,7 @@ namespace RecruitMe.Web.Controllers
         // redirect after payment method
         [HttpGet]
         [Route("afterPayment")]
-        public async Task<ActionResult> AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
+        public ActionResult AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
             // redirect to web or mobile, depending on data
             string err = "";

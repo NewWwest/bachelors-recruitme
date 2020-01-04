@@ -7,9 +7,12 @@ namespace RecruitMe.Logic.Configuration
 {
     public class EndpointConfig : IAutoComponent
     {
-        public EndpointConfig(BusinessConfiguration businessConfiguration)
+        private int _dotpaySellerId;
+
+        public EndpointConfig(BusinessConfiguration businessConfiguration, PaymentConfiguration paymentConfiguration)
         {
             BaseAddress = businessConfiguration.BaseAddress;
+            _dotpaySellerId = paymentConfiguration.Id;
         }
 
         public string BaseAddress { get; private set; }
@@ -25,6 +28,6 @@ namespace RecruitMe.Logic.Configuration
         public string DotpayBaseAddress => "https://ssl.dotpay.pl";
         public string DotpayProductionAddress => DotpayBaseAddress + "/s2/login/api/v1";
         public string DotpayTestAddress => DotpayBaseAddress + "/test_seller/api/v1";
-        public string CreatePaymentLink => $"/accounts/{PaymentConfiguration.Id}/payment_links/";
+        public string CreatePaymentLink => $"/accounts/{_dotpaySellerId}/payment_links/";
     }
 }

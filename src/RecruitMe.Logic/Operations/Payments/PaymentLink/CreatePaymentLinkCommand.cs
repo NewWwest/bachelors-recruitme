@@ -15,12 +15,15 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
     public class CreatePaymentLinkCommand : BaseAsyncOperation<string, PaymentDto>
     {
         private readonly EndpointConfig _endpointConfig;
+        private readonly PaymentConfiguration _paymentConfiguration;
         private readonly GetExistingPaymentLinkQuery _getExistingPaymentLinkQuery;
 
         public CreatePaymentLinkCommand(ILogger logger, BaseDbContext dbContext, EndpointConfig endpointConfig,
-            GetExistingPaymentLinkQuery getExistingPaymentLinkQuery) : base(logger, dbContext)
+            GetExistingPaymentLinkQuery getExistingPaymentLinkQuery,
+            PaymentConfiguration paymentConfiguration) : base(logger, dbContext)
         {
             _endpointConfig = endpointConfig;
+            _paymentConfiguration = paymentConfiguration;
             _getExistingPaymentLinkQuery = getExistingPaymentLinkQuery;
         }
 
@@ -51,14 +54,12 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
             using (HttpClient client = new HttpClient())
             {
                 string dataUrl = "";
-#if DEBUG
-                dataUrl = _endpointConfig.DotpayTestAddress;
-#else
-                dataUrl = _endpointConfig.DotpayProductionAddress;
-#endif
+                if (_paymentConfiguration.UseProductionServer)
+                    dataUrl = _endpointConfig.DotpayProductionAddress;
+                else dataUrl = _endpointConfig.DotpayTestAddress;
 
                 client.BaseAddress = new Uri(_endpointConfig.DotpayBaseAddress);
-                client.SetToken("Basic", PaymentConfiguration.AuthToken);
+                client.SetToken("Basic", _paymentConfiguration.AuthToken);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 HttpRequestMessage httpRequest = new HttpRequestMessage(HttpMethod.Post,
@@ -71,7 +72,7 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
                 {
                     string respString = await response.Content.ReadAsStringAsync();
                     PaymentLinkResponse linkResponse = JsonConvert.DeserializeObject<PaymentLinkResponse>(respString);
-                    string chk = RequestHasher.GetControlChecksum(linkResponse);
+                    string chk = RequestHasher.GetControlChecksum(linkResponse, _paymentConfiguration);
 
                     return linkResponse.Payment_Url + $"&chk={chk}";
                 }

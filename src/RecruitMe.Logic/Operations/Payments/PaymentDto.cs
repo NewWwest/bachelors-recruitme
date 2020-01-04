@@ -9,14 +9,14 @@ namespace RecruitMe.Logic.Operations.Payments
     public class PaymentDto
     {
         [JsonProperty("id")]
-        public int Id => PaymentConfiguration.Id;
+        public int Id { get; set; }
         
         [JsonProperty("amount")]
-        public decimal Amount => PaymentConfiguration.RegistrationFee;
-        
+        public decimal Amount { get; set; }
+
         [JsonProperty("currency")]
-        public string Currency => PaymentConfiguration.Currency;
-        
+        public string Currency { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
         
@@ -58,6 +58,13 @@ namespace RecruitMe.Logic.Operations.Payments
             Payer = payerDto;
             Url = endpointConfig.BaseAddress + endpointConfig.AfterPayment;
             Urlc = endpointConfig.BaseAddress + endpointConfig.SuccessfulMoneyTransfer;
+        }
+
+        public void SetPaymentsConfiguration(PaymentConfiguration paymentConfiguration)
+        {
+            Id = paymentConfiguration.Id;
+            Amount = paymentConfiguration.RegistrationFee;
+            Currency = paymentConfiguration.Currency;
         }
     }
 
