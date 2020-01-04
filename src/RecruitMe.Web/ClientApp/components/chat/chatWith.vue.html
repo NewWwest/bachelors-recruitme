@@ -32,7 +32,8 @@
         <v-card-actions>
             <v-row>
                 <v-text-field v-model="msg" label="Wiadomość" outlined
-                full-width clearable counter maxlength="500" class="textField"></v-text-field>
+                full-width clearable counter maxlength="500" class="textField"
+                @keyup.enter="sendMessage"></v-text-field>
                 <v-btn fab dark small color="primary" type="submit" class="sendBtn" @click="sendMessage">
                     <v-icon dark>send</v-icon>
                 </v-btn>

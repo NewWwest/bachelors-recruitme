@@ -4,12 +4,7 @@
 }
 export function isToday(date: Date): boolean {
     const today: Date = new Date();
-
-    console.log(today, date);
-    console.log(date.getDay(), today.getDay());
-    console.log(date.getMonth(), today.getMonth());
-    console.log(date.getFullYear(), today.getFullYear());
-
+    
     return date.getDay() == today.getDay() &&
             date.getMonth() == today.getMonth() &&
             date.getFullYear() == today.getFullYear();
