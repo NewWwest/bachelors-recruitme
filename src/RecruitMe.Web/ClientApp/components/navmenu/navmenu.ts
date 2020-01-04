@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { UserService } from '../../services/user.service';
+import { MessageBusService } from '../../services/messageBus.service';
 
 @Component({})
 export default class Navmenu extends Vue {
@@ -17,7 +18,6 @@ export default class Navmenu extends Vue {
 
     logout() {
         this.userService.logout();
-        this.$emit("user-logged-in", false);
         this.$forceUpdate();
     }
 }

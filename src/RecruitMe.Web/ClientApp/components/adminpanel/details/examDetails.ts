@@ -3,6 +3,8 @@ import { Component, Prop } from 'vue-property-decorator';
 import { ApiGateway } from '../../../api/api.gateway';
 import { IExamCategory, IExamTaker, IExam, ITeacher } from '../../../models/administraion.models';
 import { toLocalTime } from '../../../helpers/datetime.helper';
+import { MessageBusService } from '../../../services/messageBus.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class ExamDetails extends Vue {
@@ -20,39 +22,30 @@ export default class ExamDetails extends Vue {
 
     mounted() {
         if (this.id) {
-            this.apiGateway.getExam(this.id).then(resp => {
-                this.exam = resp.exam;
-                this.exam.startDateTime = toLocalTime(this.exam.startDateTime);
-                this.setExamTakers(resp.examTakers)
-            }, err => {
-                console.error(err);
-            });
+            this.getExam();
+
             this.apiGateway.listExamCategories().then(resp => {
                 this.examCategories = resp;
-            }, err => {
-                console.error(err);
-            });
+            }, err => MessageBusService.emitError(getErrorMessage(err)));
+
             this.apiGateway.listTeachers().then(resp => {
-                console.log(resp)
                 this.teachers = resp.map((t: ITeacher) => {
-                    id: t.id;
-                    name: t.name + " " + t.surname;
+                    return {
+                        id: t.id,
+                        name: t.name + " " + t.surname,
+                    };
                 });
-                console.log(this.teachers)
-            }, err => {
-                console.error(err);
-            });
+            }, err => MessageBusService.emitError(getErrorMessage(err)));
         }
     }
+
     handleDelete() {
         if (!this.id)
             return;
 
         this.apiGateway.deleteExam(this.id).then((resp: any) => {
             this.$router.push(`/adminPanel/manage/exam`);
-        }, (err: any) => {
-            console.error(err)
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     handleSubmit() {
@@ -60,29 +53,19 @@ export default class ExamDetails extends Vue {
             return;
 
         this.apiGateway.updateExam(this.exam).then((resp: any) => {
-            this.$router.push("/adminPanel/manage/exam");
-        }, (err: any) => {
-            console.error(err)
-        });
+            this.getExam();
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     deleteUserTaker(userId: number, id: number) {
         this.apiGateway.deleteExamTaker(userId, id).then((resp: any) => {
-            this.setExamTakers(resp)
-        }, (err: any) => {
-            console.error(err)
-        });
-    }
-    setExamTakers(examTakers: IExamTaker[]) {
-        this.examTakers = examTakers;
-        for (let i = 0; i < examTakers.length; i++) {
-            this.examTakers[i].startDate = toLocalTime(this.examTakers[i].startDate);
-        }
+            this.getExam();
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     downloadExamSheet() {
         if (this.id) {
-            this.apiGateway.downloadExamSheet(this.id);
+            this.apiGateway.downloadExamSheet(this.id).catch(err => MessageBusService.emitError(getErrorMessage(err)));
         }
     }
 
@@ -98,13 +81,27 @@ export default class ExamDetails extends Vue {
                     this.processingOmr = false;
                 }, err => {
                     this.processingOmr = false;
-                    console.error(err);
+                    MessageBusService.emitError(getErrorMessage(err));
                 });
             }, err => {
                 this.processingOmr = false;
-                console.error(err);
+                MessageBusService.emitError(getErrorMessage(err));
             });
         }
+    }
 
+    getExam() {
+        this.apiGateway.getExam(this.id as number).then(resp => {
+            this.exam = resp.exam;
+            this.exam.startDateTime = toLocalTime(this.exam.startDateTime);
+            this.setExamTakers(resp.examTakers)
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
+    }
+
+    setExamTakers(examTakers: IExamTaker[]) {
+        this.examTakers = examTakers;
+        for (let i = 0; i < examTakers.length; i++) {
+            this.examTakers[i].startDate = toLocalTime(this.examTakers[i].startDate);
+        }
     }
 }

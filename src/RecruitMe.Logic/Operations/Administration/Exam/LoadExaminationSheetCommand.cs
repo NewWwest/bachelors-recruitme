@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
@@ -14,30 +15,86 @@ using ZXing.Windows.Compatibility;
 
 namespace RecruitMe.Logic.Operations.Administration.Exam
 {
-    public class LoadExaminationSheetCommand : BaseOperation<OperationResult, LoadExaminationSheetRequest>
+    public class LoadExaminationSheetValidator : BaseValidator<LoadExaminationSheetRequest>
+    {
+        public LoadExaminationSheetValidator()
+        {
+            RuleFor(a => a.TeacherId).NotEmpty().WithMessage("Wskazanie nauczyciela oceniającego jest wymagane.");
+            RuleFor(a => a.ExamId).NotEmpty().WithMessage("Wskazanie egzaminu jest wymagane.");
+        }
+    }
+    public class LoadExaminationSheetCommand : BaseOperation<OperationResult, LoadExaminationSheetRequest, LoadExaminationSheetValidator>
     {
         private static object lockTempFile = new object();
-        public LoadExaminationSheetCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        public LoadExaminationSheetCommand(ILogger logger, LoadExaminationSheetValidator validator, BaseDbContext dbContext) : base(logger, validator, dbContext)
         {
         }
 
-        public override OperationResult Execute(LoadExaminationSheetRequest request)
+        protected override OperationResult DoExecute(LoadExaminationSheetRequest request)
         {
-            Data.Entities.Exam exam = _dbContext.Exams.Include(e => e.ExamTakers).First(e => e.Id == request.ExamId);
-            Data.Entities.Teacher teacher = _dbContext.Teachers.First(t => t.Id == request.TeacherId);
-
-            List<int> points = GetPoints(request.FileStream);
-            request.FileStream.Seek(0, SeekOrigin.Begin);
-            List<int> userIds = Decode(request.FileStream);
-
-            if(userIds.GroupBy(x => x).Any(g => g.Count() > 1))
+            Data.Entities.Exam exam = _dbContext.Exams.Include(e => e.ExamTakers).FirstOrDefault(e => e.Id == request.ExamId);
+            if (exam == null)
             {
-                throw new Exception("One user cannot take the same exam twice at the same moment");
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult($"Nieprawidłowe Id egzaminu: {request.ExamId}")
+                };
+            }
+
+            Data.Entities.Teacher teacher = _dbContext.Teachers.FirstOrDefault(t => t.Id == request.TeacherId);
+            if (teacher == null)
+            {
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult($"Nieprawidłowe Id nauczyciela: {request.TeacherId}")
+                };
+            }
+
+            List<int> points = null;
+            try
+            {
+                points = GetPoints(request.FileStream);
+
+                if (!points.Any())
+                {
+                    throw new Exception("Brak sczytanych punktów. - upewnij się że dokument jest poprawny");
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult($"Sczytywanie punktów z karty nie powiodło się: {e.Message}")
+                };
+            }
+            request.FileStream.Seek(0, SeekOrigin.Begin);
+            List<int> userIds = null;
+            try
+            {
+                userIds = Decode(request.FileStream);
+            }
+            catch (Exception e)
+            {
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult($"Sczytywanie kodu QR z karty nie powiodło się: {e.Message}")
+                };
+            }
+
+            if (userIds.GroupBy(x => x).Any(g => g.Count() > 1))
+            {
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult("One user cannot take the same exam twice at the same moment")
+                };
             }
 
             if (points.Count != userIds.Count)
             {
-                throw new Exception("User count and points count dont match up");
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult("User count and points count dont match up")
+                };
             }
 
             var examTakers = exam.ExamTakers.ToDictionary(et => et.UserId);

@@ -4,6 +4,8 @@ import { ApiGateway } from '../../../api/api.gateway';
 import { IProfileData } from '../../../models/recruit.models';
 import { SystemEntity, IExam, IExamTaker, ITeacher } from '../../../models/administraion.models';
 import { toLocalTime } from '../../../helpers/datetime.helper';
+import { MessageBusService } from '../../../services/messageBus.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class CandidateDetailsComponent extends Vue {
@@ -31,14 +33,12 @@ export default class CandidateDetailsComponent extends Vue {
     }
 
     fetchProfile() {
-        this.apiGateway.getProfile(this.candidateId as number).then(d => this.profile = d, err => {
-            console.error(err);
-        });
+        this.apiGateway.getProfile(this.candidateId as number).then(
+            d => this.profile = d,
+            err => MessageBusService.emitError(getErrorMessage(err)));
         this.apiGateway.listExamsForUser(this.candidateId).then(d => {
             this.setUserExams(d);
-        }, err => {
-            console.error(err);
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
         this.apiGateway.listExams().then(d => {
             this.exams = d.map((e: IExam) => {
                 return {
@@ -47,9 +47,7 @@ export default class CandidateDetailsComponent extends Vue {
                     startDateTime: new Date(e.startDateTime)
                 }
             })
-        }, err => {
-            console.error(err);
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
         this.apiGateway.listTeachers().then(d => {
             this.teachers = d.map((e: ITeacher) => {
                 return {
@@ -57,48 +55,40 @@ export default class CandidateDetailsComponent extends Vue {
                     name: e.name + " " + e.surname
                 }
             })
-        }, err => {
-            console.error(err);
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     handleSubmit() {
         this.apiGateway.updateProfile(this.profile).then(d => {
             this.profile = d;
-        }, err => {
-            console.error(err);
-        })
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     getIdentityCard() {
         this.apiGateway.downloadIdCard(this.profile.userId).then(d => {
-        }, err => {
-            console.error(err);
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     handleDelete() {
         this.apiGateway.deleteCandidate(this.profile.userId).then(d => {
             this.$router.push(`/adminPanel/manage/${SystemEntity.Candidate}`);
-        }, err => {
-            console.error(err);
-        })
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     deleteDocument(fileId: number) {
         this.apiGateway.deleteDocument(fileId, this.profile.userId).then(d => {
             this.profile = d.data;
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     downloadDocument(fileId: number) {
         if (fileId == this.profile.profilePictureFileId) {
-            this.apiGateway.downloadDocument(fileId, this.profile.profilePictureName, this.profile.userId);
+            this.apiGateway.downloadDocument(fileId, this.profile.profilePictureName, this.profile.userId).catch(err => MessageBusService.emitError(getErrorMessage(err)));
 
         } else {
             let doc = this.profile.documents.find(d => d.id == fileId);
             if (doc) {
-                this.apiGateway.downloadDocument(fileId, doc.name, this.profile.userId);
+                this.apiGateway.downloadDocument(fileId, doc.name, this.profile.userId).catch(err => MessageBusService.emitError(getErrorMessage(err)));
             }
         }
     }
@@ -116,24 +106,21 @@ export default class CandidateDetailsComponent extends Vue {
 
         this.apiGateway.addOrUpdateExamTaker(this.newExamTaker).then(d => {
             this.setUserExams(d);
-        }, err => {
-                console.error(err);
-        })
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
+
     saveExamTaker(data: IExamTaker) {
         this.apiGateway.addOrUpdateExamTaker(data).then(d => {
             this.setUserExams(d);
-        }, err => {
-            console.error(err);
-        })
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
+
     removeExamTaker(data: IExamTaker) {
         this.apiGateway.deleteExamTaker(this.profile.userId, data.id).then(d => {
             this.setUserExams(d);
-        }, err => {
-            console.error(err);
-        })
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
+
     setUserExams(data: IExamTaker[]) {
         this.newExamTaker = {} as IExamTaker;
         this.userExams = data;

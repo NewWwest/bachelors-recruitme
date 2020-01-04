@@ -4,6 +4,8 @@ import { SystemEntity, ITeacher, IExam, IExamCategory, ExamType } from '../../..
 import { ApiGateway } from '../../../api/api.gateway';
 import { UserService } from '../../../services/user.service';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
+import { MessageBusService } from '../../../services/messageBus.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class AddComponent extends Vue {
@@ -43,9 +45,7 @@ export default class AddComponent extends Vue {
         if (this.currentSystemEntity == SystemEntity.Exam) {
             this.apiGateway.listExamCategories().then(resp => {
                 this.examCategories = resp;
-            }, err => {
-                console.error(err);
-            });
+            }, err => MessageBusService.emitError(getErrorMessage(err)));
         }
     }
 
@@ -54,25 +54,19 @@ export default class AddComponent extends Vue {
             case SystemEntity.Exam:
                 this.apiGateway.addExam(this.exam).then(resp => {
                     this.$router.push(`/adminPanel/manage/${SystemEntity.Exam}`);
-                }, err => {
-                    console.error(err)
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
 
             case SystemEntity.ExamCategory:
                 this.apiGateway.addExamCategory(this.examCategory).then(resp => {
                     this.$router.push(`/adminPanel/manage/${SystemEntity.ExamCategory}`);
-                }, err => {
-                    console.error(err)
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
 
             case SystemEntity.Teacher:
                 this.apiGateway.addTeacher(this.teacher).then(resp => {
                     this.$router.push(`/adminPanel/manage/${SystemEntity.Teacher}`);
-                }, err => {
-                    console.error(err)
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
         }
     }

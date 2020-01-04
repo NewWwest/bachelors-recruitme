@@ -49,26 +49,36 @@
                         </h3>
                     </v-card-title>
                     <v-card-text>
+                        <v-row class="ml-1">
+                            <span>Pobierz kartę egzaminacyjną:</span>
+                        </v-row>
                         <v-row class="m-1">
                             <v-btn class="col-6" @click="downloadExamSheet">
-                                Pobierz kartę egzaminacyjną
+                                Wygeneruj pdf
                             </v-btn>
                         </v-row>
-                        <v-row class="m-1 mt-2">
-                            <v-btn :disabled="processingOmr" class="col-6" @click="$refs.sheetInput.click()">
-                                Wgraj kartę egzaminacyjną
-                                <input type="file" @change="uploadExamSheet" accept="image/*" style="display: none;" ref="sheetInput">
-                            </v-btn>
+
+                        <v-row class="ml-1 mt-2">
+                            <span>Wgraj kartę egzaminacyjną:</span>
+                        </v-row>
+                        <v-row>
                             <v-select :disabled="processingOmr"
                                       class="col-5" v-model="ratingTeacher"
                                       :items="teachers"
                                       label="Oceniający"
                                       item-text="name"
-                                      item-value="id"></v-select>
+                                      item-value="id">
+                            </v-select>
                         </v-row>
-                        <v-progress-circular v-if="processingOmr" size="30" width="3" indeterminate color="light-blue">
+                        <v-row class="ml-1">
+                            <v-btn :disabled="processingOmr" class="col-6" @click="$refs.sheetInput.click()">
+                                Wybierz plik
+                                <input type="file" @change="uploadExamSheet" accept="image/*" style="display: none;" ref="sheetInput">
+                            </v-btn>
+                            <v-progress-circular v-if="processingOmr" size="30" width="3" indeterminate color="light-blue">
 
-                        </v-progress-circular>
+                            </v-progress-circular>
+                        </v-row>
                     </v-card-text>
                 </v-card>
             </div>
@@ -108,7 +118,7 @@
                 </v-card>
             </div>
 
-            
+
         </div>
     </div>
 </template>

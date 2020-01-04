@@ -15,12 +15,5 @@
                 <v-btn :disabled="fetching" @click="handleSubmit">Zaloguj</v-btn>
             </div>
         </v-card-actions>
-
-        <v-snackbar v-model="snackbar">
-            {{ errorMessage }}
-            <v-btn color="pink" text @click="snackbar = false">
-                Zamknij
-            </v-btn>
-        </v-snackbar>
     </card-layout>
 </template>

@@ -3,6 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { PictureConfirmedEvent } from './pictureConfirmed.event';
 import { ApiGateway } from '../../../../api/api.gateway';
 import { getErrorMessage } from '../../../../helpers/error.helper';
+import { MessageBusService } from '../../../../services/messageBus.service';
 
 @Component({})
 export default class PictureInput extends Vue {
@@ -22,8 +23,6 @@ export default class PictureInput extends Vue {
 
     processing: boolean = false;
     cameraMode: boolean = false;
-    snackbar: boolean = false;
-    errorMessage: string = "";
 
     video: any;
     canvas: any;
@@ -40,8 +39,7 @@ export default class PictureInput extends Vue {
                 this.originaPictureSrc = `data:${d.contentType};${d.contentEncoding},` + d.file;
                 this.$forceUpdate();
             }, err => {
-                this.snackbar = true;
-                this.errorMessage = getErrorMessage(err);
+                MessageBusService.emitError(getErrorMessage(err));
             });
         }
     }
@@ -99,8 +97,7 @@ export default class PictureInput extends Vue {
     handleError(e: any) {
         this.processing = false;
 
-        this.snackbar = true;
-        this.errorMessage = getErrorMessage(e);
+        MessageBusService.emitError(getErrorMessage(e));
     }
 
     loadImage(e: any) {
@@ -120,8 +117,7 @@ export default class PictureInput extends Vue {
                     this.video.srcObject = stream;
                     this.video.play();
                 }, (err: any) => {
-                    this.snackbar = true;
-                    this.errorMessage = err.name == "NotFoundError" ? "Nie wykryto podłączonej kamerki." : getErrorMessage(err);
+                    MessageBusService.emitError("NotFoundError" ? "Nie wykryto podłączonej kamerki." : getErrorMessage(err));
                 });
             }
         }
