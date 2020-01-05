@@ -38,8 +38,7 @@ namespace RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer
             await _updateSuccessfulPaymentCommand.Execute(response);
 
             //delete previously used link
-            int rows = await _removeExistingPaymentLink.Execute(userId);
-            if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
+            await _removeExistingPaymentLink.Execute(userId);
 
             //auto-assign candidate to all exams
             await _assignCandidateToExamsCommand.Execute(userId);

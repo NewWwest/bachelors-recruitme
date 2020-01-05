@@ -1,19 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using RecruitMe.Logic.Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using RecruitMe.Logic.Tests.Helpers;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Account.Login;
 using RecruitMe.Logic.Operations.Account.Helpers;
-using RecruitMe.Logic.Tests.Helpers.TestAsyncMocks;
 using System.Threading.Tasks;
-using RecruitMe.Logic.Configuration;
 
 namespace RecruitMe.Logic.Tests.Operations.Account.Login
 {
@@ -24,19 +19,7 @@ namespace RecruitMe.Logic.Tests.Operations.Account.Login
         [SetUp]
         public void Setup()
         {
-            // dbContext in-memory setup
-            var serviceProvider = new ServiceCollection()
-                                    .AddEntityFrameworkInMemoryDatabase()
-                                    .BuildServiceProvider();
-
-            var builder = new DbContextOptionsBuilder<BaseDbContext>()
-                            .UseInMemoryDatabase("InMemoryDb")
-                            .UseInternalServiceProvider(serviceProvider);
-
-            DbContext = new Mock<BaseDbContext>(builder.Options, new BusinessConfiguration());
-
-            Mock<DbSet<User>> userTable = MoqHelper.GetTableForAsync(new TestAsyncEnumerable<User>(GetUserCollection()));
-            DbContext.Setup(t => t.Users).Returns(userTable.Object);
+            DbContext = StartupHelper.GetSetUpAsyncMethod(t => t.Users, GetUserCollection());
         }
 
         [Test]
