@@ -55,8 +55,8 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             Guid token = await GenerateEmailConfirmationToken(result.Entity.Id);
             _sendEmailCommand.Execute(new EmailDto()
             {
-                Body = _endpointConfig.ConfirmEmail(token.ToString()),
-                Title = "Complete Recruit Me registration",
+                Body = EmailContentConfiguration.RegisteredBody(_endpointConfig.ConfirmEmail(token.ToString())),
+                Title = EmailContentConfiguration.RegisteredTitle,
                 To = user.Email
             });
             return result.Entity.Id;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
@@ -45,8 +46,8 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             _sendEmailCommand.Execute(new EmailDto()
             {
                 To = user.Email,
-                Title = "Email was verified",
-                Body = $"Your Email was veryfied. Now you can log to the system with candidateId {user.CandidateId}"
+                Title = EmailContentConfiguration.EmailVerifiedTitle,
+                Body = EmailContentConfiguration.EmailVerifiedBody(user.CandidateId)
             });
 
             return user.CandidateId;
