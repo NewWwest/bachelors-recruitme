@@ -6,7 +6,7 @@ namespace RecruitMe.Logic.Configuration
 {
     public class EmailContentConfiguration
     {
-        public  static string EmailVerifiedTitle => 
+        public static string EmailVerifiedTitle =>
             "Email został potwierdzony";
 
         public static string EmailVerifiedBody(string candidateID) =>

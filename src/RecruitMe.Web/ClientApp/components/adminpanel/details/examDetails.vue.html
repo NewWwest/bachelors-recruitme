@@ -18,7 +18,7 @@
                     <v-card-text>
                         <p>
                             Usunięcie egzaminu usunie również terminy wszystkim kandydatom. Jeśli chcesz usunąć użytkownika skorzystaj z panelu poniżej.
-                            Aby ułatwić korzystanie z sytemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                            Aby ułatwić korzystanie z systemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
                         </p>
                         <v-text-field readonly label="Id" v-model="exam.id" name="exam.id " type="number"></v-text-field>
                         <v-datetime-picker label="Start Egzaminu"
@@ -99,7 +99,7 @@
                             <v-card>
                                 <v-card-text>
                                     <p>
-                                        Kandydate: {{examTaker.userDisplayName}}
+                                        Kandydat: {{examTaker.userDisplayName}}
                                     </p>
                                     <p>
                                         Zaczyna o godzinie: {{examTaker.startDate.toLocaleDateString("pl")}} {{examTaker.startDate.toLocaleTimeString("pl")}}

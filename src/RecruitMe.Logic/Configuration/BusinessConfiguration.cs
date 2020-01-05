@@ -16,6 +16,6 @@ namespace RecruitMe.Logic.Configuration
         public DateTime HighestRegistrationDate { get; set; }
         public string DefaultProfileImagePath { get; set; }
         public string BaseAddress { get; set; }
-        public string BaseAddressNoSsl { get; set; }
+        public string IdentityServerUrl { get; set; }
     }
 }
