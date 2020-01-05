@@ -62,13 +62,7 @@ namespace RecruitMe.Web.Controllers
         [Route("successfulMoneyTransfer")]
         public async Task<ActionResult> SuccessfulMoneyTransfer([FromQuery] PaymentResponseDto response)
         {
-            SuccessfulMoneyTransferDto transferDto = new SuccessfulMoneyTransferDto()
-            {
-                DotpayResponse = response,
-                User = await AuthenticateUser()
-            };
-
-            await Get<SuccessfulMoneyTransferCommand>().Execute(transferDto);
+            await Get<SuccessfulMoneyTransferCommand>().Execute(response);
 
             return Ok("OK");
         }

@@ -7,19 +7,16 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer
 {
-    public class SuccessfulMoneyTransferParamValidator : BaseValidator<SuccessfulMoneyTransferDto>
+    public class SuccessfulMoneyTransferParamValidator : BaseValidator<PaymentResponseDto>
     {
         public SuccessfulMoneyTransferParamValidator()
         {
-            RuleFor(a => a.User).NotNull();
-            RuleFor(a => a.DotpayResponse).NotNull();
-
-            RuleFor(a => a.DotpayResponse.Type).Equal(OperationType.Payment);
-            RuleFor(a => a.DotpayResponse.Status).Equal(OperationStatus.Completed);
-            RuleFor(a => a.DotpayResponse.OperationAmount)
-                .Equal(p => p.DotpayResponse.OperationOriginalAmount);
-            RuleFor(a => a.DotpayResponse.OperationCurrency)
-                .Equal(p => p.DotpayResponse.OperationOriginalCurrency);
+            RuleFor(a => a.Type).Equal(OperationType.Payment);
+            RuleFor(a => a.Status).Equal(OperationStatus.Completed);
+            RuleFor(a => a.OperationAmount)
+                .Equal(p => p.OperationOriginalAmount);
+            RuleFor(a => a.OperationCurrency)
+                .Equal(p => p.OperationOriginalCurrency);
             // should check for signature also, but have no assurance that all properties in
             // PaymentResponseDto were hashed in response.Signature
             // so we check what we can

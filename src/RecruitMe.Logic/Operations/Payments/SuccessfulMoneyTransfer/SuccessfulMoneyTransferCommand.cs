@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer
 {
     public class SuccessfulMoneyTransferCommand :
-        BaseAsyncOperation<OperationResult, SuccessfulMoneyTransferDto, SuccessfulMoneyTransferParamValidator>
+        BaseAsyncOperation<OperationResult, PaymentResponseDto, SuccessfulMoneyTransferParamValidator>
     {
         private readonly UpdateSuccessfulPaymentCommand _updateSuccessfulPaymentCommand;
         private readonly RemoveExistingPaymentLink _removeExistingPaymentLink;
@@ -30,22 +30,29 @@ namespace RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer
             _updateSuccessfulPaymentCommand = updateSuccessfulPaymentCommand;
         }
 
-        protected async override Task<OperationResult> DoExecute(SuccessfulMoneyTransferDto transferDto)
+        protected async override Task<OperationResult> DoExecute(PaymentResponseDto response)
         {
-            User user = transferDto.User;
-            PaymentResponseDto response = transferDto.DotpayResponse;
+            int userId = GetUserIdFromControlLink(response);
 
             //insert successful payment
             await _updateSuccessfulPaymentCommand.Execute(response);
 
             //delete previously used link
-            int rows = await _removeExistingPaymentLink.Execute(user.Id);
+            int rows = await _removeExistingPaymentLink.Execute(userId);
             if (rows != 1) throw new Exception($"Deleted different number of rows than one. Actual value: {rows}");
 
             //auto-assign candidate to all exams
-            await _assignCandidateToExamsCommand.Execute(user);
+            await _assignCandidateToExamsCommand.Execute(userId);
 
             return new OperationSucceded();
+        }
+
+        private int GetUserIdFromControlLink(PaymentResponseDto response)
+        {
+            string control = response.Control;
+            string userId = control.Substring(0, control.IndexOf(':'));
+
+            return int.Parse(userId);
         }
     }
 }

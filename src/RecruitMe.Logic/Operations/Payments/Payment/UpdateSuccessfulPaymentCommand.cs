@@ -41,7 +41,7 @@ namespace RecruitMe.Logic.Operations.Payments.Payment
         {
             int index = control.IndexOf(':');
             int length = control.Length;
-            string id = control.Substring(index + 1, length - index);
+            string id = control.Substring(index + 1, length - index - 1);
 
             return int.Parse(id);
         }

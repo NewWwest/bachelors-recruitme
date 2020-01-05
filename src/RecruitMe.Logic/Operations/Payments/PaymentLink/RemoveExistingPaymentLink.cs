@@ -15,12 +15,12 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
         {
         }
 
-        public override Task<int> Execute(int id)
+        public async override Task<int> Execute(int id)
         {
             Data.Entities.PaymentLink paymentLink = _dbContext.PaymentLinks.Where(p => p.UserId == id).FirstOrDefault();
             _dbContext.PaymentLinks.Remove(paymentLink);
 
-            return _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

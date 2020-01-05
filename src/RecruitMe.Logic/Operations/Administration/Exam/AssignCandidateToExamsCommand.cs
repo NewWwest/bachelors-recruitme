@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace RecruitMe.Logic.Operations.Administration.Exam
 {
-    public class AssignCandidateToExamsCommand : BaseAsyncOperation<OperationResult, User>
+    public class AssignCandidateToExamsCommand : BaseAsyncOperation<OperationResult, int>
     {
         public AssignCandidateToExamsCommand(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
-        public async override Task<OperationResult> Execute(User user)
+        public async override Task<OperationResult> Execute(int userId)
         {
             List<Data.Entities.Exam> exams = await _dbContext.Exams
                 .Include(e => e.ExamCategory)
@@ -27,14 +27,14 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
             foreach (var exam in exams)
             {
-                AddExamTaker(exam, user);
+                AddExamTaker(exam, userId);
             }
 
             await _dbContext.SaveChangesAsync();
             return new OperationSucceded();
         }
 
-        private void AddExamTaker(Data.Entities.Exam exam, User user)
+        private void AddExamTaker(Data.Entities.Exam exam, int userId)
         {
             DateTime startDate;
 
@@ -49,7 +49,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
             ExamTaker examTaker = new ExamTaker()
             {
                 ExamId = exam.Id,
-                UserId = user.Id,
+                UserId = userId,
                 StartDate = startDate
             };
 
