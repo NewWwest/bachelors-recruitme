@@ -29,13 +29,17 @@ namespace RecruitMe.Logic.Data
 
         public DbSet<PersonalDocument> PersonalDocuments { get; set; }
 
-        public DbSet<ExamCategory> ExamCategories { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
+
+        public virtual DbSet<PaymentLink> PaymentLinks { get; set; }
+
+        public virtual DbSet<ExamCategory> ExamCategories { get; set; }
 
         public DbSet<Teacher> Teachers { get; set; }
 
-        public DbSet<Exam> Exams { get; set; }
+        public virtual DbSet<Exam> Exams { get; set; }
 
-        public DbSet<ExamTaker> ExamTakers { get; set; }
+        public virtual DbSet<ExamTaker> ExamTakers { get; set; }
 
         public BaseDbContext(DbContextOptions options, BusinessConfiguration businessConfiguration) : base(options)
         {

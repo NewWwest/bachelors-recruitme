@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecruitMe.Web.Services.Data;
 
 namespace RecruitMe.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191215200643_PaymentLinks")]
+    partial class PaymentLinks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,70 +30,9 @@ namespace RecruitMe.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("ConfirmationEmails");
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Exam", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("DurationInMinutes");
-
-                    b.Property<int>("ExamCategoryId");
-
-                    b.Property<int>("SeatCount");
-
-                    b.Property<DateTime>("StartDateTime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamCategoryId");
-
-                    b.ToTable("Exams");
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.ExamCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ExamType");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExamCategories");
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.ExamTaker", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ExamId");
-
-                    b.Property<float?>("Score");
-
-                    b.Property<DateTime>("StartDate");
-
-                    b.Property<int?>("TeacherId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExamId");
-
-                    b.HasIndex("TeacherId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("ExamTakers");
+                    b.ToTable("ConfirmationEmails");
                 });
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PasswordReset", b =>
@@ -105,8 +46,7 @@ namespace RecruitMe.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("PasswordResets");
                 });
@@ -117,8 +57,6 @@ namespace RecruitMe.Web.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
-
-                    b.Property<string>("DotpayOperationNumber");
 
                     b.Property<DateTime>("IssueDate");
 
@@ -181,33 +119,13 @@ namespace RecruitMe.Web.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("PersonalDataUserId");
-
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonalDataUserId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("PersonalDocuments");
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Teacher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Surname");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.User", b =>
@@ -239,32 +157,7 @@ namespace RecruitMe.Web.Migrations
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.ConfirmationEmail", b =>
                 {
                     b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
-                        .WithOne("ConfirmationEmail")
-                        .HasForeignKey("RecruitMe.Logic.Data.Entities.ConfirmationEmail", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Exam", b =>
-                {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.ExamCategory", "ExamCategory")
-                        .WithMany("Exams")
-                        .HasForeignKey("ExamCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.ExamTaker", b =>
-                {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.Exam", "Exam")
-                        .WithMany("ExamTakers")
-                        .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RecruitMe.Logic.Data.Entities.Teacher", "Teacher")
-                        .WithMany("ExamTakers")
-                        .HasForeignKey("TeacherId");
-
-                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
-                        .WithMany("ExamTakers")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -272,8 +165,8 @@ namespace RecruitMe.Web.Migrations
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PasswordReset", b =>
                 {
                     b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
-                        .WithOne("PasswordReset")
-                        .HasForeignKey("RecruitMe.Logic.Data.Entities.PasswordReset", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -307,10 +200,6 @@ namespace RecruitMe.Web.Migrations
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PersonalDocument", b =>
                 {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.PersonalData")
-                        .WithMany("Documents")
-                        .HasForeignKey("PersonalDataUserId");
-
                     b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
                         .WithMany("PersonalDocuments")
                         .HasForeignKey("UserId")

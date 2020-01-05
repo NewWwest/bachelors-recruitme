@@ -90,6 +90,18 @@ export class ApiGateway {
         });
     }
 
+    // Payments calls
+    public makePayment() {
+        let data: any = {}; // payer's data - might not use it after all, but let's keep it
+
+        return axios.post('/api/payment/processPayment', data, this.authHeader());
+    }
+
+    public isPaymentDone() {
+        return axios.get('/api/payment/isPaymentDone', this.authHeader());
+    }
+
+    // Admin Panel calls
     public listExamCategories() {
         return axios.get(`/api/administration/examCategory`, this.authHeader()).then((resp) => {
             return resp.data;
