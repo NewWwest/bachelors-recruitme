@@ -6,6 +6,7 @@ namespace RecruitMe.Logic.Configuration
 {
     public class BusinessConfiguration
     {
+        public int AllowedAccountsWithSameEmail { get; set; }
         public string AdminLogin { get; set; }
         public string InitialAdminPassword { get; set; }
         public string InitialAdminPasswordHash { get; set; }
