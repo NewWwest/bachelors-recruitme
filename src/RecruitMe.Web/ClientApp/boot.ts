@@ -53,7 +53,8 @@ const routes: any[] = [
     { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default, beforeEnter: AdminGuard },
     { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default, beforeEnter: AdminGuard },
 
-    { path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default, beforeEnter: AuthenticatedGuard }
+    { path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default, beforeEnter: AuthenticatedGuard },
+    { path: '/chat/threads', component: require('./components/chat/userList.vue.html').default, beforeEnter: AdminGuard },
 ];
 
 new Vue({

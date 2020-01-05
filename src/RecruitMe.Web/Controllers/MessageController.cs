@@ -42,6 +42,16 @@ namespace RecruitMe.Web.Controllers
             return Json(messages);
         }
 
+        [HttpGet]
+        [Route("getUserThreads")]
+        public async Task<ActionResult> GetUserThreads()
+        {
+            User admin = await AuthenticateAdmin();
+            IEnumerable<UserThreadDto> threadDtos = await Get<GetUserThreadsForAdminQuery>().Execute(admin);
+
+            return Json(threadDtos);
+        }
+
         [HttpPost]
         [Route("send")]
         public async Task<ActionResult> SendMessage([FromBody] SendDto sendDto)

@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { IMessage } from "../models/chat.models";
+import { IMessage, IUserThread } from "../models/chat.models";
 
 export class MessageService {
     private apiGateway: ApiGateway = new ApiGateway();
@@ -21,6 +21,14 @@ export class MessageService {
                 page: page,
                 data: data
             }
+        })
+    }
+
+    public getUserThreads() {
+        return this.apiGateway.getUserThreads().then(d => {
+            const data: IUserThread[] = d.data;
+
+            return data;
         })
     }
 

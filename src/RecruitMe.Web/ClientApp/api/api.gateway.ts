@@ -249,6 +249,9 @@ export class ApiGateway {
     public getMessages(person: string, page: number, pageSize: number) {
         return axios.get(`/api/messages/${person}?page=${page}&pageSize=${pageSize}`, this.authHeader());
     }
+    public getUserThreads() {
+        return axios.get('/api/messages/getUserThreads', this.authHeader());
+    }
     public sendMessage(person: string, message: string) {
         let data = {
             toId: person,

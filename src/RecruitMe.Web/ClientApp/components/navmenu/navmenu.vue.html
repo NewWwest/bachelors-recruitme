@@ -47,6 +47,14 @@
                 <v-alert>
                     Zalogowany jako Admin
                 </v-alert>
+                <v-btn to="/chat/threads">
+                    <span>Chat   
+                        <v-badge color="purple" overlap>
+                            <span slot="badge" v-if="messages">{{messages}}</span>
+                            <v-icon>chat</v-icon>
+                        </v-badge>
+                    </span>
+                </v-btn>
                 <v-btn to="/adminPanel/manage/any">
                     <span>Zarządzaj   <v-icon>account_circle</v-icon></span>
                 </v-btn>

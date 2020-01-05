@@ -36,6 +36,10 @@ export default class ChatWithComponent extends Vue {
     }
 
     getMessages(page: number = this.page) {
+        if (!this.$route.fullPath.includes("chatWith")) {
+            return;
+        }
+
         this.messageService.getMessages(this.person, page, this.pageSize).then(d => {
             if (d.page * this.pageSize >= d.count) {
                 this.readAll = true;
