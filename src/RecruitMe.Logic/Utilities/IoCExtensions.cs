@@ -28,6 +28,17 @@ namespace RecruitMe.Logic.Utilities
             }
         }
 
+        private static IDictionary<Type, Func<string, object>> conversionDictionary =
+            new Dictionary<Type, Func<string, object>>()
+            {
+                { typeof(bool), (b) => bool.Parse(b) },
+                { typeof(DateTime), (d) => DateTime.Parse(d) },
+                { typeof(decimal), (d) => decimal.Parse(d) },
+                { typeof(float), (f) => float.Parse(f) },
+                { typeof(int), (i) => int.Parse(i) },
+                { typeof(string), (s) => s }
+            };
+
         public static T AddSingletonConfiguration<T>(this IServiceCollection container, IConfiguration configuration)
         {
             Type type = typeof(T);
@@ -36,14 +47,8 @@ namespace RecruitMe.Logic.Utilities
 
             foreach (PropertyInfo property in type.GetProperties())
             {
-                if (property.PropertyType == typeof(DateTime))
-                {
-                    property.SetValue(instance, DateTime.Parse(config[property.Name]));
-                }
-                else
-                {
-                    property.SetValue(instance, config[property.Name]);
-                }
+                object value = conversionDictionary[property.PropertyType](config[property.Name]);
+                property.SetValue(instance, value);
             }
 
             container.AddSingleton(type, instance);

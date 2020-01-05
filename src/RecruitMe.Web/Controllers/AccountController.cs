@@ -57,17 +57,14 @@ namespace RecruitMe.Web.Controllers
                 return Ok();
 
             }
-            catch (Exception e)
+            catch (ValidationFailedException e)
             {
-                if (e is ValidationFailedException exc)
-                {
-                    return BadRequest(exc.ValidationResult.Errors);
-                }
-                else
-                {
-                    //Hide error to block looking up emails
-                    return Ok();
-                }
+                return BadRequest(e.ValidationResult.Errors);
+            }
+            catch (Exception)
+            {
+                //Hide error to block looking up emails
+                return Ok();
             }
         }
 
@@ -80,17 +77,14 @@ namespace RecruitMe.Web.Controllers
                 await Get<RemindLoginCommand>().Execute(request);
                 return Ok();
             }
-            catch (Exception e)
+            catch (ValidationFailedException e)
             {
-                if (e is ValidationFailedException exc)
-                {
-                    return BadRequest(exc.ValidationResult.Errors);
-                }
-                else
-                {
-                    //Hide error to block looking up emails
-                    return Ok();
-                }
+                return BadRequest(e.ValidationResult.Errors);
+            }
+            catch (Exception)
+            {
+                //Hide error to block looking up emails
+                return Ok();
             }
         }
     }
