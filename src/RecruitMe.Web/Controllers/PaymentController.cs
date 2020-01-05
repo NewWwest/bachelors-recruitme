@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
+using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Administration.Exam;
 using RecruitMe.Logic.Operations.Payments;
 using RecruitMe.Logic.Operations.Payments.Enums;
@@ -62,9 +63,11 @@ namespace RecruitMe.Web.Controllers
         [Route("successfulMoneyTransfer")]
         public async Task<ActionResult> SuccessfulMoneyTransfer([FromQuery] PaymentResponseDto response)
         {
-            await Get<SuccessfulMoneyTransferCommand>().Execute(response);
+            OperationResult result = await Get<SuccessfulMoneyTransferCommand>().Execute(response);
 
-            return Ok("OK");
+            if (result.Success)
+                return Ok("OK");
+            else return BadRequest("Operation failed");
         }
 
         [HttpGet]
