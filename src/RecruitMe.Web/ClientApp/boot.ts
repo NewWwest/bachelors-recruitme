@@ -36,7 +36,7 @@ const vuetify =  new Vuetify({
 const routes: any[] = [
     // home
     {
-        path: '/', component: require('./components/home/home.vue.html').default,
+        path: '/', component: require('./components/staticpages/home.vue.html').default,
         meta: { title: "Strona główna" },
     },
     {
