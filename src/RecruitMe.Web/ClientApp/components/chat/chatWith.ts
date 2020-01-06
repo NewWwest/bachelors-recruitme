@@ -9,12 +9,14 @@ import { isToday, toLocalTime, toLocaleDateTimeString } from '../../helpers/date
 export default class ChatWithComponent extends Vue {
     page: number = 1;
     person: string = '';
-    readonly pageSize: number = 30;
+    readonly pageSize: number = 15;
     
     msg: string = "";
 
     readAll: boolean = false;
     messages: IMessage[] = [];
+
+    fetching: boolean = false;
 
     userService: UserService = new UserService();
     messageService: MessageService = new MessageService();
@@ -22,9 +24,6 @@ export default class ChatWithComponent extends Vue {
     beforeMount() {
         this.person = this.$route.params.login;
         setInterval(this.getMessages, 15000);
-    }
-
-    mounted() {
         this.getMessages(1);
     }
 
@@ -36,27 +35,39 @@ export default class ChatWithComponent extends Vue {
     }
 
     getMessages(page: number = this.page) {
-        if (!this.$route.fullPath.includes("chatWith")) {
+        if (!this.$route.fullPath.includes("chatwith")) {
             return;
         }
 
+        this.fetching = true;
         this.messageService.getMessages(this.person, page, this.pageSize).then(d => {
-            if (d.page * this.pageSize >= d.count) {
+            this.processMessages(page, d.data);
+
+            if (d.count <= this.messages.length) {
                 this.readAll = true;
             }
 
-            this.processMessages(d.data);
+            this.fetching = false;
         });
     }
 
-    processMessages(messagesToAdd: IMessage[]) {
+    processMessages(page: number, messagesToAdd: IMessage[]) {
         // the same collections
         if (this.messages[0] && this.messages[0].timestamp == messagesToAdd[0].timestamp) {
             return;
         }
 
         // add and remove duplicates
-        this.messages.push(...messagesToAdd.reverse());
+        if (page == 1) {
+            // the newest messages
+            this.messages.push(...messagesToAdd.reverse());
+        }
+        else {
+            // the older ones
+            messagesToAdd.reverse().push(...this.messages);
+            this.messages = messagesToAdd;
+        }
+
         this.messages = this.messages.filter((v,i,a)=> {
             for (let ix = 0; ix < a.length; ix++) {
                 const el = a[ix];

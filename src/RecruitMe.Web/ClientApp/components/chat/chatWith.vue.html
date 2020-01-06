@@ -5,6 +5,12 @@
         </v-toolbar>
         <v-card-text>
             <v-list ref="mainList" shaped class="messagesList">
+                <v-list-item>
+                    <v-list-item-content >
+                        <v-btn v-if="!readAll" :enabled="!fetching" @click="getMessages(page+1)">Ściągnij więcej wiadomości</v-btn>
+                        <span class="text-center" v-else>Wszystkie wiadomości zostały przeczytane</span>
+                    </v-list-item-content>
+                </v-list-item>
                 <template v-for="message in messages">
                     <v-list-item two-line riple="0">
                         <v-spacer v-if="message.isMine"></v-spacer>

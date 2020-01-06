@@ -3,6 +3,7 @@ using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
 using RecruitMe.Logic.Operations.Abstractions;
+using RecruitMe.Logic.Operations.Messages.Commands;
 using RecruitMe.Logic.Operations.Messages.Dto;
 using RecruitMe.Logic.Operations.Messages.Validators;
 using RecruitMe.Logic.Utilities.Paging;
@@ -14,8 +15,12 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
 {
     public class GetMessagesQuery : BaseAsyncOperation<PagedResponse<MessageDto>, GetMessagesDto, GetMessagesValidator>
     {
-        public GetMessagesQuery(ILogger logger, GetMessagesValidator validator, BaseDbContext dbContext) : base(logger, validator, dbContext)
+        private readonly SetQueriedMessagesAsReadCommand _setQueriedMessagesAsReadCommand;
+
+        public GetMessagesQuery(ILogger logger, GetMessagesValidator validator, BaseDbContext dbContext,
+            SetQueriedMessagesAsReadCommand setQueriedMessagesAsReadCommand) : base(logger, validator, dbContext)
         {
+            _setQueriedMessagesAsReadCommand = setQueriedMessagesAsReadCommand;
         }
 
         protected async override Task<PagedResponse<MessageDto>> DoExecute(GetMessagesDto request)
@@ -27,12 +32,17 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
                                .Skip((request.Parameters.Page - 1) * request.Parameters.PageSize)
                                .Take(request.Parameters.PageSize)
                                .ToListAsync();
-            var countTask = _dbContext.Messages.CountAsync();
+            var countTask = _dbContext.Messages.Where(m =>
+                                    m.FromId == request.From && m.ToId == request.To ||
+                                    m.ToId == request.From && m.FromId == request.To).CountAsync();
 
             await Task.WhenAll(messagesTask, countTask);
 
             List<Message> messages = messagesTask.Result;
             int count = countTask.Result;
+
+            // Set received messages as read
+            await _setQueriedMessagesAsReadCommand.Execute(messages.Where(m => !m.IsRead));
 
             PagedResponse<MessageDto> response = new PagedResponse<MessageDto>()
             {

@@ -17,7 +17,7 @@ export default class AppComponent extends Vue {
     messages: number = 0;
 
     beforeMount() {
-        //setInterval(this.checkMessages, 30000);
+        setInterval(this.checkMessages, 20000);
     }
 
     mounted() {
