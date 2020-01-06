@@ -6,6 +6,7 @@ namespace RecruitMe.Logic.Configuration
 {
     public class BusinessConfiguration
     {
+        public int AllowedAccountsWithSameEmail { get; set; }
         public string AdminLogin { get; set; }
         public string InitialAdminPassword { get; set; }
         public string InitialAdminPasswordHash { get; set; }
@@ -15,6 +16,6 @@ namespace RecruitMe.Logic.Configuration
         public DateTime HighestRegistrationDate { get; set; }
         public string DefaultProfileImagePath { get; set; }
         public string BaseAddress { get; set; }
-        public string BaseAddressNoSsl { get; set; }
+        public string IdentityServerUrl { get; set; }
     }
 }

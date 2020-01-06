@@ -5,6 +5,7 @@ import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import { MessageService } from '../../services/message.service';
+import { MessageBusService } from '../../services/messageBus.service';
 
 @Component({
     components: {
@@ -16,6 +17,9 @@ export default class AppComponent extends Vue {
     displayName: string = "";
     messages: number = 0;
 
+    snackbar: boolean = false;
+    errorMessage: string = "";
+
     beforeMount() {
         setInterval(this.checkMessages, 20000);
     }
@@ -23,13 +27,22 @@ export default class AppComponent extends Vue {
     mounted() {
         this.userLoggedIn = new UserService().isLoggedIn();
         this.displayName = new UserService().getDisplayName();
+        MessageBusService.onError(this.showError);
+        MessageBusService.onUserChanged(this.setCurretUser);
     }
 
     setCurretUser(state: boolean) {
         this.userLoggedIn = state;
         this.displayName = new UserService().getDisplayName();
+        if (this.$route.path !== "" && this.$route.path !== "/") {
+            this.$router.push("/");
+        }
         this.$forceUpdate();
-        this.$router.push("/");
+    }
+
+    showError(evt: any) {
+        this.snackbar = true;
+        this.errorMessage = evt;
     }
 
     @Watch('$route', { immediate: true, deep: true })

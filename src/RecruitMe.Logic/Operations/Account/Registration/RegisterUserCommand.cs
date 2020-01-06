@@ -8,6 +8,7 @@ using RecruitMe.Logic.Operations.Email;
 using RecruitMe.Logic.Configuration;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace RecruitMe.Logic.Operations.Account.Registration
 {
@@ -16,21 +17,33 @@ namespace RecruitMe.Logic.Operations.Account.Registration
         private readonly PasswordHasher _passwordHasher;
         private readonly SendEmailCommand _sendEmailCommand;
         private readonly EndpointConfig _endpointConfig;
+        private readonly BusinessConfiguration _businessConfiguration;
 
         public RegisterUserCommand(ILogger logger,
             RegisterRequestValidator validator,
             BaseDbContext dbContext,
             PasswordHasher passwordHasher,
-            SendEmailCommand sendEmailCommand, 
-            EndpointConfig endpointConfig) : base(logger, validator, dbContext)
+            SendEmailCommand sendEmailCommand,
+            EndpointConfig endpointConfig,
+            BusinessConfiguration businessConfiguration) : base(logger, validator, dbContext)
         {
             _passwordHasher = passwordHasher;
             _sendEmailCommand = sendEmailCommand;
             _endpointConfig = endpointConfig;
+            _businessConfiguration = businessConfiguration;
         }
 
         protected async override Task<int> DoExecute(RegisterDto request)
         {
+            int alreaddyRegisteredUsers = _dbContext.Users.Count(u => u.Email == request.Email);
+            if (alreaddyRegisteredUsers >= _businessConfiguration.AllowedAccountsWithSameEmail)
+            {
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult("Na ten email zarejestrowanych jest już za dużo użytkowników")
+                };
+            }
+
             var user = new User
             {
                 Email = request.Email,
@@ -55,8 +68,8 @@ namespace RecruitMe.Logic.Operations.Account.Registration
             Guid token = await GenerateEmailConfirmationToken(result.Entity.Id);
             _sendEmailCommand.Execute(new EmailDto()
             {
-                Body = _endpointConfig.ConfirmEmail(token.ToString()),
-                Title = "Complete Recruit Me registration",
+                Body = EmailContentConfiguration.RegisteredBody(_endpointConfig.ConfirmEmail(token.ToString())),
+                Title = EmailContentConfiguration.RegisteredTitle,
                 To = user.Email
             });
             return result.Entity.Id;

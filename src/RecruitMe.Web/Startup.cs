@@ -78,7 +78,7 @@ namespace RecruitMe.Web
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = config.BaseAddressNoSsl;
+                    options.Authority = config.IdentityServerUrl;
                     options.ApiName = ISConfig.AuthScope;
                     options.RequireHttpsMetadata = false;
                     options.SupportedTokens = SupportedTokens.Jwt;

@@ -254,6 +254,20 @@ export class ApiGateway {
         });
     }
 
+    public downloadExamSheet(examId:number) {
+        return axios.get(`/api/administration/Exam/${examId}/sheet`, this.blobResponseAuthHeader()).then((response) => {
+            saveAs(new Blob([response.data]), `ExamSheet_${examId}.pdf`);
+        });
+    }
+
+    public uploadExamSheet(examId: number, ratingTeacherId:number, file: any) {
+        let data: FormData = new FormData();
+        data.append('teacherId', ratingTeacherId.toString());
+        data.append('file', file, 'filename');
+
+        return axios.post(`/api/administration/Exam/${examId}/sheet`, data, this.authHeader());
+    }
+
     // messages
     public checkNewMessages() {
         return axios.get('/api/messages/checknewmessages', this.authHeader());
