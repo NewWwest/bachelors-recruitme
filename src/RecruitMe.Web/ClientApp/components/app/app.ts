@@ -32,6 +32,23 @@ export default class AppComponent extends Vue {
         this.$router.push("/");
     }
 
+    @Watch('$route', { immediate: true, deep: true })
+    onUrlChange(to: any) {
+        let prefix: string = "";
+        const title: string = "RecruitMe";
+        
+        if (to.path.includes("adminPanel")) {
+            prefix = "Admin Panel - ";
+        }
+        else {
+            prefix = to.meta.title + " - ";
+        }
+
+        document.title = prefix + title;
+
+        this.checkMessages();
+    }
+
     checkMessages() {
         if (!this.$route.path.includes('chat')) {
             new MessageService().checkNewMessages().then(d => {

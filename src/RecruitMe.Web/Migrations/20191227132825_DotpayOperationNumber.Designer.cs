@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecruitMe.Web.Services.Data;
 
 namespace RecruitMe.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191227132825_DotpayOperationNumber")]
+    partial class DotpayOperationNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,30 +94,6 @@ namespace RecruitMe.Web.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ExamTakers");
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Message", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("FromId");
-
-                    b.Property<bool>("IsRead");
-
-                    b.Property<string>("Text");
-
-                    b.Property<DateTime>("Timestamp");
-
-                    b.Property<int>("ToId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromId");
-
-                    b.HasIndex("ToId");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PasswordReset", b =>
@@ -290,19 +268,6 @@ namespace RecruitMe.Web.Migrations
                     b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
                         .WithMany("ExamTakers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Message", b =>
-                {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "From")
-                        .WithMany()
-                        .HasForeignKey("FromId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "To")
-                        .WithMany()
-                        .HasForeignKey("ToId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

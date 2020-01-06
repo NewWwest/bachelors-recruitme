@@ -34,27 +34,83 @@ const vuetify =  new Vuetify({
 });
 
 const routes: any[] = [
-    { path: '/', component: require('./components/staticpages/home.vue.html').default },
-    { path: '/terms', component: require('./components/staticpages/termsOfService.vue.html').default },
-    { path: '/about', component: require('./components/staticpages/about.vue.html').default },
+    // home
+    {
+        path: '/', component: require('./components/staticpages/home.vue.html').default,
+        meta: { title: "Strona główna" },
+    },
+    {
+        path: '/terms', component: require('./components/staticpages/termsOfService.vue.html').default,
+        meta: { title: "Regulamin" },
+    },
+    {
+        path: '/about', component: require('./components/staticpages/about.vue.html').default,
+        meta: { title: "O nas" },
+    },
 
-    { path: '/account/login', component: require('./components/account/login/login.vue.html').default },
-    { path: '/account/register', component: require('./components/account/register/register.vue.html').default },
-    { path: '/account/EmailVerified', component: require('./components/account/emailverified/emailverified.vue.html').default },
+    // account
+    {
+        path: '/account/login', component: require('./components/account/login/login.vue.html').default,
+        meta: { title: "Logowanie" },
+    },
+    { 
+        path: '/account/register', component: require('./components/account/register/register.vue.html').default,
+        meta: { title: "Rejestracja" }, 
+    },
+    { 
+        path: '/account/EmailVerified', component: require('./components/account/emailverified/emailverified.vue.html').default, 
+        meta: { title: "E-mail zweryfikowany" }, 
+    },    
+    { 
+        path: '/account/resetPassword', component: require('./components/account/resetPassword/resetPassword.vue.html').default, 
+        meta: { title: "Reset hasła" }, 
+    },
+    { 
+        path: '/account/setnewPassword', component: require('./components/account/setNewPassword/setNewPassword.vue.html').default, 
+        meta: { title: "Nowe hasło" }, 
+    },
+    { 
+        path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default, 
+        meta: { title: "Przypomnij login" }, 
+    },
+    
+    // recruitment
+    { 
+        path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default, 
+        meta: { title: "Profil kandydata" }, beforeEnter: AuthenticatedGuard, 
+    },
 
-    { path: '/account/resetPassword', component: require('./components/account/resetPassword/resetPassword.vue.html').default },
-    { path: '/account/setnewPassword', component: require('./components/account/setNewPassword/setNewPassword.vue.html').default },
-    { path: '/account/remindLogin', component: require('./components/account/remindLogin/remindLogin.vue.html').default },
-
-    { path: '/recruitment/yourexams', component: require('./components/recruitment/yourexams/yourExams.vue.html').default, beforeEnter: AuthenticatedGuard },
-    { path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default, beforeEnter: AuthenticatedGuard },
-
-    { path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default, beforeEnter: AdminGuard },
-    { path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default, beforeEnter: AdminGuard },
-    { path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default, beforeEnter: AdminGuard },
-
-    { path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default, beforeEnter: AuthenticatedGuard },
-    { path: '/chat/threads', component: require('./components/chat/userList.vue.html').default, beforeEnter: AdminGuard },
+    // payments
+    {
+        path: '/payments/makepayment', component: require('./components/payments/makePayment/makePayment.vue.html').default,
+        meta: { title: "Status płatności" }, beforeEnter: AuthenticatedGuard, 
+    },
+    { 
+        path: '/payments/thankyou', component: require('./components/payments/thankYou/thankYou.vue.html').default, 
+        meta: { title: "Dziękujemy za płatność" }, beforeEnter: AuthenticatedGuard, 
+    },
+    
+    // admin panel
+    { 
+        path: '/adminPanel/manage/:entityType', component: require('./components/adminpanel/manage/manage.vue.html').default, 
+        meta: { title: "Zarządzaj" }, beforeEnter: AdminGuard, 
+    },
+    { 
+        path: '/adminPanel/add/:entityType', component: require('./components/adminpanel/add/add.vue.html').default, 
+        meta: { title: "Dodaj" }, beforeEnter: AdminGuard, 
+    },
+    { 
+        path: '/adminPanel/details/:entityType/:id', component: require('./components/adminpanel/details/details.vue.html').default, 
+        meta: { title: "Szczegóły" }, beforeEnter: AdminGuard, 
+    },
+    {
+        path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default,
+        meta: { title: "Chat" }, beforeEnter: AuthenticatedGuard, 
+    },
+    {
+        path: '/chat/threads', component: require('./components/chat/userList.vue.html').default,
+        meta: { title: "Chat" }, beforeEnter: AdminGuard,
+    }
 ];
 
 new Vue({
