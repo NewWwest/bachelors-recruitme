@@ -3,27 +3,25 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { RecruitmentService } from '../../../services/recruitment.service';
 import { ApiGateway } from '../../../api/api.gateway';
-import { IExamDataDto, RecrutationStatus } from '../../../models/recruit.models';
+import { IMyExamsDto, IMyExamDto } from '../../../models/recruit.models';
 import { toLocalTime } from '../../../helpers/datetime.helper';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 import { getErrorMessage } from '../../../helpers/error.helper';
 import { MessageBusService } from '../../../services/messageBus.service';
 
 @Component({})
-export default class YourExamsComponent extends Vue {
-    RecrutationStatusEnum = RecrutationStatus;
+export default class MyExamsComponent extends Vue {
     userService: UserService = new UserService();
     recruitmentService: RecruitmentService = new RecruitmentService();
     apiGateway: ApiGateway = new ApiGateway();
-    exams: IExamDataDto[] = [];
+    exams: IMyExamDto[] = [];
     examsFormatted: any[] = [];
-    status: RecrutationStatus | null = null;
 
+    loaded: boolean = false;
     mounted() {
         this.recruitmentService.examsAndStatus().then(d => {
             this.exams = d.exams;
-            this.status = d.status;
-            this.examsFormatted = d.exams.map((e: IExamDataDto, i: number) => {
+            this.examsFormatted = d.exams.map((e: IMyExamDto, i: number) => {
                 let tempDate = toLocalTime(e.startTime);
                 return {
                     durationInMinutes: e.durationInMinutes,
@@ -34,6 +32,7 @@ export default class YourExamsComponent extends Vue {
                     key: i
                 };
             });
+            this.loaded = true;
         }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 }

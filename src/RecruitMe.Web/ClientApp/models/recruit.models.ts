@@ -35,21 +35,13 @@ export interface IDocument {
     contentType: string;
 }
 
-export interface IExamDataDto {
+export interface IMyExamDto {
     durationInMinutes: number;
     startTime: Date;
     categoryName: string;
     examType: ExamType;
 }
 
-export interface IExamsAndStatusDto {
-    status: RecrutationStatus;
-    exams: IExamDataDto[];
-}
-
-export enum RecrutationStatus {
-    Registration = 1,
-    Examination = 2,
-    Accepted = 3,
-    Declined = 4
+export interface IMyExamsDto {
+    exams: IMyExamDto[];
 }
