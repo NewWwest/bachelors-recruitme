@@ -79,6 +79,10 @@ const routes: any[] = [
         path: '/recruitment/profile', component: require('./components/recruitment/profile/profile.vue.html').default, 
         meta: { title: "Profil kandydata" }, beforeEnter: AuthenticatedGuard, 
     },
+    {
+        path: '/recruitment/myexams', component: require('./components/recruitment/myexams/myExams.vue.html').default,
+        meta: { title: "Moje Egzaminy" }, beforeEnter: AuthenticatedGuard,
+    },
 
     // payments
     {

@@ -1,7 +1,7 @@
 ﻿import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { ApiGateway } from '../../../api/api.gateway';
-import { IProfileData } from '../../../models/recruit.models';
+import { IProfileData, RecruitmentStatus } from '../../../models/recruit.models';
 import { SystemEntity, IExam, IExamTaker, ITeacher } from '../../../models/administraion.models';
 import { toLocalTime } from '../../../helpers/datetime.helper';
 import { MessageBusService } from '../../../services/messageBus.service';
@@ -9,6 +9,7 @@ import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class CandidateDetailsComponent extends Vue {
+    RecruitmentStatusEnum = RecruitmentStatus;
     apiGateway = new ApiGateway();
     @Prop()
     candidateId: number | undefined;
@@ -34,9 +35,9 @@ export default class CandidateDetailsComponent extends Vue {
 
     fetchProfile() {
         this.apiGateway.getProfile(this.candidateId as number).then(
-            d => this.profile = d,
+            d => this.setprofile(d),
             err => MessageBusService.emitError(getErrorMessage(err)));
-        this.apiGateway.listExamsForUser(this.candidateId).then(d => {
+        this.apiGateway.listExamsForUser(this.candidateId as number).then(d => {
             this.setUserExams(d);
         }, err => MessageBusService.emitError(getErrorMessage(err)));
         this.apiGateway.listExams().then(d => {
@@ -59,9 +60,9 @@ export default class CandidateDetailsComponent extends Vue {
     }
 
     handleSubmit() {
-        this.apiGateway.updateProfile(this.profile).then(d => {
-            this.profile = d;
-        }, err => MessageBusService.emitError(getErrorMessage(err)));
+        this.apiGateway.updateUser(this.profile).then(
+            d => this.setprofile(d),
+            err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     getIdentityCard() {
@@ -76,9 +77,9 @@ export default class CandidateDetailsComponent extends Vue {
     }
 
     deleteDocument(fileId: number) {
-        this.apiGateway.deleteDocument(fileId, this.profile.userId).then(d => {
-            this.profile = d.data;
-        }, err => MessageBusService.emitError(getErrorMessage(err)));
+        this.apiGateway.deleteDocument(fileId, this.profile.userId).then(
+            d => this.setprofile(d.data),
+            err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
     downloadDocument(fileId: number) {
@@ -121,6 +122,12 @@ export default class CandidateDetailsComponent extends Vue {
         }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 
+    setprofile(newProfile: IProfileData) {
+        this.profile = newProfile;
+        if (!this.profile.status) {
+            this.profile.status = 0;
+        }
+    }
     setUserExams(data: IExamTaker[]) {
         this.newExamTaker = {} as IExamTaker;
         this.userExams = data;

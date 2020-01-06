@@ -3,7 +3,7 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { RecruitmentService } from '../../../services/recruitment.service';
 import { PictureConfirmedEvent } from './pictureInput/pictureConfirmed.event';
-import { IProfileData } from '../../../models/recruit.models';
+import { IProfileData, RecruitmentStatus } from '../../../models/recruit.models';
 import { ApiGateway } from '../../../api/api.gateway';
 import { getErrorMessage } from '../../../helpers/error.helper';
 import { MessageBusService } from '../../../services/messageBus.service';
@@ -14,6 +14,7 @@ import { MessageBusService } from '../../../services/messageBus.service';
     }
 })
 export default class ProfileComponent extends Vue {
+    RecruitmentStatusEnum = RecruitmentStatus;
     adress: string = "";
     fatherName: string = "";
     motherName: string = "";

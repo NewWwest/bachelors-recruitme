@@ -110,7 +110,7 @@ namespace RecruitMe.Web.Controllers
         {
             User user = await AuthenticateUser();
 
-            ExamsAndStatusDto result = await Get<GetExamsAndStatusQuery>().Execute(user.Id);
+            MyExamsDto result = await Get<GetMyExamsQuery>().Execute(user.Id);
             return Ok(result);
         }
     }

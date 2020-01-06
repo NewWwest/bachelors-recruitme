@@ -17,17 +17,19 @@ namespace RecruitMe.Web
     {
         public static void Main(string[] args)
         {
+
+            BuildWebHost(args).Run();
+        }
+
+        public static IWebHost BuildWebHost(string[] args)
+        {
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false)
                 .AddJsonFile($"appsettings.{env}.json", optional: true)
                 .Build();
 
-            BuildWebHost(args, config).Run();
-        }
-
-        public static IWebHost BuildWebHost(string[] args, IConfiguration config) =>
-            WebHost.CreateDefaultBuilder(args)
+            return WebHost.CreateDefaultBuilder(args)
             .UseKestrel(opts =>
             {
                 opts.Listen(IPAddress.Any, int.Parse(config["https_port"]), listenOptions =>
@@ -40,5 +42,6 @@ namespace RecruitMe.Web
             })
             .UseStartup<Startup>()
             .Build();
+        }
     }
 }

@@ -7,7 +7,6 @@ export class MessageBusService {
         this.internalBus.$on("app-error", handler);
     }
     static emitError(data: string) {
-        console.log("xd2")
         this.internalBus.$emit("app-error", data);
     }
 

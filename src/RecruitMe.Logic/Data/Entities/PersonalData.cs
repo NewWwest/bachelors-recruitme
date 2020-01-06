@@ -22,6 +22,8 @@ namespace RecruitMe.Logic.Data.Entities
 
         public int? ProfilePictureFileId { get; set; }
 
+        public RecruitmentStatus? Status { get; set; }
+
         public virtual PersonalDocument ProfilePictureFile { get; set; }
 
         public virtual IEnumerable<PersonalDocument> Documents { get; set; }
