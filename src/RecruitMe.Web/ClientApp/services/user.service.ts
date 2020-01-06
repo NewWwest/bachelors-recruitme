@@ -1,7 +1,9 @@
-import { ApiGateway } from "../api/api.gateway";
+﻿import { ApiGateway } from "../api/api.gateway";
 import { IRegistrationRequest, IAuthenticationResult, IJwtClaims, IResetPasswordRequest, ISetNewPassword, IRemindLoginRequest } from "../models/user.models";
 import { LocalStorageService } from "./localStorage.service";
 import { AxiosResponse } from "axios";
+import { MessageBusService } from "./messageBus.service";
+import { getErrorMessage } from "../helpers/error.helper";
 
 export class UserService {
     private _apiGateway: ApiGateway = new ApiGateway();
@@ -10,6 +12,7 @@ export class UserService {
         return this._apiGateway.login(email, password).then(
             (response: AxiosResponse<IAuthenticationResult>) => {
                 if (response == null || response.data == null) {
+                    MessageBusService.emitError(getErrorMessage(null, "Logowanie się nie powiodło, spróbuj jeszcze raz lub skontaktuj się z administratorem"));
                     throw new Error();
                 }
 
@@ -20,11 +23,13 @@ export class UserService {
                 LocalStorageService.setName(jwt.name);
                 LocalStorageService.setSurname(jwt.surname);
                 LocalStorageService.setIsAdmin(jwt.isadmin == "1");
+                MessageBusService.emitUserChanged(true);
 
                 return true;
             },
             (err: any) => {
-                console.error(err);
+                console.log("xdxd")
+                MessageBusService.emitError(getErrorMessage(err, "Logowanie się nie powiodło, spróbuj jeszcze raz lub skontaktuj się z administratorem"));
                 throw new Error();
             })
     }
@@ -33,11 +38,12 @@ export class UserService {
         return this._apiGateway.register(registrationModel).then(
             (response: AxiosResponse<number>) => {
                 if (response == null || response.data == null) {
+                    MessageBusService.emitError(getErrorMessage(null, "Rejestracja się nie powiodła, spróbuj jeszcze raz lub skontaktuj się z administratorem"));
                     throw new Error();
                 }
 
             }, (err: any) => {
-                console.error(err);
+                MessageBusService.emitError(getErrorMessage(err, "Rejestracja się nie powiodła, spróbuj jeszcze raz lub skontaktuj się z administratorem"));
                 throw err.response;
             });
     }
@@ -45,9 +51,9 @@ export class UserService {
     public resetPassword(resetmodel: IResetPasswordRequest): Promise<void> {
         return this._apiGateway.resetPassword(resetmodel).then(
             (response: AxiosResponse<number>) => {
-                
+                return response;
             }, (err: any) => {
-                console.error(err);
+                MessageBusService.emitError(getErrorMessage(err));
                 throw err;;
             });
     }
@@ -55,9 +61,9 @@ export class UserService {
     public setNewPassword(resetModel: ISetNewPassword): Promise<void> {
         return this._apiGateway.setNewPassword(resetModel).then(
             (response: AxiosResponse<number>) => {
-
+                return response;
             }, (err: any) => {
-                console.error(err);
+                MessageBusService.emitError(getErrorMessage(err));
                 throw err;;
             });
     }
@@ -65,10 +71,10 @@ export class UserService {
     public remindLogin(remindModel: IRemindLoginRequest): Promise<void> {
         return this._apiGateway.remindLogin(remindModel).then(
             (response: AxiosResponse<string>) => {
-
+                return response;
             }, (err: any) => {
-                console.error(err);
-                throw err;;
+                MessageBusService.emitError(getErrorMessage(err));
+                throw err;
             });
     }
 
@@ -79,6 +85,7 @@ export class UserService {
         LocalStorageService.resetName();
         LocalStorageService.resetSurname();
         LocalStorageService.resetIsAdmin();
+        MessageBusService.emitUserChanged(false);
     }
 
     public getDisplayName(): string {
@@ -113,5 +120,4 @@ export class UserService {
             throw e;
         }
     }
-
 }

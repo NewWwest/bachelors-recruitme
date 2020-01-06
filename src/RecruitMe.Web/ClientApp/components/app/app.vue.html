@@ -1,8 +1,16 @@
 <template>
     <div id='app-root' class="container-fluid">
         <v-app>
-            <menu-component @user-logged-in="setCurretUser" :userLoggedIn="userLoggedIn" :displayName="displayName"/>
-            <router-view @user-logged-in="setCurretUser"></router-view>
+            <menu-component :userLoggedIn="userLoggedIn" :displayName="displayName" />
+            <router-view></router-view>
+
+            <v-snackbar v-model="snackbar">
+                <div v-html="errorMessage">
+                </div>
+                <v-btn color="pink" text @click="snackbar = false">
+                    Zamknij
+                </v-btn>
+            </v-snackbar>
         </v-app>
     </div>
 </template>

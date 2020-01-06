@@ -53,7 +53,7 @@ namespace RecruitMe.Logic.Data
 
         public void EnsureCreated()
         {
-            Database.EnsureCreated();
+            Database.Migrate();
             var admin = Users.FirstOrDefault(u => u.CandidateId == businessConfiguration.AdminLogin);
             if(admin == null)
             {

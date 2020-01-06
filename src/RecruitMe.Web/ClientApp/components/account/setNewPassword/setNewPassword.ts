@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
-import { IRegistrationRequest, IResetPasswordRequest, ISetNewPassword } from '../../../models/user.models';
+import { ISetNewPassword } from '../../../models/user.models';
 import { ValidationService } from '../../../services/validation.service';
-import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class SetNewPassword extends Vue {
@@ -13,8 +12,6 @@ export default class SetNewPassword extends Vue {
 
     fetching: boolean = false;
     newPasswordSet: boolean = false;
-    snackbar: boolean = false;
-    errorMessage: string = "";
 
     userService: UserService = new UserService();
 
@@ -35,8 +32,6 @@ export default class SetNewPassword extends Vue {
                 this.newPasswordSet = true;
             }, (err) => {
                 this.fetching = false;
-                this.snackbar = true;
-                this.errorMessage = getErrorMessage(err);
             }
         )
     }

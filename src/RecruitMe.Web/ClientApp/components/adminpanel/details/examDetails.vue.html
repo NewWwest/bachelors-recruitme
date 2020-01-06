@@ -8,71 +8,117 @@
             Wróć
         </v-btn>
         <div class="row">
-            <v-card class="ml-3 mr-3 col-md-10 col-lg-5">
-                <v-card-title>
-                    <h3 class="d-inline-block">
-                        Podstawowe dane
-                    </h3>
-                </v-card-title>
-                <v-card-text>
-                    <p>
-                        Usunięcie egzaminu usunie również terminy wszystkim kandydatom. Jeśli chcesz usunąć użytkownika skorzystaj z panelu poniżej.
-                        Aby ułatwić korzystanie z sytemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
-                    </p>
-                    <v-text-field readonly label="Id" v-model="exam.id" name="exam.id " type="number"></v-text-field>
-                    <v-datetime-picker label="Start Egzaminu"
-                                       v-model="exam.startDateTime">
-                    </v-datetime-picker>
-                    <v-text-field label="Liczba osób" v-model="exam.seatCount" name="exam.seatCount" type="number"></v-text-field>
-                    <v-text-field label="Czas trwania" v-model="exam.durationInMinutes" name="exam.durationInMinutes" type="number"></v-text-field>
-                    <v-select v-model="exam.examCategoryId"
-                              :items="examCategories"
-                              label="Kategoria egzaminu"
-                              item-text="name"
-                              item-value="id"></v-select>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn @click="handleDelete">
-                        Usun
-                    </v-btn>
-                    <v-btn @click="handleSubmit">
-                        Zapisz
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
+            <div class="col-md-10 col-lg-5">
+                <v-card class="m-1">
+                    <v-card-title>
+                        <h3 class="d-inline-block">
+                            Podstawowe dane
+                        </h3>
+                    </v-card-title>
+                    <v-card-text>
+                        <p>
+                            Usunięcie egzaminu usunie również terminy wszystkim kandydatom. Jeśli chcesz usunąć użytkownika skorzystaj z panelu poniżej.
+                            Aby ułatwić korzystanie z systemu, upewnij się przed rozpoczęciem rekrutacji, że obiekty są poprawnie przygotowane.
+                        </p>
+                        <v-text-field readonly label="Id" v-model="exam.id" name="exam.id " type="number"></v-text-field>
+                        <v-datetime-picker label="Start Egzaminu"
+                                           v-model="exam.startDateTime">
+                        </v-datetime-picker>
+                        <v-text-field label="Liczba osób" v-model="exam.seatCount" name="exam.seatCount" type="number"></v-text-field>
+                        <v-text-field label="Czas trwania" v-model="exam.durationInMinutes" name="exam.durationInMinutes" type="number"></v-text-field>
+                        <v-select v-model="exam.examCategoryId"
+                                  :items="examCategories"
+                                  label="Kategoria egzaminu"
+                                  item-text="name"
+                                  item-value="id"></v-select>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn @click="handleDelete">
+                            Usun
+                        </v-btn>
+                        <v-btn @click="handleSubmit">
+                            Zapisz
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
 
-            <v-card class="ml-3 mr-3 col-md-10 col-lg-5">
-                <v-card-title>
-                    <h3 class="d-inline-block">
-                        Uczestnicy Egzaminu
-                    </h3>
-                </v-card-title>
+                <v-card class="m-1">
+                    <v-card-title>
+                        <h3 class="d-inline-block">
+                            Karta egzaminacyjna
+                        </h3>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row class="ml-1">
+                            <span>Pobierz kartę egzaminacyjną:</span>
+                        </v-row>
+                        <v-row class="m-1">
+                            <v-btn class="col-6" @click="downloadExamSheet">
+                                Wygeneruj pdf
+                            </v-btn>
+                        </v-row>
 
-                <v-card-text>
-                    <p>
-                        Obecnie na egzamin zapisanych jest {{examTakers.length}} na {{exam.seatCount}} kandydatów
-                    </p>
-                    <div v-for="examTaker in examTakers">
-                        <v-card>
-                            <v-card-text>
-                                <p>
-                                    Kandydate: {{examTaker.userDisplayName}}
-                                </p>
-                                <p>
-                                    Zaczyna o godzinie: {{examTaker.startDate.toLocaleDateString("pl")}} {{examTaker.startDate.toLocaleTimeString("pl")}}
-                                </p>
-                                <p v-if="examTaker.score">
-                                    Otrzymał ocenę: {{examTaker.score}}
-                                </p>
-                                <p v-if="examTaker.teacherDisplayName">
-                                    Ocenę wystawił: {{examTaker.teacherDisplayName}}
-                                </p>
-                                <v-btn @click="deleteUserTaker(examTaker.userId, examTaker.id)">Usuń   <v-icon>delete</v-icon></v-btn>
-                            </v-card-text>
-                        </v-card>
-                    </div>
-                </v-card-text>
-            </v-card>
+                        <v-row class="ml-1 mt-2">
+                            <span>Wgraj kartę egzaminacyjną:</span>
+                        </v-row>
+                        <v-row>
+                            <v-select :disabled="processingOmr"
+                                      class="col-5" v-model="ratingTeacher"
+                                      :items="teachers"
+                                      label="Oceniający"
+                                      item-text="name"
+                                      item-value="id">
+                            </v-select>
+                        </v-row>
+                        <v-row class="ml-1">
+                            <v-btn :disabled="processingOmr" class="col-6" @click="$refs.sheetInput.click()">
+                                Wybierz plik
+                                <input type="file" @change="uploadExamSheet" accept="image/*" style="display: none;" ref="sheetInput">
+                            </v-btn>
+                            <v-progress-circular v-if="processingOmr" size="30" width="3" indeterminate color="light-blue">
+
+                            </v-progress-circular>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </div>
+
+            <div class="col-md-10 col-lg-5">
+                <v-card class="m-1">
+                    <v-card-title>
+                        <h3 class="d-inline-block">
+                            Uczestnicy Egzaminu
+                        </h3>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <p>
+                            Obecnie na egzamin zapisanych jest {{examTakers.length}} na {{exam.seatCount}} kandydatów
+                        </p>
+                        <div v-for="examTaker in examTakers">
+                            <v-card>
+                                <v-card-text>
+                                    <p>
+                                        Kandydat: {{examTaker.userDisplayName}}
+                                    </p>
+                                    <p>
+                                        Zaczyna o godzinie: {{examTaker.startDate.toLocaleDateString("pl")}} {{examTaker.startDate.toLocaleTimeString("pl")}}
+                                    </p>
+                                    <p v-if="examTaker.score">
+                                        Otrzymał ocenę: {{examTaker.score}}
+                                    </p>
+                                    <p v-if="examTaker.teacherDisplayName">
+                                        Ocenę wystawił: {{examTaker.teacherDisplayName}}
+                                    </p>
+                                    <v-btn @click="deleteUserTaker(examTaker.userId, examTaker.id)">Usuń   <v-icon>delete</v-icon></v-btn>
+                                </v-card-text>
+                            </v-card>
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </div>
+
+
         </div>
     </div>
 </template>

@@ -3,7 +3,6 @@ import { Component } from 'vue-property-decorator';
 import { UserService } from '../../../services/user.service';
 import { IResetPasswordRequest } from '../../../models/user.models';
 import { ValidationService } from '../../../services/validation.service';
-import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class ResetPassword extends Vue {
@@ -12,14 +11,8 @@ export default class ResetPassword extends Vue {
 
     fetching: boolean = false;
     passwordResetCompleted: boolean = false;
-    snackbar: boolean = false;
-    errorMessage: string = "";
 
     userService: UserService = new UserService();
-
-    constructor() {
-        super();
-    }
 
     handleSubmit() {
         this.fetching = true;
@@ -34,8 +27,6 @@ export default class ResetPassword extends Vue {
                 this.passwordResetCompleted = true;
             }, (err) => {
                 this.fetching = false;
-                this.snackbar = true;
-                this.errorMessage = getErrorMessage(err);
             }
         )
     }

@@ -114,7 +114,7 @@ namespace RecruitMe.Web.Controllers
 
         [HttpDelete]
         [Route("{userId}/exams/{id}/")]
-        public async Task<ActionResult> AddOrUpdateExamTaker(int userId, int id)
+        public async Task<ActionResult> DeleteExamTaker(int userId, int id)
         {
             await AuthenticateAdmin();
 

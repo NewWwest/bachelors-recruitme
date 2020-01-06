@@ -7,6 +7,7 @@ import { IExamDataDto, RecrutationStatus } from '../../../models/recruit.models'
 import { toLocalTime } from '../../../helpers/datetime.helper';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
 import { getErrorMessage } from '../../../helpers/error.helper';
+import { MessageBusService } from '../../../services/messageBus.service';
 
 @Component({})
 export default class YourExamsComponent extends Vue {
@@ -18,14 +19,11 @@ export default class YourExamsComponent extends Vue {
     examsFormatted: any[] = [];
     status: RecrutationStatus | null = null;
 
-    snackbar: boolean = false;
-    errorMessage: string = "";
-
     mounted() {
         this.recruitmentService.examsAndStatus().then(d => {
             this.exams = d.exams;
             this.status = d.status;
-            this.examsFormatted = d.exams.map((e: IExamDataDto,i:number) => {
+            this.examsFormatted = d.exams.map((e: IExamDataDto, i: number) => {
                 let tempDate = toLocalTime(e.startTime);
                 return {
                     durationInMinutes: e.durationInMinutes,
@@ -36,10 +34,6 @@ export default class YourExamsComponent extends Vue {
                     key: i
                 };
             });
-        }, err => {
-            console.error(err);
-            this.snackbar = true;
-            this.errorMessage = getErrorMessage(err);
-        });
+        }, err => MessageBusService.emitError(getErrorMessage(err)));
     }
 }

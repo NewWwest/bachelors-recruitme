@@ -4,6 +4,8 @@ import { SystemEntity, IExamCategory, IExam } from '../../../models/administraio
 import { ApiGateway } from '../../../api/api.gateway';
 import { toLocalTime } from '../../../helpers/datetime.helper';
 import { ExamTypeDisplayName } from '../../../helpers/examType.helper';
+import { MessageBusService } from '../../../services/messageBus.service';
+import { getErrorMessage } from '../../../helpers/error.helper';
 
 @Component({})
 export default class ManageComponent extends Vue {
@@ -146,19 +148,18 @@ export default class ManageComponent extends Vue {
                             name: category.name,
                             examTypeName: ExamTypeDisplayName(category.examType)
                         };
-                    }, (err: any) => {
-                        console.error(err);
                     });
+
                     this.rowsTotal = resp.length;
                     this.pagination.page = 1;
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
             case SystemEntity.Teacher:
                 this.apiGateway.listTeachers().then(resp => {
                     this.items = resp;
                     this.rowsTotal = resp.length;
                     this.pagination.page = 1;
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
             case SystemEntity.Exam:
                 this.apiGateway.listExams().then(exams => {
@@ -166,13 +167,11 @@ export default class ManageComponent extends Vue {
                         this.apiGateway.listExamCategories().then(categories => {
                             this.examCategories = categories;
                             this.mapExams(exams);
-                        }, (err: any) => {
-                            console.error(err);
-                        });
+                        }, err => MessageBusService.emitError(getErrorMessage(err)));
                     } else {
                         this.mapExams(exams);
                     }
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
             case SystemEntity.Candidate:
                 let paging: any = {
@@ -184,9 +183,7 @@ export default class ManageComponent extends Vue {
                 this.apiGateway.listCandidates(paging).then(x => {
                     this.items = x.data;
                     this.rowsTotal = x.total;
-                }, e => {
-                    console.error(e);
-                });
+                }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
             default:
         }

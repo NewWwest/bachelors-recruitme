@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data;
 using RecruitMe.Logic.Data.Entities;
 using RecruitMe.Logic.Logging;
@@ -48,8 +49,8 @@ namespace RecruitMe.Logic.Operations.Account.RemindLogin
             _sendEmailCommand.Execute(new EmailDto()
             {
                 To = user.Email,
-                Title = "Login reminder from RecruitMe System",
-                Body = $"Your Login is: {user.CandidateId}"
+                Title = EmailContentConfiguration.LoginRemindedTitle,
+                Body = EmailContentConfiguration.LoginRemindedBody(user.CandidateId)
             });
             return new OperationSucceded();
         }
