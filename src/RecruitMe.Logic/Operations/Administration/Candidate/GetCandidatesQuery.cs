@@ -24,8 +24,9 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
 
         public override PagedResponse<GetCandidatesResultDto> Execute(PagingParameters request)
         {
-            var dataTask = Get(_dbContext.Users
-                .Where(u => u.CandidateId != _businessConfiguration.AdminLogin), request)
+            var dataTask = Get(
+                _dbContext.Users.Where(u => u.CandidateId != _businessConfiguration.AdminLogin),
+                request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();

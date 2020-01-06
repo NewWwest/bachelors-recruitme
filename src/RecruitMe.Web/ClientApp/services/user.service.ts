@@ -28,7 +28,6 @@ export class UserService {
                 return true;
             },
             (err: any) => {
-                console.log("xdxd")
                 MessageBusService.emitError(getErrorMessage(err, "Logowanie się nie powiodło, spróbuj jeszcze raz lub skontaktuj się z administratorem"));
                 throw new Error();
             })
@@ -116,7 +115,7 @@ export class UserService {
             return JSON.parse(jsonPayload);
         }
         catch (e) {
-            console.error(e);
+            MessageBusService.emitError(getErrorMessage(e));
             throw e;
         }
     }

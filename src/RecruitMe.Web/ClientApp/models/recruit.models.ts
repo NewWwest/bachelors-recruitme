@@ -24,6 +24,7 @@ export interface IProfileData {
     primarySchool: string;
     profilePictureName: string;
     profilePictureFileId: number | undefined;
+    status?: RecruitmentStatus;
 
     documents: IDocument[];
 }
@@ -44,4 +45,10 @@ export interface IMyExamDto {
 
 export interface IMyExamsDto {
     exams: IMyExamDto[];
+}
+
+export enum RecruitmentStatus {
+    //0 or null not decided
+    Accepted = 1,
+    Rejected = 2,
 }
