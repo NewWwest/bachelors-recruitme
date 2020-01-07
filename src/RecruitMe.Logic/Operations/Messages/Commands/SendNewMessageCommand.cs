@@ -7,6 +7,7 @@ using RecruitMe.Logic.Operations.Abstractions;
 using RecruitMe.Logic.Operations.Messages.Dto;
 using RecruitMe.Logic.Operations.Messages.Queries;
 using RecruitMe.Logic.Operations.Messages.Validators;
+using RecruitMe.Logic.Utilities.Dates;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,11 +17,13 @@ namespace RecruitMe.Logic.Operations.Messages.Commands
 {
     public class SendNewMessageCommand : BaseAsyncOperation<MessageDto, SendDto, SendDtoValidator>
     {
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly GetAdminOrUserIdQuery _getAdminOrUserIdQuery;
 
         public SendNewMessageCommand(ILogger logger, SendDtoValidator validator, BaseDbContext dbContext,
-            GetAdminOrUserIdQuery getAdminOrUserIdQuery) : base(logger, validator, dbContext)
+            GetAdminOrUserIdQuery getAdminOrUserIdQuery, IDateTimeProvider dateTimeProvider) : base(logger, validator, dbContext)
         {
+            _dateTimeProvider = dateTimeProvider;
             _getAdminOrUserIdQuery = getAdminOrUserIdQuery;
         }
 
@@ -33,7 +36,7 @@ namespace RecruitMe.Logic.Operations.Messages.Commands
                 FromId = request.FromId,
                 IsRead = false,
                 Text = request.Message,
-                Timestamp = DateTime.Now,
+                Timestamp = _dateTimeProvider.Now,
                 ToId = toId,
             };
 

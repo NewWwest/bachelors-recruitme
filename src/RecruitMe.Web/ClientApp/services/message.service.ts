@@ -1,5 +1,6 @@
 import { ApiGateway } from "../api/api.gateway";
 import { IMessage, IUserThread } from "../models/chat.models";
+import { LocalStorageService } from "./localStorage.service";
 
 export class MessageService {
     private apiGateway: ApiGateway = new ApiGateway();
@@ -7,6 +8,9 @@ export class MessageService {
     public checkNewMessages(): Promise<number> {
         return this.apiGateway.checkNewMessages().then(d => {
             return d.data;
+        }, err => {
+            console.error(err);
+            throw err;
         })
     }
 
@@ -21,23 +25,30 @@ export class MessageService {
                 page: page,
                 data: data
             }
+        }, err => {
+            console.error(err);
+            throw err;
         })
     }
 
     public getUserThreads() {
         return this.apiGateway.getUserThreads().then(d => {
             const data: IUserThread[] = d.data;
-
             return data;
+        }, err => {
+            console.error(err);
+            throw err;
         })
     }
 
-    public sendMessage(person: string, message: string) {
-        return this.apiGateway.sendMessage(person, message).then(d => {
+    public sendMessage(to: string, message: string) {
+        const from: number | null = LocalStorageService.getUserId();
+        
+        return this.apiGateway.sendMessage(from, to, message).then(d => {
             const message: IMessage = d.data;
             return message;
         }, err => {
-            console.log(err);
+            console.error(err);
             throw err;
         })
     }

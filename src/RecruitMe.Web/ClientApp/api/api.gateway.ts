@@ -278,9 +278,10 @@ export class ApiGateway {
     public getUserThreads() {
         return axios.get('/api/messages/getUserThreads', this.authHeader());
     }
-    public sendMessage(person: string, message: string) {
+    public sendMessage(from: number | null, to: string, message: string) {
         let data = {
-            toId: person,
+            fromId: from,
+            toId: to,
             message: message
         };
 

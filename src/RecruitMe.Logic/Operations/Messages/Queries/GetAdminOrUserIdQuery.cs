@@ -13,6 +13,7 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
 {
     public class GetAdminOrUserIdQuery : BaseAsyncOperation<int, string>
     {
+        private const string C_ADMIN_USERID = "admin";
         private readonly BusinessConfiguration _businessConfiguration;
 
         public GetAdminOrUserIdQuery(ILogger logger, BaseDbContext dbContext,
@@ -25,11 +26,9 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
         {
             int id = -1;
 
-            if (userId == "admin")
+            if (userId == C_ADMIN_USERID)
             {
                 User admin = await _dbContext.Users.FirstOrDefaultAsync(u => u.CandidateId == _businessConfiguration.AdminLogin);
-                if (admin == null) throw new Exception("No admin in db");
-
                 id = admin.Id;
             }
             else

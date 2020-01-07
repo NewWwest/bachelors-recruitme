@@ -16,6 +16,7 @@ export default class ChatWithComponent extends Vue {
     readAll: boolean = false;
     messages: IMessage[] = [];
 
+    loaded: boolean = false;
     fetching: boolean = false;
 
     userService: UserService = new UserService();
@@ -48,6 +49,8 @@ export default class ChatWithComponent extends Vue {
             }
 
             this.fetching = false;
+        }, _ => {
+            this.fetching = false;
         });
     }
 
@@ -77,13 +80,7 @@ export default class ChatWithComponent extends Vue {
             }
         });
     }
-
-    // not working properly :c
-    scrollToBottom() {
-        const el = (this.$refs['mainList'].$el as Element);
-        el.scrollBy(0, el.scrollHeight + 120);
-    }
-
+    
     getDateText(timestamp: Date): string {
         const date: Date = new Date(timestamp);
         if (isToday(date)) {

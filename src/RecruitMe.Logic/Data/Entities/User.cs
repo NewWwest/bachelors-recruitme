@@ -30,7 +30,7 @@ namespace RecruitMe.Logic.Data.Entities
         public virtual PasswordReset PasswordReset { get; set; }
         public virtual IEnumerable<PersonalDocument> PersonalDocuments { get; set; }
         public virtual IEnumerable<ExamTaker> ExamTakers { get; set; }
-        
+        public virtual IEnumerable<Message> Messages { get; set; }        
 
         public override bool Equals(object obj)
         {

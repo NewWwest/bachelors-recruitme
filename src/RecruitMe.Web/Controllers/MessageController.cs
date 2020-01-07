@@ -47,7 +47,7 @@ namespace RecruitMe.Web.Controllers
         public async Task<ActionResult> GetUserThreads()
         {
             User admin = await AuthenticateAdmin();
-            IEnumerable<UserThreadDto> threadDtos = await Get<GetUserThreadsForAdminQuery>().Execute(admin);
+            IEnumerable<UserThreadDto> threadDtos = await Get<GetUserThreadsQuery>().Execute(admin);
 
             return Json(threadDtos);
         }

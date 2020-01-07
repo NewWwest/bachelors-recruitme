@@ -25,16 +25,18 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
 
         protected async override Task<PagedResponse<MessageDto>> DoExecute(GetMessagesDto request)
         {
-            var messagesTask = _dbContext.Messages.Where(m =>
+            if (request.Parameters.Page < 1)
+                request.Parameters.Page = 1;
+            
+            var queriedMessages = _dbContext.Messages.Where(m =>
                                     m.FromId == request.From && m.ToId == request.To ||
-                                    m.ToId == request.From && m.FromId == request.To)
-                               .OrderByDescending(m => m.Timestamp)
-                               .Skip((request.Parameters.Page - 1) * request.Parameters.PageSize)
-                               .Take(request.Parameters.PageSize)
-                               .ToListAsync();
-            var countTask = _dbContext.Messages.Where(m =>
-                                    m.FromId == request.From && m.ToId == request.To ||
-                                    m.ToId == request.From && m.FromId == request.To).CountAsync();
+                                    m.ToId == request.From && m.FromId == request.To);
+
+            var messagesTask = queriedMessages.OrderByDescending(m => m.Timestamp)
+                                   .Skip((request.Parameters.Page - 1) * request.Parameters.PageSize)
+                                   .Take(request.Parameters.PageSize)
+                                   .ToListAsync();
+            var countTask = queriedMessages.CountAsync();
 
             await Task.WhenAll(messagesTask, countTask);
 
