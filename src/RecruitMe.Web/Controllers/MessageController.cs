@@ -56,11 +56,8 @@ namespace RecruitMe.Web.Controllers
         [Route("send")]
         public async Task<ActionResult> SendMessage([FromBody] SendDto sendDto)
         {
-            if (sendDto.FromId == 0)
-            {
-                User user = await AuthenticateUser();
-                sendDto.FromId = user.Id;
-            }
+            User user = await AuthenticateUser();
+            sendDto.FromId = user.Id;
 
             MessageDto message = await Get<SendNewMessageCommand>().Execute(sendDto);
 

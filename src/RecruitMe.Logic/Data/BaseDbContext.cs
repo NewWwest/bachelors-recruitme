@@ -72,5 +72,17 @@ namespace RecruitMe.Logic.Data
                 SaveChanges();
             }
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(p => p.From)
+                .WithMany(p => p.SentMessages);
+            modelBuilder.Entity<Message>()
+                .HasOne(p => p.To)
+                .WithMany(p => p.ReceivedMessages);
+        }
     }
 }
