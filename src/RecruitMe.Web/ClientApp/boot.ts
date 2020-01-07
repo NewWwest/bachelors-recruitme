@@ -110,6 +110,10 @@ const routes: any[] = [
     {
         path: '/chatwith/:login', component: require('./components/chat/chatWith.vue.html').default,
         meta: { title: "Chat" }, beforeEnter: AuthenticatedGuard, 
+    },
+    {
+        path: '/chat/threads', component: require('./components/chat/userList.vue.html').default,
+        meta: { title: "Chat" }, beforeEnter: AdminGuard,
     }
 ];
 

@@ -41,6 +41,8 @@ namespace RecruitMe.Logic.Data
 
         public virtual DbSet<ExamTaker> ExamTakers { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
         public BaseDbContext(DbContextOptions options, BusinessConfiguration businessConfiguration) : base(options)
         {
             this.businessConfiguration = businessConfiguration;
@@ -69,6 +71,18 @@ namespace RecruitMe.Logic.Data
                     });
                 SaveChanges();
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(p => p.From)
+                .WithMany(p => p.SentMessages);
+            modelBuilder.Entity<Message>()
+                .HasOne(p => p.To)
+                .WithMany(p => p.ReceivedMessages);
         }
     }
 }

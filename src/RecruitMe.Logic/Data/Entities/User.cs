@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace RecruitMe.Logic.Data.Entities
@@ -31,6 +32,10 @@ namespace RecruitMe.Logic.Data.Entities
         public virtual IEnumerable<PersonalDocument> PersonalDocuments { get; set; }
         public virtual IEnumerable<ExamTaker> ExamTakers { get; set; }
         
+        [ForeignKey("ToId")]
+        public virtual IEnumerable<Message> ReceivedMessages { get; set; }
+        [ForeignKey("FromId")]
+        public virtual IEnumerable<Message> SentMessages { get; set; }
 
         public override bool Equals(object obj)
         {

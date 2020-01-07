@@ -11,6 +11,8 @@ export default class Navmenu extends Vue {
     userLoggedIn: boolean | undefined;
     @Prop()
     displayName: string | undefined;
+    @Prop()
+    messages: number | undefined;
 
     constructor() {
         super();

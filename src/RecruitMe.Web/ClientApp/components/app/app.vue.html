@@ -1,7 +1,7 @@
 <template>
     <div id='app-root' class="container-fluid">
         <v-app>
-            <menu-component :userLoggedIn="userLoggedIn" :displayName="displayName" />
+            <menu-component :userLoggedIn="userLoggedIn" :displayName="displayName" :messages="messages"/>
             <router-view></router-view>
 
             <v-snackbar v-model="snackbar">

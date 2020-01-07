@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecruitMe.Web.Services.Data;
 
 namespace RecruitMe.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200102135848_Messages")]
+    partial class Messages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,44 +137,6 @@ namespace RecruitMe.Web.Migrations
                     b.ToTable("PasswordResets");
                 });
 
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("DotpayOperationNumber");
-
-                    b.Property<DateTime>("IssueDate");
-
-                    b.Property<DateTime?>("PaidDate");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Payments");
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PaymentLink", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Link");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PaymentLinks");
-                });
-
             modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PersonalData", b =>
                 {
                     b.Property<int>("UserId");
@@ -186,8 +150,6 @@ namespace RecruitMe.Web.Migrations
                     b.Property<string>("PrimarySchool");
 
                     b.Property<int?>("ProfilePictureFileId");
-
-                    b.Property<int?>("Status");
 
                     b.HasKey("UserId");
 
@@ -313,22 +275,6 @@ namespace RecruitMe.Web.Migrations
                     b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
                         .WithOne("PasswordReset")
                         .HasForeignKey("RecruitMe.Logic.Data.Entities.PasswordReset", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.Payment", b =>
-                {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RecruitMe.Logic.Data.Entities.PaymentLink", b =>
-                {
-                    b.HasOne("RecruitMe.Logic.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

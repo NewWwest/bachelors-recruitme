@@ -1,0 +1,36 @@
+<template>
+    <card-layout className="col-md-6">
+        <v-toolbar dark>
+            <v-toolbar-title>Lista chatów</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+            <v-list shaped>
+                <template v-for="thread in userThreads" class="threadsList">
+                    <v-list-item @click="onClick(thread)">
+                        <v-list-item-content>
+                            <v-row class="margins">
+                                {{thread.displayName}}
+                                <v-spacer></v-spacer>
+                                <v-chip :color="getColorForCount(thread.newMessagesCount)"
+                                 :text-color="getTextColorForCount(thread.newMessagesCount)">
+                                    {{thread.newMessagesCount}}
+                                </v-chip>
+                            </v-row>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-list>
+        </v-card-text>
+    </card-layout>
+</template>
+<script src="./userList.ts"></script>
+<style scoped>
+    .margins {
+        margin-left: 0px!important;
+        margin-right: 0px!important;
+    }    
+    .threadsList {
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+</style>
