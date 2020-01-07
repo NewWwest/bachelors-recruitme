@@ -59,7 +59,7 @@ export class ApiGateway {
     public examsAndStatus() {
         return axios.get('/api/Recruitment/examsandstatus', this.authHeader());
     }
-    
+
     public uploadDocument(fileName: string, file: any) {
         let data: FormData = new FormData();
         data.append('file', file, fileName);
@@ -169,16 +169,10 @@ export class ApiGateway {
         });
     }
 
-    public listExamsForUser(userId: number | undefined = undefined) {
-        if (userId) {
-            return axios.get(`/api/administration/candidates/${userId}/exams`, this.authHeader()).then((resp) => {
-                return resp.data;
-            });
-        }
-        else {
-            alert("TODO")
-            return null as any as Promise<any>;
-        }
+    public listExamsForUser(userId: number) {
+        return axios.get(`/api/administration/candidates/${userId}/exams`, this.authHeader()).then((resp) => {
+            return resp.data;
+        });
     }
 
     public getExam(id: number) {
@@ -198,7 +192,7 @@ export class ApiGateway {
             return resp.data;
         });
     }
-    public deleteExamTaker(userId:number, id: number) {
+    public deleteExamTaker(userId: number, id: number) {
         return axios.delete(`/api/administration/candidates/${userId}/exams/${id}`, this.authHeader()).then((resp) => {
             return resp.data;
         });
@@ -221,8 +215,8 @@ export class ApiGateway {
         });
     }
 
-    public updateProfile(data: IProfileData) {
-        let json = {
+    public updateUser(data: IProfileData) {
+        let profileWithoutDocuments = {
             id: data.id,
             userId: data.userId,
 
@@ -237,8 +231,9 @@ export class ApiGateway {
             fatherName: data.fatherName,
             motherName: data.motherName,
             primarySchool: data.primarySchool,
+            status: data.status
         }
-        return axios.post(`/api/administration/candidates/`, json, this.authHeader()).then((resp) => {
+        return axios.post(`/api/administration/candidates/`, profileWithoutDocuments, this.authHeader()).then((resp) => {
             return resp.data;
         });
     }
@@ -254,13 +249,13 @@ export class ApiGateway {
         });
     }
 
-    public downloadExamSheet(examId:number) {
+    public downloadExamSheet(examId: number) {
         return axios.get(`/api/administration/Exam/${examId}/sheet`, this.blobResponseAuthHeader()).then((response) => {
             saveAs(new Blob([response.data]), `ExamSheet_${examId}.pdf`);
         });
     }
 
-    public uploadExamSheet(examId: number, ratingTeacherId:number, file: any) {
+    public uploadExamSheet(examId: number, ratingTeacherId: number, file: any) {
         let data: FormData = new FormData();
         data.append('teacherId', ratingTeacherId.toString());
         data.append('file', file, 'filename');
@@ -310,7 +305,7 @@ export class ApiGateway {
             }
         };
     }
-    private withParams(params:any ): any {
+    private withParams(params: any): any {
         return {
             params: params,
             headers: {

@@ -46,8 +46,11 @@
                         <v-text-field label="Imię i nazwisko rodzica 1" v-model="profile.fatherName" name="fatherName"></v-text-field>
                         <v-text-field label="Imię i nazwisko rodzica 2" v-model="profile.motherName" name="motherName"></v-text-field>
                         <v-text-field label="Szkoła podstawowa" v-model="profile.primarySchool" name="primarySchool"></v-text-field>
-                        <div class="form-group">
-                        </div>
+                        <v-radio-group v-model="profile.status">
+                            <v-radio label="W trakcie" :value="0" ></v-radio>
+                            <v-radio label="Przyjęty" :value="RecruitmentStatusEnum.Accepted" color="green"></v-radio>
+                            <v-radio label="Odrzucony" :value="RecruitmentStatusEnum.Rejected" color="red"></v-radio>
+                        </v-radio-group>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="handleSubmit">Zapisz dane</v-btn>

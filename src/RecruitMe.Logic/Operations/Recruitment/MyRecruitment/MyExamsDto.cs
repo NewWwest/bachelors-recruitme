@@ -5,7 +5,12 @@ using System.Text;
 
 namespace RecruitMe.Logic.Operations.Recruitment.MyRecruitment
 {
-    public class ExamDataDto
+    public class MyExamsDto
+    {
+        public List<MyExamDto> Exams { get; set; }
+    }
+
+    public class MyExamDto
     {
         public int DurationInMinutes { get; set; }
 

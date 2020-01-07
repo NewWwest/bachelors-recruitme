@@ -10,24 +10,23 @@ using RecruitMe.Logic.Operations.Recruitment.ProfileData;
 
 namespace RecruitMe.Logic.Operations.Recruitment.MyRecruitment
 {
-    public class GetExamsAndStatusQuery : BaseAsyncOperation<ExamsAndStatusDto, int>
+    public class GetMyExamsQuery : BaseAsyncOperation<MyExamsDto, int>
     {
-        public GetExamsAndStatusQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
+        public GetMyExamsQuery(ILogger logger, BaseDbContext dbContext) : base(logger, dbContext)
         {
         }
 
-        public override async Task<ExamsAndStatusDto> Execute(int request)
+        public override async Task<MyExamsDto> Execute(int request)
         {
-            var result = new ExamsAndStatusDto()
+            var result = new MyExamsDto()
             {
-                Status = GetRecrutationStatus(request),
                 Exams = await GetExams(request)
             };
 
             return result;
         }
 
-        private async Task<List<ExamDataDto>> GetExams(int request)
+        private async Task<List<MyExamDto>> GetExams(int request)
         {
             var data = await _dbContext.ExamTakers
                 .Include(et => et.Exam)
@@ -42,19 +41,13 @@ namespace RecruitMe.Logic.Operations.Recruitment.MyRecruitment
                 })
                 .ToListAsync();
 
-            return data.Select(e => new ExamDataDto()
+            return data.Select(e => new MyExamDto()
             {
                 CategoryName = e.Name,
                 DurationInMinutes = e.DurationInMinutes,
                 ExamType = e.ExamType,
                 StartTime = e.StartDate
             }).ToList();
-        }
-
-        private RecrutationStatus GetRecrutationStatus(int request)
-        {
-#warning TODO: after merge with payments implement this method
-            return RecrutationStatus.Registration;
         }
     }
 }

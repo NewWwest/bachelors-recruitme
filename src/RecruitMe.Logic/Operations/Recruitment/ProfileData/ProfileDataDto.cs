@@ -34,6 +34,8 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
 
         public int? ProfilePictureFileId { get; set; }
 
+        public RecruitmentStatus? Status { get; set; }
+
         public List<DocumentDto> Documents { get; set; }
 
         public static ProfileDataDto FromPersonalDataEntity(User user, PersonalData entity, IEnumerable<PersonalDocument> documents)
@@ -62,6 +64,7 @@ namespace RecruitMe.Logic.Operations.Recruitment.ProfileData
                 MotherName = entity?.MotherName,
                 PrimarySchool = entity?.PrimarySchool,
                 ProfilePictureFileId = entity?.ProfilePictureFileId,
+                Status = entity?.Status,
                 ProfilePictureName = documents.FirstOrDefault(d => d.Id == entity?.ProfilePictureFileId)?.Name,
                 Documents = docs
             };

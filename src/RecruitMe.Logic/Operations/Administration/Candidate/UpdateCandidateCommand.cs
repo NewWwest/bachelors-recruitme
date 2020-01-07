@@ -34,7 +34,7 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
             user.CandidateId = request.CandidateId;
             user.BirthDate = request.BirthDate;
             await _dbContext.SaveChangesAsync();
-                ;
+
             await _addOrUpdateProfileDataCommand.Execute(new AddOrUpdateProfileDataCommandRequest()
             {
                 UserId = request.UserId,
@@ -43,9 +43,19 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
                     Adress = request.Adress,
                     FatherName = request.FatherName,
                     MotherName = request.MotherName,
-                    PrimarySchool = request.PrimarySchool
+                    PrimarySchool = request.PrimarySchool,
+                    Status = request.Status
                 }
             });
+
+            //After execution of the previous command we know that the user has a profile in db
+            Data.Entities.PersonalData profile = await _dbContext.PersonalData.FirstAsync(u => u.UserId == request.UserId);
+            if (request.Status.HasValue && (int)request.Status == 0)
+            {
+                request.Status = null;
+            }
+            profile.Status = request.Status;
+            await _dbContext.SaveChangesAsync();
 
             return new OperationSucceded();
         }

@@ -24,6 +24,7 @@ export interface IProfileData {
     primarySchool: string;
     profilePictureName: string;
     profilePictureFileId: number | undefined;
+    status?: RecruitmentStatus;
 
     documents: IDocument[];
 }
@@ -35,21 +36,19 @@ export interface IDocument {
     contentType: string;
 }
 
-export interface IExamDataDto {
+export interface IMyExamDto {
     durationInMinutes: number;
     startTime: Date;
     categoryName: string;
     examType: ExamType;
 }
 
-export interface IExamsAndStatusDto {
-    status: RecrutationStatus;
-    exams: IExamDataDto[];
+export interface IMyExamsDto {
+    exams: IMyExamDto[];
 }
 
-export enum RecrutationStatus {
-    Registration = 1,
-    Examination = 2,
-    Accepted = 3,
-    Declined = 4
+export enum RecruitmentStatus {
+    //0 or null not decided
+    Accepted = 1,
+    Rejected = 2,
 }

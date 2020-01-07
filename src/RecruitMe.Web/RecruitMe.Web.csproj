@@ -84,4 +84,10 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="CreateAppDataFolder" AfterTargets="AfterPublish">
+    <MakeDir Directories="$(PublishDir)assets\" Condition="!Exists('$(PublishDir)assets\')" />
+    <MakeDir Directories="$(PublishDir)assets\recruitment\" Condition="!Exists('$(PublishDir)assets\recruitment\')" />
+    <MakeDir Directories="$(PublishDir)assets\recruitment\images\" Condition="!Exists('$(PublishDir)assets\recruitment\images\')" />
+    <MakeDir Directories="$(PublishDir)wwwroot\recruitment\" Condition="!Exists('$(PublishDir)wwwroot\recruitment\')" />
+  </Target>
 </Project>
