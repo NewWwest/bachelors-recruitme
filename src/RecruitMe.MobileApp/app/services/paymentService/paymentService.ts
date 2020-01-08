@@ -13,4 +13,13 @@ export class PaymentService {
                 "Nie mogliśmy wygenerować linku płatności - prosimy o zgłoszenie sytuacji administratorowi");
         })
     }
+
+    public isPaymentDone() {
+        return this._apiGateway.isPaymentDone().then(r => {
+            return r.data;
+        }, err => {
+            console.error(err);
+            PopupFactory.GenericErrorPopup("Nie mogliśmy sprawdzić statusu płatności - prosimy o zgłoszenie sytuacji administratorowi");
+        });
+    }
 }

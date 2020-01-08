@@ -23,7 +23,7 @@
                 </GridLayout>
             </ScrollView>
             <StackLayout row="2" class="pageBack">
-                <Button text="Przejdź do płatności" class="my-button paymentButton" @tap="goToPayment()"/>
+                <Button v-if="isPaymentMade" text="Przejdź do płatności" class="my-button paymentButton" @tap="goToPayment()"/>
             </StackLayout>
         </GridLayout>
     </Page>
@@ -35,15 +35,21 @@ import { PaymentService } from '../services/paymentService/paymentService'
 import * as utils from '@/services/sideDrawer/utils';
 import { Component, Vue } from "vue-property-decorator";
 import { openUrl } from "tns-core-modules/utils/utils";
+import { setInterval, clearInterval } from 'tns-core-modules/timer';
 
 @Component({
     components: { NotFilledPersonalData }
 })
 export default class Payments extends Vue {
-    fetching: boolean = false;
+    intervalId: number = 0;
     isPaymentMade: boolean = false;
     paymentService: PaymentService = new PaymentService();
     
+    beforeMount() {
+        this.intervalId = setInterval(this.checkPaymentStatus, 30000);
+        this.checkPaymentStatus();
+    }
+
     get paymentDescription() {
         return this.isPaymentMade ? 'Płatność została zaksięgowana w naszym systemie' 
          : 'Płatność nie została zaksięgowana w naszym systemie';
@@ -53,6 +59,15 @@ export default class Payments extends Vue {
         this.paymentService.getPaymentLink().then(url => {
             openUrl(url);
         });
+    }
+
+    checkPaymentStatus() {
+        this.paymentService.isPaymentDone().then(isDone => {
+            if (isDone) {
+                this.isPaymentMade = true;
+                clearInterval(this.intervalId);
+            }
+        })
     }
 
     onDrawerButtonTap() {
