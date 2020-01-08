@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
@@ -40,6 +41,7 @@ namespace RecruitMe.Web.Controllers
 
         // redirect after payment method
         [HttpGet]
+        [AllowAnonymous]
         [Route("afterPayment")]
         public ActionResult AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
@@ -52,7 +54,23 @@ namespace RecruitMe.Web.Controllers
 
             if (IsMobileBrowser())
             {
-                redirectUrl = "recruitme://" + redirectUrl;
+                if (redirectUrl.Contains("http"))
+                {
+                    if (redirectUrl.Contains("https"))
+                        redirectUrl = redirectUrl.Replace("https", "recruitme");
+                    else
+                        redirectUrl = redirectUrl.Replace("http", "recruitme");
+                }
+                else
+                {
+                    redirectUrl = "recruitme://" + redirectUrl;
+                }
+
+                // hack for not getting parameters
+                if (redirectUrl.Contains('?'))
+                {
+                    redirectUrl = redirectUrl.Replace('?', '/').Replace('=', '/');
+                }
             }
 
             return RedirectPermanent(redirectUrl);
