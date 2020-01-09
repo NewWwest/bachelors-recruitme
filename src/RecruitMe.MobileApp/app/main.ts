@@ -32,7 +32,7 @@ handleOpenURL((appURL: AppURL) => {
       PopupFactory.GenericErrorPopup('Błąd z systemu Dotpay: "' + appURL.path.slice(appURL.path.lastIndexOf('/') + 1) + '"');
     }
     else {
-      PopupFactory.GenericSuccessPopup("Sukces! Udana transakcja!");
+      PopupFactory.createPopup("success", "Transakcja zakończona sukcesem", "Może minąć parę chwil od zaksięgowania transakcji w systemie");
     }
   }
 });

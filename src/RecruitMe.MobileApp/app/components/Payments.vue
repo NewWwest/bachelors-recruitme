@@ -1,5 +1,5 @@
 <template>
-    <Page class="page">
+    <Page @unloaded="onNavigatingFrom" class="page">
         <ActionBar class="action-bar">
             <StackLayout horizontalAlignment="left" orientation="horizontal">
                 <Image src="res://mobile_menu_white" width="32" height="32"
@@ -46,6 +46,8 @@ export default class Payments extends Vue {
     paymentService: PaymentService = new PaymentService();
     
     beforeMount() {
+        console.log("go in");
+
         this.intervalId = setInterval(this.checkPaymentStatus, 30000);
         this.checkPaymentStatus();
     }
@@ -68,6 +70,11 @@ export default class Payments extends Vue {
                 clearInterval(this.intervalId);
             }
         })
+    }
+
+    onNavigatingFrom() {
+        console.log("go out");
+        clearInterval(this.intervalId);
     }
 
     onDrawerButtonTap() {
