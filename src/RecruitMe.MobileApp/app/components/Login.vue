@@ -70,7 +70,7 @@ import LoaderService from '@/services/loaderView/loader';
 
                 this.userService.login(this.username, this.password).then(() => {
                     LoaderService.hideLoader();
-                    this.$goto.CandidateDashboard();
+                    this.$goto.CandidateDashboard(true);
                 }, err => {
                     console.error(err);
                     
