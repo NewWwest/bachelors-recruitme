@@ -9,6 +9,8 @@ import RemindLogin from "~/components/RemindLogin.vue";
 import ResetPassword from "~/components/ResetPassword.vue";
 import CandidateDashboard from "~/components/CandidateDashboard.vue";
 import CandidateSettings from "~/components/CandidateSettings.vue";
+import Chat from "~/components/Chat.vue";
+
 
 // Drawer Selected Page Service
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service";
@@ -88,6 +90,13 @@ export class Goto {
      */
     public CandidateSettings(clearHistory?: boolean) {
         this.navigate(CandidateSettings, clearHistory);
+    }
+
+    /**
+     * Chat
+     */
+    public Chat() {
+        this.navigate(Chat);
     }
 } 
 

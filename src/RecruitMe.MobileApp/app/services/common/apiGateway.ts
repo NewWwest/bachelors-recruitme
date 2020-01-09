@@ -102,6 +102,26 @@ export class ApiGateway {
         return s.multipartUpload([data], options);
     }
 
+    // messages
+    public checkNewMessages() {
+        return axios.get('/api/messages/checknewmessages', this.authHeader());
+    }
+    public getMessages(person: string, page: number, pageSize: number) {
+        return axios.get(`/api/messages/${person}?page=${page}&pageSize=${pageSize}`, this.authHeader());
+    }
+    public getUserThreads() {
+        return axios.get('/api/messages/getUserThreads', this.authHeader());
+    }
+    public sendMessage(from: number | null, to: string, message: string) {
+        let data = {
+            fromId: from,
+            toId: to,
+            message: message
+        };
+
+        return axios.post('/api/messages/send', data, this.authHeader());
+    }
+
     /// private helpers
 
     private authHeader() {
