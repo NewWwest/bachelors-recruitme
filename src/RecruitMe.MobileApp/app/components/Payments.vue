@@ -46,8 +46,6 @@ export default class Payments extends Vue {
     paymentService: PaymentService = new PaymentService();
     
     beforeMount() {
-        console.log("go in");
-
         this.intervalId = setInterval(this.checkPaymentStatus, 30000);
         this.checkPaymentStatus();
     }
@@ -73,7 +71,6 @@ export default class Payments extends Vue {
     }
 
     onNavigatingFrom() {
-        console.log("go out");
         clearInterval(this.intervalId);
     }
 

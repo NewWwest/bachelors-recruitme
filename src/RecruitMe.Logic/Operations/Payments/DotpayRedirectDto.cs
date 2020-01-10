@@ -8,7 +8,7 @@ namespace RecruitMe.Logic.Operations.Payments
 {
     public class DotpayRedirectDto
     {
-        [JsonProperty("status_code")]
+        [JsonProperty("status")]
         public string StatusCode { get; set; }
 
         [JsonProperty("error_code")]

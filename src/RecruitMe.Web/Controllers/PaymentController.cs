@@ -54,19 +54,14 @@ namespace RecruitMe.Web.Controllers
 
             if (IsMobileBrowser())
             {
-                if (redirectUrl.Contains("http"))
+                UriBuilder uriBuilder = new UriBuilder(redirectUrl)
                 {
-                    if (redirectUrl.Contains("https"))
-                        redirectUrl = redirectUrl.Replace("https", "recruitme");
-                    else
-                        redirectUrl = redirectUrl.Replace("http", "recruitme");
-                }
-                else
-                {
-                    redirectUrl = "recruitme://" + redirectUrl;
-                }
+                    Scheme = "recruitme",
+                    Port = -1
+                };
+                redirectUrl = uriBuilder.Uri.ToString();
 
-                // hack for not getting parameters
+                // hack for not getting parameters in urlhandler in mobile app
                 if (redirectUrl.Contains('?'))
                 {
                     redirectUrl = redirectUrl.Replace('?', '/').Replace('=', '/');
