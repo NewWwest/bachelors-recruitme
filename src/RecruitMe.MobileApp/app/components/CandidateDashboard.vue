@@ -5,7 +5,7 @@
                 <Image src="res://mobile_menu_white" width="32" height="32"
                     @tap="onDrawerButtonTap"/>
                 <Image class="dummyImage" /> <!-- dummy object to get text to center -->
-                <Label class="action-bar-title" text="Home"></Label>
+                <Label class="action-bar-title" text="Ekran główny"></Label>
             </StackLayout>  
         </ActionBar>
 
@@ -39,6 +39,6 @@ export default class CandidateDashboard extends Vue {
     @import '../app-common';
 
     .dummyImage {
-        width: 33%;     // should be 35% - (half of head string length [circa 1% for letter])
+        width: 24.5%;     // should be 35% - (half of head string length [circa 1% for letter])
     }
 </style>

@@ -13,16 +13,23 @@
         <StackLayout>
             <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'CandidateDashboard' ? '-selected': '')" 
-             @tap="onNavigationItemTap(() => $goto.CandidateDashboard(true))">
+             @tap="onNavigationItemTap(() => $goto.CandidateDashboard())">
                 <Label text.decode="&#xf015;" class="fa item-icon"></Label>
-                <Label text="Home"></Label>
+                <Label text="Ekran główny"></Label>
+            </FlexboxLayout>
+
+            <FlexboxLayout flexDirection="row" alignItems="center"
+             :class="'drawer__list-item' + (selectedPage === 'Payments' ? '-selected': '')" 
+             @tap="onNavigationItemTap(() => $goto.Payments())">
+                <Label text.decode="&#xf09d;" class="fa item-icon-payments"></Label>
+                <Label text="Płatności"></Label>
             </FlexboxLayout>
 
             <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'CandidateSettings' ? '-selected': '')"
-             @tap="onNavigationItemTap(() => $goto.CandidateSettings(true))">
+             @tap="onNavigationItemTap(() => $goto.CandidateSettings())">
                 <Label text.decode="&#xf013;" class="fa item-icon"></Label>
-                <Label text="Settings"></Label>
+                <Label text="Ustawienia"></Label>
             </FlexboxLayout>
         </StackLayout>
     </ScrollView>
@@ -71,6 +78,10 @@ export default class DrawerContent extends Vue {
 
     .item-icon {
         margin: 0 20;
+    }
+
+    .item-icon-payments {
+        margin: 0 18;
     }
 
     .t-75 {
