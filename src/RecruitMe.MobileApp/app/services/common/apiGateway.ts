@@ -4,6 +4,7 @@ import { IRegistrationRequest, IResetPasswordRequest,
      ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
 import { IProfileData } from '@/models/personalDataModel';
 import { Request, session, Task } from 'nativescript-background-http';
+import * as httpModule from "tns-core-modules/http/http";
 
 export class ApiGateway {
     private baseURL = "http://192.168.0.2:5000"; // base url
@@ -17,6 +18,9 @@ export class ApiGateway {
                return axios.get(url, data).then( (response) => {
                    //this.indicator.hide();
                    return response;
+               }, err => {
+                   console.error(err);
+                   throw err;
                });
             case RequestType.POST:
                return axios.post(url, data, headers).then( (response) => {
@@ -107,19 +111,49 @@ export class ApiGateway {
         return axios.get('/api/messages/checknewmessages', this.authHeader());
     }
     public getMessages(person: string, page: number, pageSize: number) {
-        return axios.get(`/api/messages/${person}?page=${page}&pageSize=${pageSize}`, this.authHeader());
+        return httpModule.request({
+            url: this.baseURL + `/api/messages/${person}?page=${page}&pageSize=${pageSize}`,
+            method: 'GET',
+            headers: this.authHeader().headers
+        }).then(r => {
+            if (r.content && r.statusCode == 200) {
+                return r.content.toJSON();
+            }
+            else {
+                const message = `Error: Sending message failed! Status code: ${r.statusCode}`;
+                console.error(message);
+                throw new Error(message);
+            }
+        });
     }
     public getUserThreads() {
         return axios.get('/api/messages/getUserThreads', this.authHeader());
     }
-    public sendMessage(from: number | null, to: string, message: string) {
+    public sendMessage(to: string, message: string) {
         let data = {
-            fromId: from,
             toId: to,
             message: message
         };
+        const opt = {
+            'Content-Type': 'application/json'
+        }
+        const headers = Object.assign(opt, this.authHeader().headers);
 
-        return axios.post('/api/messages/send', data, this.authHeader());
+        return httpModule.request({
+            url: this.baseURL + '/api/messages/send', 
+            method: 'POST',
+            content: JSON.stringify(data),
+            headers: headers
+        }).then(r => {
+            if (r.content && r.statusCode == 200) {
+                return r.content.toJSON();
+            }
+            else {
+                const message = `Error: Sending message failed! Status code: ${r.statusCode}`;
+                console.error(message);
+                throw new Error(message);
+            }
+        });
     }
 
     /// private helpers

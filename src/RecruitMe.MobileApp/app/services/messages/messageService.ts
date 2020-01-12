@@ -8,9 +8,9 @@ export class MessageService {
 
     public getMessages(page: number, pageSize: number) {
         return this._apiGateway.getMessages(this.toPerson, page, pageSize).then(r => {
-            const count = r.data.totalCount;
-            const page = r.data.page;
-            const data : IMessage[] = r.data.data;
+            const count = r.totalCount;
+            const page = r.page;
+            const data : IMessage[] = r.data;
 
             return {
                 count: count,
@@ -24,13 +24,14 @@ export class MessageService {
         });
     }
 
-    public sendMessage(text: string) {
-        return this._apiGateway.sendMessage(null, this.toPerson, text).then(r => {
-            const message: IMessage = r.data;
+    public sendMessage(text: string): Promise<IMessage> {
+        return this._apiGateway.sendMessage(this.toPerson, text).then(r => {
+            const message: IMessage = r;
             return message;
         }, err => {
             console.error(err);
             PopupFactory.GenericErrorPopup("" + err);
+            throw err;
         });
     }
 
