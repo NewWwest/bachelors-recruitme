@@ -4,10 +4,10 @@
 
         <card-layout v-if="loaded" className="col-lg-7 col-md-8 col-sm-10 col-xs-10">
             <v-card-title>
-                Examiny
+                Egzaminy
             </v-card-title>
             <v-card-text v-if="examsFormatted.length==0">
-                Nie chwilę obecną nie jesteś zapisany na żadne egzaminy.
+                Nie chwilę obecną nie jesteś zapisany/a na żadne egzaminy.
             </v-card-text>
             <v-card-text>
                 <v-card v-for="exam in examsFormatted" :key="exam.key" class="mb-3">

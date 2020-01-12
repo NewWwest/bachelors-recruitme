@@ -1,5 +1,5 @@
 import { ApiGateway } from "../api/api.gateway";
-import { IPersonalData, IProfileData, IExamsAndStatusDto } from "../models/recruit.models";
+import { IPersonalData, IProfileData, IMyExamsDto } from "../models/recruit.models";
 
 export class RecruitmentService {
     private apiGateway: ApiGateway = new ApiGateway();
@@ -49,7 +49,7 @@ export class RecruitmentService {
             });
     }
 
-    examsAndStatus(): Promise<IExamsAndStatusDto> {
+    examsAndStatus(): Promise<IMyExamsDto> {
         return this.apiGateway.examsAndStatus().then(
             r => {
                 return r.data;

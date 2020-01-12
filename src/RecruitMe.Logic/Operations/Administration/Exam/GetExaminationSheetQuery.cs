@@ -30,7 +30,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                 .Include(e => e.ExamCategory)
                 .Include(e => e.ExamTakers)
                 .ThenInclude(et => et.User)
-                .FirstOrDefaultAsync(e => e.Id == 1);
+                .FirstOrDefaultAsync(e => e.Id == request);
             if (exam == null)
             {
                 throw new KeyNotFoundException();
@@ -72,7 +72,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         private void PrintHeader(XGraphics gfx, Data.Entities.Exam exam)
         {
-            var text = $"Recruit.Me Exam Sheet \nExam: {exam.ExamCategory.Name} \nStart: {exam.StartDateTime.ToString("HH:mm dd-MM-YYYY")}";
+            var text = $"Recruit.Me Exam Sheet \nExam: {exam.ExamCategory.Name} \nStart: {exam.StartDateTime.ToString("HH:mm dd-MM-yyyy")}";
             XFont font = new XFont("Arial", 12, XFontStyle.Regular);
             XTextFormatter tf = new XTextFormatter(gfx);
             tf.DrawString(text, font, XBrushes.Gray, new XRect(15, 15, 300, 100));
