@@ -8,11 +8,14 @@ namespace RecruitMe.Logic.Configuration
     public class EndpointConfig : IAutoComponent
     {
         private int _dotpaySellerId;
+        private bool _dotpayUseProductionDatabase;
 
         public EndpointConfig(BusinessConfiguration businessConfiguration, PaymentConfiguration paymentConfiguration)
         {
             BaseAddress = businessConfiguration.BaseAddress;
+
             _dotpaySellerId = paymentConfiguration.Id;
+            _dotpayUseProductionDatabase = paymentConfiguration.UseProductionServer;
         }
 
         public string BaseAddress { get; private set; }
@@ -22,6 +25,9 @@ namespace RecruitMe.Logic.Configuration
         public string AdminPanelDetailsCandidatate(string candidateId) => BaseAddress + $"/adminpanel/details/candidate/{candidateId}";
         public string PaymentsThankYou(string err) => string.IsNullOrEmpty(err) ?
             BaseAddress + "/payments/thankyou" : BaseAddress + $"/payments/thankyou?error={err}";
+        public string PaymentsDeleteLink(string token) => _dotpayUseProductionDatabase ?
+            DotpayProductionAddress + $"/accounts/{_dotpaySellerId}/payment_links/{token}" :
+            DotpayTestAddress + $"/accounts/{_dotpaySellerId}/payment_links/{token}";
         public string SuccessfulMoneyTransfer => "/api/payment/successfulMoneyTransfer";
         public string AfterPayment => "/api/payment/afterPayment";
 
