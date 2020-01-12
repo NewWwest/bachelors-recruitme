@@ -4,15 +4,25 @@ import { IProfileData } from './models/personalDataModel';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
+function initialState() {
+  return {
     userId: 0,
     email: '',
     token: '',
     fullname: '',
     profileData: {} as IProfileData | null,
-  },
+  }
+}
+
+export default new Vuex.Store({
+  state: initialState(),
   mutations: {
+    reset(state) {
+      const init = initialState();
+      Object.keys(init).forEach(key => {
+        state[key] = init[key];
+      })
+    },
     setUserId(state, userId) {
       state.userId = userId ? userId : 0;
     },

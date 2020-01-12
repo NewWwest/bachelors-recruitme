@@ -14,6 +14,7 @@ import Chat from "~/components/Chat.vue";
 
 // Drawer Selected Page Service
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service";
+import { LocalStorageService } from './localStorage/localStorageService';
 
 export default function Router<RouterOptions>(Vue: typeof _Vue, options? : RouterOptions) {
     let goto : Goto;
@@ -48,6 +49,7 @@ export class Goto {
      */
     public Home() {
         this.navigate(Home);
+        LocalStorageService.reset();
     }
 
     /**
