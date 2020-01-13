@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RecruitMe.Logic.Configuration;
 using RecruitMe.Logic.Data.Entities;
@@ -40,6 +41,7 @@ namespace RecruitMe.Web.Controllers
 
         // redirect after payment method
         [HttpGet]
+        [AllowAnonymous]
         [Route("afterPayment")]
         public ActionResult AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
         {
@@ -52,7 +54,18 @@ namespace RecruitMe.Web.Controllers
 
             if (IsMobileBrowser())
             {
-                redirectUrl = "recruitme://" + redirectUrl;
+                UriBuilder uriBuilder = new UriBuilder(redirectUrl)
+                {
+                    Scheme = "recruitme",
+                    Port = -1
+                };
+                redirectUrl = uriBuilder.Uri.ToString();
+
+                // hack for not getting parameters in urlhandler in mobile app
+                if (redirectUrl.Contains('?'))
+                {
+                    redirectUrl = redirectUrl.Replace('?', '/').Replace('=', '/');
+                }
             }
 
             return RedirectPermanent(redirectUrl);

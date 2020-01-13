@@ -34,13 +34,15 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
             
             if (string.IsNullOrEmpty(paymentLink))
             {
-                paymentLink = await CreatePaymentLinkFromDotpay(request);
+                string token;
+                (paymentLink, token) = await CreatePaymentLinkFromDotpay(request);
 
                 // insert link to db
                 _dbContext.PaymentLinks.Add(new Data.Entities.PaymentLink()
                 {
                     Link = paymentLink,
-                    UserId = userId
+                    UserId = userId,
+                    Token = token
                 });
 
                 await _dbContext.SaveChangesAsync();
@@ -49,7 +51,7 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
             return paymentLink;
         }
 
-        private async Task<string> CreatePaymentLinkFromDotpay(PaymentDto request)
+        private async Task<(string link, string token)> CreatePaymentLinkFromDotpay(PaymentDto request)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -74,7 +76,7 @@ namespace RecruitMe.Logic.Operations.Payments.PaymentLink
                     PaymentLinkResponse linkResponse = JsonConvert.DeserializeObject<PaymentLinkResponse>(respString);
                     string chk = RequestHasher.GetControlChecksum(linkResponse, _paymentConfiguration);
 
-                    return linkResponse.Payment_Url + $"&chk={chk}";
+                    return (linkResponse.Payment_Url + $"&chk={chk}", linkResponse.Token);
                 }
 
                 throw new Exception(response.ToString());

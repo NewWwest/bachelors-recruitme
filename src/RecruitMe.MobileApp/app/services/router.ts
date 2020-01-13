@@ -9,6 +9,7 @@ import RemindLogin from "~/components/RemindLogin.vue";
 import ResetPassword from "~/components/ResetPassword.vue";
 import CandidateDashboard from "~/components/CandidateDashboard.vue";
 import CandidateSettings from "~/components/CandidateSettings.vue";
+import Payments from "~/components/Payments.vue";
 import Chat from "~/components/Chat.vue";
 
 
@@ -92,6 +93,13 @@ export class Goto {
      */
     public CandidateSettings(clearHistory?: boolean) {
         this.navigate(CandidateSettings, clearHistory);
+    }
+
+    /**
+     * Payments
+     */
+    public Payments(clearHistory?: boolean) {
+        this.navigate(Payments, clearHistory);
     }
 
     /**

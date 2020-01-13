@@ -32,7 +32,7 @@ export class ApiGateway {
     }
 
     // API METHODS
-
+    // recruitment
     public login(candidateId: string, password: string): Promise<AxiosResponse> {
         let clientsecret: string = "123456789ABCDEF123456789ABCDEF123456789ABCDEF123456789ABCDEF";
         let data: string = "grant_type=password&" +
@@ -43,38 +43,31 @@ export class ApiGateway {
             `password=${encodeURIComponent(password)}`
         return this.makeRequest(RequestType.POST, '/connect/token', data, this.ContentTypeFormUrlencoded());
     }
-
     public register(registrationModel: IRegistrationRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, '/api/Account/Register', registrationModel)
     }
-
     public resetPassword(resetPasswordRequest: IResetPasswordRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/ResetPassword', resetPasswordRequest)
     }
-
     public setNewPassword(resetPasswordRequest: ISetNewPassword): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/SetNewPassword', resetPasswordRequest)
     }
-
     public remindLogin(remindModel: IRemindLoginRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/RemindLogin', remindModel)
     }
-
     public getProfileData() : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
             '/api/Recruitment/Profile', this.authHeader());
     }
-
     public setProfileData(personalDataModel: IProfileData) : Promise<AxiosResponse> {
         console.log(personalDataModel);
         
         return this.makeRequest(RequestType.POST,
             '/api/Recruitment/PersonalData', personalDataModel, this.authHeader());
     }
-
     public getProfilePicture(fileId: number) : Promise<AxiosResponse> {
         return this.makeRequest(RequestType.GET,
             '/api/asset/image/' + fileId, this.authHeader());
@@ -156,8 +149,24 @@ export class ApiGateway {
         });
     }
 
-    /// private helpers
+    // payments
+    public getPaymentLink() {
+        let opt = {
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+        const headers =  {
+            headers: Object.assign(opt, this.authHeader().headers) 
+        }
+        console.log(headers);
 
+        return this.makeRequest(RequestType.POST,
+            '/api/payment/processPayment', {}, headers);
+    }
+    public isPaymentDone() {
+        return this.makeRequest(RequestType.GET, 
+            '/api/payment/isPaymentDone', this.authHeader());
+    }
+    /// private helpers
     private authHeader() {
         return {
             headers: {

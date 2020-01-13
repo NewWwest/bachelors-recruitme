@@ -18,16 +18,19 @@ namespace RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer
         private readonly UpdateSuccessfulPaymentCommand _updateSuccessfulPaymentCommand;
         private readonly RemoveExistingPaymentLink _removeExistingPaymentLink;
         private readonly AssignCandidateToExamsCommand _assignCandidateToExamsCommand;
+        private readonly RemovePaymentLinkInDotpayCommand _removePaymentLinkInDotpayCommand;
 
         public SuccessfulMoneyTransferCommand(ILogger logger, 
             SuccessfulMoneyTransferParamValidator validator, BaseDbContext dbContext,
             UpdateSuccessfulPaymentCommand updateSuccessfulPaymentCommand,
             RemoveExistingPaymentLink removeExistingPaymentLink,
-            AssignCandidateToExamsCommand assignCandidateToExamsCommand) : base(logger, validator, dbContext)
+            AssignCandidateToExamsCommand assignCandidateToExamsCommand,
+            RemovePaymentLinkInDotpayCommand removePaymentLinkInDotpayCommand) : base(logger, validator, dbContext)
         {
             _assignCandidateToExamsCommand = assignCandidateToExamsCommand;
             _removeExistingPaymentLink = removeExistingPaymentLink;
             _updateSuccessfulPaymentCommand = updateSuccessfulPaymentCommand;
+            _removePaymentLinkInDotpayCommand = removePaymentLinkInDotpayCommand;
         }
 
         protected async override Task<OperationResult> DoExecute(PaymentResponseDto response)
@@ -38,7 +41,10 @@ namespace RecruitMe.Logic.Operations.Payments.SuccessfulMoneyTransfer
             await _updateSuccessfulPaymentCommand.Execute(response);
 
             //delete previously used link
-            await _removeExistingPaymentLink.Execute(userId);
+            Data.Entities.PaymentLink link = await _removeExistingPaymentLink.Execute(userId);
+
+            //delete link from Dotpay
+            await _removePaymentLinkInDotpayCommand.Execute(link);
 
             //auto-assign candidate to all exams
             await _assignCandidateToExamsCommand.Execute(userId);
