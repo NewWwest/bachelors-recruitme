@@ -23,7 +23,7 @@
                 </GridLayout>
             </ScrollView>
             <StackLayout row="2" class="pageBack">
-                <Button v-if="isPaymentMade" text="Przejdź do płatności" class="my-button paymentButton" @tap="goToPayment()"/>
+                <Button v-if="!isPaymentMade" text="Przejdź do płatności" class="my-button paymentButton" @tap="goToPayment()"/>
             </StackLayout>
         </GridLayout>
     </Page>
