@@ -26,7 +26,7 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
                                 .Select(g => new
                                 {
                                     UserId = g.Key,
-                                    Count = g.Count(m => m.IsRead),
+                                    Count = g.Count(m => !m.IsRead),
                                     Firstname = g.Select(m => m.From.Name).FirstOrDefault(),
                                     Surname = g.Select(m => m.From.Surname).FirstOrDefault(),
                                     CandidateId = g.Select(m => m.From.CandidateId).FirstOrDefault()
