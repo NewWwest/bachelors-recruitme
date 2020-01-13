@@ -36,8 +36,8 @@ export class MessageService {
     }
 
     public checkNewMessages() {
-        return this._apiGateway.checkNewMessages().then(r => {
-            return r.data;
+        return this._apiGateway.checkNewMessages().then(count => {
+            return count;
         }, err => {
             console.error(err);
             PopupFactory.GenericErrorPopup("" + err);

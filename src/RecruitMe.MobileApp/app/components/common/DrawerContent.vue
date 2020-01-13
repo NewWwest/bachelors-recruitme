@@ -27,7 +27,7 @@
 
             <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'Chat' ? '-selected': '')" 
-             @tap="onNavigationItemTap(() => $goto.Chat(true))">
+             @tap="onNavigationItemTap(() => $goto.Chat())">
                 <Label text.decode="&#xf075;" class="fa item-icon-chat"></Label>
                 <Label text="Chat"></Label>
             </FlexboxLayout>

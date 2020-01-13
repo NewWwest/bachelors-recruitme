@@ -48,12 +48,14 @@ import * as utils from '@/services/sideDrawer/utils';
 import { Component, Vue } from "vue-property-decorator";
 import { setInterval, clearInterval } from 'tns-core-modules/timer';
 import { IMessage } from '../models/chatModel';
+import { LocalNotifications } from "nativescript-local-notifications";
 
 @Component({
     components: { NotFilledPersonalData }
 })
 export default class Chat extends Vue {
     intervalId: number = 0;
+    firstCall: boolean = true;
 
     readAll: boolean = false;
     msg: string = "";
@@ -69,6 +71,11 @@ export default class Chat extends Vue {
 
             if (req.count <= this.messages.length) {
                 this.readAll = true;
+            }
+
+            if (this.firstCall) {
+                LocalNotifications.cancelAll();
+                this.firstCall = false;
             }
         });
     }

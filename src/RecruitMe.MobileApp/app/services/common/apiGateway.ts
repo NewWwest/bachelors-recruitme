@@ -101,7 +101,20 @@ export class ApiGateway {
 
     // messages
     public checkNewMessages() {
-        return axios.get('/api/messages/checknewmessages', this.authHeader());
+        return httpModule.request({
+            url: this.baseURL + '/api/messages/checknewmessages',
+            method: 'GET',
+            headers: this.authHeader().headers
+        }).then(r => {
+            if (r.content && r.statusCode == 200) {
+                return r.content.toJSON();
+            }
+            else {
+                const message = `Error: Sending message failed! Status code: ${r.statusCode}`;
+                console.error(message);
+                throw new Error(message);
+            }
+        });
     }
     public getMessages(person: string, page: number, pageSize: number) {
         return httpModule.request({
