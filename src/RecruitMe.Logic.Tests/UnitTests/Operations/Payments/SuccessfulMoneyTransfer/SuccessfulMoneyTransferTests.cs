@@ -73,9 +73,13 @@ namespace RecruitMe.Logic.Tests.UnitTests.Operations.Payments.SuccessfulMoneyTra
                 Type = OperationType.Payment
             };
             SuccessfulMoneyTransferParamValidator validator = new SuccessfulMoneyTransferParamValidator();
+            Mock<RemovePaymentLinkInDotpayCommand> RemovePaymentLinkInDotpayCommandMock = 
+                new Mock<RemovePaymentLinkInDotpayCommand>(null,null,null,null);
+            RemovePaymentLinkInDotpayCommandMock.Setup(c => c.Execute(It.IsAny<PaymentLink>())).ReturnsAsync(new OperationSucceded());
 
             SuccessfulMoneyTransferCommand command = new SuccessfulMoneyTransferCommand(Logger, validator,
-                DbContext.Object, UpdatePaymentCommand, RemovePaymentLinkCommand, AssignCandidateToExamsCommand);
+                DbContext.Object, UpdatePaymentCommand, RemovePaymentLinkCommand, AssignCandidateToExamsCommand,
+                RemovePaymentLinkInDotpayCommandMock.Object);
             OperationResult result = await command.Execute(responseDto);
 
             Assert.IsTrue(result.Success);
