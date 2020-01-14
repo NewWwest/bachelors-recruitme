@@ -112,6 +112,13 @@ export class ApiGateway {
         return this.makeRequest(RequestType.GET, 
             '/api/payment/isPaymentDone', this.authHeader());
     }
+
+    // recruitment
+    public examsAndStatus() {
+        return this.makeRequest(RequestType.GET,
+            '/api/Recruitment/examsandstatus', this.authHeader());
+    }
+
     /// private helpers
     private authHeader() {
         return {

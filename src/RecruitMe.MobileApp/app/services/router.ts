@@ -10,6 +10,7 @@ import ResetPassword from "~/components/ResetPassword.vue";
 import CandidateDashboard from "~/components/CandidateDashboard.vue";
 import CandidateSettings from "~/components/CandidateSettings.vue";
 import Payments from "~/components/Payments.vue";
+import Exams from "~/components/Exams.vue";
 
 // Drawer Selected Page Service
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service";
@@ -96,6 +97,13 @@ export class Goto {
      */
     public Payments(clearHistory?: boolean) {
         this.navigate(Payments, clearHistory);
+    }
+
+    /**
+     * Exams
+     */
+    public Exams() {
+       this.navigate(Exams); 
     }
 } 
 

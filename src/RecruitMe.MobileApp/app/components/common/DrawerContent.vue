@@ -19,6 +19,13 @@
             </FlexboxLayout>
 
             <FlexboxLayout flexDirection="row" alignItems="center"
+             :class="'drawer__list-item' + (selectedPage === 'Exams' ? '-selected': '')" 
+             @tap="onNavigationItemTap(() => $goto.Exams())">
+                <Label text.decode="&#xf19d;" class="fa item-icon-payments"></Label>
+                <Label text="Egzaminy"></Label>
+            </FlexboxLayout>
+
+            <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'Payments' ? '-selected': '')" 
              @tap="onNavigationItemTap(() => $goto.Payments())">
                 <Label text.decode="&#xf09d;" class="fa item-icon-payments"></Label>
