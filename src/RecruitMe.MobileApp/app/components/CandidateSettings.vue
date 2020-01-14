@@ -20,7 +20,7 @@
                 <FlexboxLayout flexDirection="column" justifyContent="space-around"
                 row="1" col="1">
                     <Button class="my-button" text="Z aparatu" @tap="onTakeImageTap"/>
-                    <Button class="my-button" text="Z galerii" />
+                    <Button class="my-button" text="Z galerii" @tap="onChooseImageTap"/>
                 </FlexboxLayout>
 
                 <!-- form -->
@@ -74,7 +74,6 @@ export default class CandidateSettings extends Vue {
     
     constructor() {
         super();
-        
         const data = LocalStorageService.getProfileData();
 
         if (data !== null) {
@@ -88,8 +87,6 @@ export default class CandidateSettings extends Vue {
 
     reloadPicture() {
         this.imageService.loadUserPicture().then(r => {
-            //RELOAD NOT WORKING
-
             this.imageSrc = r;
             LoaderService.hideLoader();
         });
@@ -99,14 +96,16 @@ export default class CandidateSettings extends Vue {
         utils.showDrawer();
     }
 
+    onChooseImageTap() {
+        this.imageService.choosePicture().then(r => {
+            this.imageSrc = r;
+            LoaderService.hideLoader();
+        })
+    }
     onTakeImageTap() {
         this.imageService.takePicture().then(r => {
-            if (r) {
-                this.personalDataService.getProfileData().then(r1 => {
-                    console.log("reload");
-                    this.reloadPicture();
-                })
-            }
+            this.imageSrc = r;
+            LoaderService.hideLoader();
         })
     }
 

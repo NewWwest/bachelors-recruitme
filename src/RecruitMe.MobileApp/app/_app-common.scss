@@ -18,6 +18,10 @@ ActionBar {
    padding-right: 30;
 }
 
+.pageBack-no-pad {
+   background-image: linear-gradient(to right, $login-left-color, $login-right-color);
+}
+
 .my-button {
    background-color: #DBAD6A;
    color: white;
