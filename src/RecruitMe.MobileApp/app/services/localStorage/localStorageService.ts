@@ -2,6 +2,10 @@ import store from '@/store';
 import { IProfileData } from "../../models/personalDataModel";
 
 export class LocalStorageService {
+    static reset(): void {
+        store.commit('reset');
+    }
+
     static setUserId(userId: number): void {
         store.commit('setUserId', userId);
     }

@@ -44,7 +44,7 @@ namespace RecruitMe.Logic.Operations.Messages.Queries
             int count = countTask.Result;
 
             // Set received messages as read
-            await _setQueriedMessagesAsReadCommand.Execute(messages.Where(m => !m.IsRead));
+            await _setQueriedMessagesAsReadCommand.Execute(messages.Where(m => request.From == m.ToId && !m.IsRead));
 
             PagedResponse<MessageDto> response = new PagedResponse<MessageDto>()
             {

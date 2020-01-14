@@ -26,6 +26,13 @@
             </FlexboxLayout>
 
             <FlexboxLayout flexDirection="row" alignItems="center"
+             :class="'drawer__list-item' + (selectedPage === 'Chat' ? '-selected': '')" 
+             @tap="onNavigationItemTap(() => $goto.Chat())">
+                <Label text.decode="&#xf075;" class="fa item-icon-chat"></Label>
+                <Label text="Chat"></Label>
+            </FlexboxLayout>
+
+            <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'CandidateSettings' ? '-selected': '')"
              @tap="onNavigationItemTap(() => $goto.CandidateSettings())">
                 <Label text.decode="&#xf013;" class="fa item-icon"></Label>
@@ -78,6 +85,10 @@ export default class DrawerContent extends Vue {
 
     .item-icon {
         margin: 0 20;
+    }
+
+    .item-icon-chat {
+        margin: 0 19;
     }
 
     .item-icon-payments {

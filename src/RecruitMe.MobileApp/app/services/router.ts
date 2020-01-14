@@ -10,9 +10,12 @@ import ResetPassword from "~/components/ResetPassword.vue";
 import CandidateDashboard from "~/components/CandidateDashboard.vue";
 import CandidateSettings from "~/components/CandidateSettings.vue";
 import Payments from "~/components/Payments.vue";
+import Chat from "~/components/Chat.vue";
+
 
 // Drawer Selected Page Service
 import SelectedPageService from "@/services/sideDrawer/selectedPage.service";
+import { LocalStorageService } from './localStorage/localStorageService';
 
 export default function Router<RouterOptions>(Vue: typeof _Vue, options? : RouterOptions) {
     let goto : Goto;
@@ -47,6 +50,7 @@ export class Goto {
      */
     public Home() {
         this.navigate(Home);
+        LocalStorageService.reset();
     }
 
     /**
@@ -96,6 +100,13 @@ export class Goto {
      */
     public Payments(clearHistory?: boolean) {
         this.navigate(Payments, clearHistory);
+    }
+
+    /**
+     * Chat
+     */
+    public Chat() {
+        this.navigate(Chat);
     }
 } 
 
