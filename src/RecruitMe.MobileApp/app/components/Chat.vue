@@ -18,7 +18,6 @@
                         <v-template>
                             <GridLayout columns="*" rows="auto" class="msg">
                                 <StackLayout :class="filter(item.isMine)" orientation="horizontal" :horizontalAlignment="align(item.isMine)">
-                                    <!-- <Image [visibility]="showImage(item.from)" class="authorimg" stretch="aspectFill" height="30" width="30" verticalAlignment="top" src="~/images/k1.png" col="1"></Image> -->
                                     <Label :text="item.message" class="msg_text" textWrap="true" verticalAlignment="top"></Label>
                                 </StackLayout>
                             </GridLayout>
@@ -84,7 +83,6 @@ export default class Chat extends Vue {
             this.getNewMessages();
             this.msg = "";
         }, err => {
-            console.error(err);
         });
     }
     processMessages(page: number, messagesToAdd: IMessage[]) {
