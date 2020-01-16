@@ -10,6 +10,7 @@ import ResetPassword from "~/components/ResetPassword.vue";
 import CandidateDashboard from "~/components/CandidateDashboard.vue";
 import CandidateSettings from "~/components/CandidateSettings.vue";
 import Payments from "~/components/Payments.vue";
+import Exams from "~/components/Exams.vue";
 import Chat from "~/components/Chat.vue";
 
 
@@ -107,6 +108,13 @@ export class Goto {
      */
     public Chat() {
         this.navigate(Chat);
+    }
+
+    /**
+     * Exams
+     */
+    public Exams() {
+       this.navigate(Exams); 
     }
 } 
 

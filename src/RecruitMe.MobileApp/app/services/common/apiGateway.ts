@@ -7,7 +7,7 @@ import { Request, session, Task } from 'nativescript-background-http';
 import * as httpModule from "tns-core-modules/http/http";
 
 export class ApiGateway {
-    private baseURL = "http://192.168.0.2:5000"; // base url
+    private baseURL = "http://192.168.43.56:5000"; // base url
 
     private makeRequest(type: RequestType, url: string, data: any, headers?: any): Promise<AxiosResponse> {
         url = this.baseURL + url;
@@ -179,6 +179,13 @@ export class ApiGateway {
         return this.makeRequest(RequestType.GET, 
             '/api/payment/isPaymentDone', this.authHeader());
     }
+
+    // recruitment
+    public examsAndStatus() {
+        return this.makeRequest(RequestType.GET,
+            '/api/Recruitment/examsandstatus', this.authHeader());
+    }
+
     /// private helpers
     private authHeader() {
         return {

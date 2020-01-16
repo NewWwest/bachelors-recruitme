@@ -11,4 +11,5 @@ export interface IProfileData {
     primarySchool: string;
     profilePictureName: string;
     profilePictureFileId: number | undefined;
+    status?: number;
 }

@@ -19,6 +19,13 @@
             </FlexboxLayout>
 
             <FlexboxLayout flexDirection="row" alignItems="center"
+             :class="'drawer__list-item' + (selectedPage === 'Exams' ? '-selected': '')" 
+             @tap="onNavigationItemTap(() => $goto.Exams())">
+                <Label text.decode="&#xf19d;" class="fa item-icon-exams"></Label>
+                <Label text="Egzaminy"></Label>
+            </FlexboxLayout>
+
+            <FlexboxLayout flexDirection="row" alignItems="center"
              :class="'drawer__list-item' + (selectedPage === 'Payments' ? '-selected': '')" 
              @tap="onNavigationItemTap(() => $goto.Payments())">
                 <Label text.decode="&#xf09d;" class="fa item-icon-payments"></Label>
@@ -86,13 +93,14 @@ export default class DrawerContent extends Vue {
     .item-icon {
         margin: 0 20;
     }
-
     .item-icon-chat {
         margin: 0 19;
     }
-
     .item-icon-payments {
         margin: 0 18;
+    }
+    .item-icon-exams {
+        margin: 0 17;
     }
 
     .t-75 {

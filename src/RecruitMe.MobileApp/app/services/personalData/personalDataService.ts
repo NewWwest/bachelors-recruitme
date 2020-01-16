@@ -8,24 +8,29 @@ export class PersonalDataService {
 
     public getProfileData() : Promise<IProfileData | null> {
         return this._apiGateway.getProfileData().then(r => {
-            console.log("personal data service");
-            console.log(r);
-
             LocalStorageService.setProfileData(r.data);
             return r.data; 
         }, err => {
-            console.log(err);
+            console.error(err);
             PopupFactory.GenericErrorPopup("" + err);
         })
     }
 
     public setProfileData(profileDataModel: IProfileData) : Promise<void> {
         return this._apiGateway.setProfileData(profileDataModel).then(r => {
-            console.log(r);
             PopupFactory.GenericSuccessPopup("Pomyślnie zapisano dane dodatkowe");
         }, err => {
-            console.log(err);
+            console.error(err);
             PopupFactory.GenericErrorPopup("" + err);
         })
+    }
+
+    public examsAndStatus() {
+        return this._apiGateway.examsAndStatus().then(r => {
+            return r.data.exams;
+        }, err => {
+            console.error(err);
+            PopupFactory.GenericErrorPopup("" + err);
+        });
     }
 }
