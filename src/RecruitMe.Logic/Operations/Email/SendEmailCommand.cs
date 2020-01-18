@@ -18,14 +18,16 @@ namespace RecruitMe.Logic.Operations.Email
 
         public override OperationResult Execute(EmailDto request)
         {
-            var client = new SmtpClient("smtp.gmail.com", 587)
+            using (SmtpClient client = new SmtpClient(_businessConfiguration.EmailServer, _businessConfiguration.EmailServerPort)
             {
                 Credentials = new NetworkCredential(_businessConfiguration.Email, _businessConfiguration.EmailPassword),
                 EnableSsl = true
-            };
-            client.Send("RecruitMeSystem@gmail.com", request.To, request.Title, request.Body);
-            _logger.Log($"Sent Email to {request.To}");
-            return new OperationSucceded();
+            })
+            {
+                client.Send(_businessConfiguration.Email, request.To, request.Title, request.Body);
+                _logger.Log($"Sent Email to {request.To}");
+                return new OperationSucceded();
+            }
         }
     }
 }
