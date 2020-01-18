@@ -17,5 +17,7 @@ namespace RecruitMe.Logic.Configuration
         public string DefaultProfileImagePath { get; set; }
         public string BaseAddress { get; set; }
         public string IdentityServerUrl { get; set; }
+        public string EmailServer { get; set; }
+        public int EmailServerPort { get; set; }
     }
 }
