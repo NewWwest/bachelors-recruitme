@@ -13,6 +13,7 @@ import { MessageBusService } from '../../services/messageBus.service';
     }
 })
 export default class AppComponent extends Vue {
+    userService: UserService = new UserService();
     userLoggedIn: boolean = false;
     displayName: string = "";
     messages: number = 0;
@@ -49,7 +50,7 @@ export default class AppComponent extends Vue {
     onUrlChange(to: any) {
         let prefix: string = "";
         const title: string = "RecruitMe";
-        
+
         if (to.path.includes("adminPanel")) {
             prefix = "Admin Panel - ";
         }
@@ -63,6 +64,9 @@ export default class AppComponent extends Vue {
     }
 
     checkMessages() {
+        if (!this.userService.isLoggedIn())
+            return;
+
         if (!this.$route.path.includes('chat')) {
             new MessageService().checkNewMessages().then(d => {
                 this.messages = d;
