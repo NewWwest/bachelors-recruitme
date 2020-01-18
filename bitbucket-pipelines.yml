@@ -10,7 +10,6 @@ pipelines:
             caches:
               - dotnetcore
             script: 
-              - dotnet restore src/RecruitMe.Logic/RecruitMe.Logic.csproj
-              - dotnet restore src/RecruitMe.Logic.Tests/RecruitMe.Logic.Tests.csproj
+              - dotnet restore src/RecruitMe.sln
               - dotnet build src/RecruitMe.sln -c Release  
               - dotnet test src/RecruitMe.sln -c Release
