@@ -1,0 +1,205 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{spverbatim}
+\urlstyle{same}
+
+\title{Wielowarstwowy system rekrutacji dla szkół z interfejsem webowym i aplikacją mobilną - instrukcja instalacji systemu}
+\author{Andrzej Westfalewicz, Filip Zyskowski}
+\date{7 stycznia 2019}
+
+\renewcommand*\contentsname{Spis treści}
+\renewcommand\refname{Odwołania} 
+
+% do wrapowania tekstu w tabelce
+\usepackage{array}
+\newcolumntype{L}{>{\centering\arraybackslash}m{10cm}}
+% 
+\usepackage{tabularx}
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\tableofcontents
+
+\pagebreak
+
+\section{Wstęp}
+Niniejszy dokument zawiera opisy instalacji potrzebne do wdrożenia wielowarstwowego systemu rekrutacji dla szkół z interfejsem webowym i aplikacją mobilną. Konfiguracja i instalacja kolejnych elementów systemu są opisane w poszczególnych punktach. Każdy opis procesu został opisany w prosty, przystępny sposób, a ukończenie wszystkich punktów z tej instrukcji praktycznie pozwoli na uruchomienie całego systemu. W instrukcji wskazane są również elementy, które nie zostały tutaj opisane, ponieważ jest wiele sposobów na ich implementację, bądź nie zależą od kodu systemu - te punkty również powinny zostać wykonane, by cieszyć się pełną funkcjonalnością i wygodą systemu.
+
+\section{Aplikacja mobilna}
+Zanim użytkownicy będą mogli skorzystać z aplikacji mobilnej, trzeba ją najpierw skompilować tzn. zamienić kod źródłowy z folderu \linebreak /src/RecruitMe.MobileApp do jednego pliku, a następnie zainstalować na \linebreak urządzeniu. Cały proces składa się z paru kroków, które zostaną przedstawione poniżej.
+
+\subsection{Kompilacja aplikacji do pliku APK}
+Do procesu kompilacji aplikacji wymagane jest zainstalowanie co najmniej kilku narzędzi programistycznych, w tym Node.js oraz NativeScript CLI. Pełna instrukcja instalacji wymaganych rzeczy na stronie NativeScript Docs w artykule \emph{CLI Setup} (https://docs.nativescript.org/start/quick-setup\#full-setup). Interesuje nas podpunkt \textbf{Full Setup}.
+
+Po przejściu całego poradnika instalacji potrzebnych narzędzi możemy przejść do procesu kompilacji.\\Aby tylko skompilować aplikację lokalnie, by sprawdzić na swoim telefonie jak działa aplikacja, uruchamiamy okno konsoli w folderze src/RecruitMe.MobileApp i wpisujemy: 
+\begin{verbatim}
+    tns run android
+\end{verbatim}
+Proces kompilacji może potrwać nawet kilka minut i zakończy się automatyczną instalacją oraz uruchomieniem aplikacji na podłączonym do komputera urządzeniu z systemem Android lub do wirtualnej maszyny Androida zainstalowanej wcześniej. Jeżeli chcemy tylko otrzymać plik APK, w ekran konsoli wpisujemy:
+\begin{verbatim}
+    tns build android
+\end{verbatim}
+W obu przypadkach w folderze src/RecruitMe.MobileApp/platforms/ \linebreak android/app/build/outputs/apk/debug/ znajdziemy plik APK naszej aplikacji w formacie debug.
+
+Jeżeli chcemy skompilować naszą aplikację do pliku, który będzie można potem rozpowszechniać w sklepach z aplikacjami (np. Google Play), należy przeprowadzić proces kompilacji w trybie \emph{release}. Aby to zrobić, potrzebny jest certyfikat - klucz prywatny potwierdzający, że to my jesteśmy właścicielami naszej aplikacji. Szczegółowe instrukcje dotyczące tego jak taki certyfikat  \linebreak stworzyć, znajdują się w artykule \emph{Publishing for Android} na stronie NativeScript Docs (https://docs.nativescript.org/tooling/publishing/publishing-android-apps).
+
+Po stworzeniu certyfikatu możemy przystąpić do kompilacji w trybie release. Uruchamiamy okno konsoli w folderze src/RecruitMe.MobileApp i wpisujemy: 
+\begin{verbatim}
+    tns build android --release 
+        --key-store-path <ścieżka-do-certyfikatu>
+        --key-store-password <hasło-certyfikatu> 
+        --key-store-alias <alternatywna-nazwa-certyfikatu> 
+        --key-store-alias-password <hasło-altern.-nazwy-certyfikatu>
+    
+\end{verbatim}
+Wszystkie cztery wartości otrzymamy po stworzeniu certyfikatu w poprzednim kroku. Stworzony plik znajdziemy w folderze src/RecruitMe.MobileApp/pl \linebreak atforms/android/app/build/outputs/apk/release. \\
+
+\textbf{Uwaga}: Przed procesem kompilacji aplikacji należy zainstalować najpierw serwer i otrzymać jego adres. Następnie należy otworzyć plik src/RecruitMe.Mo \linebreak bileApp/app/services/common/apiGateway.ts w dowolnym edytorze tekstu i zmienić w linii 9. pomiędzy cudzysłowami adres, na jaki nasza aplikacja będzie wysyłała żądania. W przeciwnym wypadku proces kompilacji będzie trzeba powtórzyć już z zmienionymi danymi. Niezmienienie danych skutkuje wadliwym działaniem całej aplikacji mobilnej.
+
+\subsection{Instalacja aplikacji na urządzeniu}
+Aby móc korzystać z specjalnie przygotowanej aplikacji mobilnej, należy ją wcześniej zainstalować na urządzeniu z systemem operacyjnym Android.
+W zależności od wybranej przez Organizatorów rekrutacji metody dystrybucji aplikacji mobilnej istnieją różne sposoby instalacji tego programu. \\
+
+\textbf{Przekazywanie pliku APK} \\
+Organizatorzy mogą się zdecydować udostępniać we własnym zakresie aplikację mobilną na systemy Android poprzez plik APK. Zainteresowani programem użytkownicy muszą ściągnąć go na swoje telefony i kliknąć na pobrany plik, by go zainstalować. W takim wypadku użytkownicy zmuszeni są zezwolić na \textbf{instalowanie aplikacji z nieznanych źródeł}. W każdym telefonie tą opcję włącza się inaczej, więc zalecane jest wyszukanie w Internecie gdzie znajduje się ta opcja w danym modelu telefonu. \\
+
+\textbf{Google Play lub inny sklep z aplikacjami} \\
+By potencjalnie zwiększyć zakres odbiorców aplikacji, istnieje opcja  \linebreak upublicznienia aplikacji w sklepie/pach z aplikacjami. Gdy już nasza aplikacja znajdzie się w takim sklepie, musimy ją wyszukać i kliknąć przycisk \emph{Instaluj}. Po pobraniu i zainstalowaniu aplikacji, możemy kliknąć \emph{Otwórz}, by od razu przejść \linebreak do aplikacji.
+
+\section{Aplikacja webowa}
+Aplikacja webowa nie wymaga instalacji - jedynym wymaganiem jest posiadanie zainstalowanej przeglądarki internetowej. Chociaż aplikacja powinna działać na dowolnej nowoczesnej przeglądarce internetowej, zalecane jest używanie przeglądarek Google Chrome lub Mozilla Firefox, za pomocą których aplikacja była tworzona i została na nich przetestowana. Podczas testów znalezione zostały niepożądane zachowania w przypadku niektórych przeglądarek: 
+\begin{itemize}
+	\item \textbf{Mozilla Firefox} - Jeśli w procesie konfiguracji (opisanym poniżej) \linebreak  zrezygnujemy z przekierowania użytkowników na połączenie bezpieczne (HTTPS) przeglądarka, ze względów bezpieczeństwa, odmówi aplikacji dostępu do kamerki urządzenia.
+	\item \textbf{Microsoft Edge} - Ze względu na ograniczone funkcjonalności przeglądarki niektóre funkcjonalności mogą nie działać poprawnie np.: przeglądarka nie wspiera konstruktora \verb"new File()", który jest używany w zapisie zdjęcia zrobionego kamerką - tym samym ta funkcjonalność nie działa poprawnie.
+\end{itemize}
+\section{Baza danych oraz serwer API}
+Instalacja tych dwóch komponentów jest ze sobą bardzo powiązana. Jest ona również dość złożona, więc została ona podzielona na dwie części: konfigurację, czyli dostosowanie systemu do naszych potrzeb oraz wdrożenie czyli upublicznienie systemu.
+\subsection{Konfiguracja}
+\subsubsection{Potrzebne narzędzia}
+Absolutnym minimum do konfiguracji aplikacji jest dowolny edytor tekstowy, jednak zalecane użycie zintegrowanego środowiska programistycznego - IDE (np.: Visual Studio, Visual Studio Code), które ułatwi zdanie i wskaże ewentualne błędy. Dodatkowo, jeśli chcemy testować stworzoną konfigurację potrzebujemy narzędzi programistycznych: 
+\begin{itemize}
+    \item dotnet sdk (https://dotnet.microsoft.com/download), 
+    \item node oraz npm (https://nodejs.org/en/download/), 
+    \item MySQL Server (https://www.mysql.com/downloads/). 
+\end{itemize} 
+\subsubsection{Strony dla użytkowników niezalogowanych}
+W systemie zostały przygotowany strony ogólnodostępne: strona główna, \linebreak
+"o szkole" i "regulamin". Ich zawartość można zmienić edytując odpowiadające im pliki w folderze src/RecruitMe.Web/ClientApp/components/staticpages.\linebreak
+Domyślnie są one wypełnione przykładowym tekstem "lorem ipsum".
+\subsubsection{Treść wysyłanych maili}
+Aby zmienić treść wiadomości email wysyłanych do użytkowników należy zmodyfikować pola w klasie EmailContentConfiguration znajdującej się w folderze src/RecruitMe.Logic/Configuration/. Możliwe jest zmienienie tytułów i treści wszystkich maili wysyłanych przez system.
+\begin{itemize}
+    \item RegisteredTitle, RegisteredBody odpowiadają tytułowi i treści wiadomości wysyłanej po zarejestrowaniu się do systemu,
+    \item EmailVerifiedTitle, EmailVerifiedBody odpowiadają tytułowi i treści wiadomości wysyłanej po potwierdzeniu adresu email,
+    \item LoginRemindedTitle, LoginRemindedBody odpowiadają tytułowi i treści wiadomości wysyłanej kiedy użytkownik używa funkcjonalności przypomnienia loginu
+    \item ResetPasswordTitle, ResetPasswordBody odpowiadają tytułowi i treści wiadomości kiedy użytkownik chce zresetować hasło.
+\end{itemize}
+\subsubsection{Certyfikat SSL}
+Z uwagi na dane osobowe przesyłane pomiędzy aplikacjami, połączenie musi być zabezpieczone, a użytkownicy powinni używać protokołu HTTPS przy łączeniu się z serwerem. Do aplikacji dołączony jest testowy certyfikat SSL wygenerowany na potrzeby rozwoju i testów aplikacji. Nie należy, jednak go używać w środowisku produkcyjnym. Wykupiony certyfikat należy umieścić w formacie .pfx w folderze  src/RecruitMe.Web/ssl/ z nazwą aspnetapp.pfx. Hasło, którym zaszyfrowany jest plik, należy umieścić w pliku appsettings.json w folderze src/RecruitMe.Web/ pod kluczem SslCertificatePassword. 
+\subsubsection{Pliki konfiguracyjne}
+W pliku appsettings.json znajdują się dane konfigurujące zachowanie aplikacji. Poza wspomnianym powyżej hasłem do certyfikatu należy zmienić:
+\begin{itemize}
+    \item ConnectionString - wartość "password" należy zmienić z domyślnej \linebreak
+    ("Tester!123") na wybrane przez siebie hasło,
+    \item UseHttpsRedirection - jeśli dostarczony certyfikat jest zaufany (tzn. jest wystawiony przez Urząd Certyfikacji, angl: CA), należy zmienić wartość na "True" - wówczas użytkownicy będą przekierowywani na połączenie bezpieczne, nawet jeśli pierwsze połączenie było po kanale niezabezpieczonym,
+    \item BusinessConfiguration:Email - konto poczty elektronicznej, której chcemy aby były wysyłane wiadomości do użytkowników. Potrzebny jest dostęp SMTP to wskazanego konta.
+    \item BusinessConfiguration:EmailPassword - hasło to powyższego konta,
+    \item BusinessConfiguration:LowestRegistrationDate - najniższa możliwa data urodzenia jaką może mieć użytkownik, aby mógł się zarejestrować w systemie,
+    \item BusinessConfiguration:HighestRegistrationDate - najwyższa możliwa data urodzenia jaką może mieć użytkownik, aby mógł się zarejestrować w systemie,
+    \item BusinessConfiguration:BaseAddress - adres publiczny serwera, po którym będą się łączyć użytkownicy.
+    \item PaymentConfiguration:Id - unikatowy numer sklepu w serwisie Dotpay
+    \item PaymentConfiguration:RegistrationFee - kwota jaką kandydaci muszą uiścić w serwisie Dotpay
+    \item PaymentConfiguration:Currency - waluta określająca \emph{RegistrationFee}; \linebreak  dostępne wartości: \emph{PLN}, \emph{EUR}, \emph{USD}, \emph{GBP}, \emph{JPY}, \emph{CZK}, \emph{SEK}, \emph{UAH}, \emph{RON}, \emph{NOK}, \emph{BGN}, \emph{CHF}, \emph{HRK}, \emph{HUF}, \emph{RUB}
+    \item PaymentConfiguration:PIN - kod PIN do unikatowego numeru sklepu - dostępny w panelu Dotpay 
+    \item PaymentConfiguration:AuthToken - token autoryzacji do konta Dotpay; to ciąg znaków w systemie \emph{Base64}, który po odkodowaniu sprowadza się do następującego napisu: \emph{<nazwa użytkownika>}:\emph{<hasło do systemu Dotpay>} (znaki \emph{<} oraz \emph{>} muszą być pominięte, zostały one użyte tylko dla czytelności)
+    \item PaymentConfiguration:UseProductionServer - parametr określający czy aplikacja do połączenia ma korzystać z serwera produkcyjnego Dotpay; wartość \emph{false} będzie oznaczała, że wszystkie zapytania do serwisu Dotpay będą przechodziły przez serwer testowy - należy wtedy w pola \textbf{PaymentConfiguration:PIN} oraz \textbf{PaymentConfiguration:AuthToken} przekazać dane testowe
+\end{itemize}
+\subsection{Wdrożenie}
+\subsubsection{Potrzebne narzędzia}
+Do wdrażania i hostowania systemu użyty został Docker. Jest to narzędzie dzięki któremu możemy zdefiniować środowisko wykonawcze aplikacji, usuwając w ten sposób zależność od sytemu operacyjnego i zainstalowanych bibliotekach.
+\subsubsection{Wymagania sprzętowe}
+Wymagania sprzętowe są w pełni zależne od wykorzystania systemu w trakcie rejestracji -  aplikacja, z której będzie korzystać 100 użytkowników ma o wiele mniejsze wymagania od aplikacji z której korzysta 3000 osób. Dlatego też zaleca się monitorowanie wolnych zasobów systemu w czasie jego pracy - należy również pamiętać, że przed kluczowymi datami, np.: koniec okresu rejestracji, ogłoszenie wyników, ruch w systemie znacznie wzrośnie a z nim zapotrzebowanie na zasoby. Dla aplikacji, których liczba użytkowników nie przekroczy 1000 sugerujemy serwer: o co najmniej 32GB wolnego miejsca na dysku twardym, 8GB pamięci RAM oraz dowolny nowoczesny procesor o co najmniej 2 rdzeniach.
+\subsubsection{Utworzenie sieci}
+Pierwszym krokiem jest utworzenie wirtualnej sieci dla kontenerów dockera. Sprowadza się to do wykonania polecenia:
+\begin{verbatim}
+    docker network create --driver=bridge recruit-me-network
+\end{verbatim}
+\subsubsection{Utworzenie bazy}
+Następnie wewnątrz sieci uruchamiamy MySQL Server. Poniższy skrypt kolejno: pobiera obraz serwera bazy danych, startuje go wewnątrz sieci i przegląda logi w poszukiwaniu wygenerowanego hasła.
+\begin{verbatim}
+    docker pull mysql/mysql-server
+    docker run -p 3306:3306 --net=recruit-me-network 
+        --name=rm-mysql -d mysql/mysql-server
+    docker logs rm-mysql 2>&1 | grep GENERATED
+\end{verbatim}
+Oczekiwanym wynikiem ostatniej komendy jest wiersz podobny do poniższego zawierającego hasło. Jeśli nie otrzymujemy takiego wyniku należy odczekać chwilę, aż baza danych się uruchomi. W przypadku niepowodzenia informacje o błędach możemy sprawdzić poleceniem \verb"docker logs rm-mysql".
+\begin{verbatim}
+    [Entrypoint] GENERATED ROOT PASSWORD: 6IbLUwAaKXEG[aBc0MaONz
+\end{verbatim}
+Następnie logujemy się do serwera za pomocą komendy.
+\begin{verbatim}
+    docker exec -it rm-mysql mysql -uroot -p
+\end{verbatim}
+Zostaniemy zapytani o hasło, które znaleźliśmy w logach. Po zalogowaniu wykonujemy poniższy skrypt, w którym podmieniamy hasło "Tester!123" na zgodne z hasłem w appsettings.json.
+\begin{verbatim}
+    ALTER USER 'root'@'localhost' IDENTIFIED BY 'Tester!123';
+    CREATE USER 'recruitme'@'%' IDENTIFIED BY 'Tester!123';
+    GRANT ALL PRIVILEGES ON *.* TO 'recruitme'@'%';
+    quit
+\end{verbatim}
+W ten sposób skonfigurowana baza danych jest gotowa na połączenia. Można się do niej podłączyć używając programów typu MySQL Workbench i konfigurować według własnych potrzeb. Katalog bazy aplikacji zostanie stworzony przy pierwszym włączeniu aplikacji.
+\subsubsection{Serwer API}
+Aby uruchomić serwer API najpierw należy utworzyć jego obraz. Dzieje się to w krokach zdefiniowanych w pliku Dockerfile. Aby uruchomić proces należy będąc w folderze src/ wywołać komendę:
+\begin{verbatim}
+    docker build -t rm-api-image .
+\end{verbatim}
+Proces kompilacji może być czasochłonny, zwłaszcza za pierwszym razem. Kiedy się skończy, możemy otrzymany obraz uruchomić poleceniem:
+\begin{verbatim}
+    docker run -d --net=recruit-me-network --name rm-api 
+        -p 80:80 -p 443:443 --expose=80 --expose=443 rm-api-image
+\end{verbatim}
+Po chwili serwer powinien być gotowy na przyjmowanie połączeń co można sprawdzić poleceniem logs:
+\begin{verbatim}
+    docker logs rm-api
+\end{verbatim}
+Przykładowy wynik polecenia:
+\begin{verbatim}
+    Now listening on: https://0.0.0.0:443
+    Now listening on: http://0.0.0.0:80
+    Application started. Press Ctrl+C to shut down.
+\end{verbatim}
+\subsubsection{Czynności po wdrożeniu}
+Pierwszą czynnością po wdrożeniu systemu, którą należy wykonać natychmiast po pierwszym włączeniu aplikacji jest zmiana hasła administratora z domyślnego \verb"ZMIEN_TO_HASLO". Dokonuje się tego analogicznie jak hasło resetują użytkownicy, email z linkiem do zmiany hasła przyjdzie na adres wskazany w appsettings.json. Po zmianie hasła można przystąpić do wprowadzania danych: nauczycieli, egzaminów i ich kategorii.
+\section{Elementy nie pokryte instrukcją}
+\subsection{Publikacja aplikacji w sklepie Google Play}
+Organizator, chcąc upublicznić aplikację mobilną w sklepie Google Play, musi uiścić opłatę rejestracyjną konta deweloperskiego. Z tej racji tworzenie takiego konta oraz publikacja tej aplikacji nie jest pokryta w tej instrukcji.
+\subsection{Konfiguracja sieci serwera}
+Konfiguracja sieci do której podłączony jest serwer zależy w pełni od osoby instalującej system. Oczywiście, aby system był użytkowane przez potencjalnych kandydatów należy wykupić domenę internetową, aby ukryć adres IP przed użytkownikiem.\\
+Konfiguracja sieci również ma bardzo duży wpływ na bezpieczeństwo systemu. Zaleca się skonfigurowanie jej tak, aby baza danych nie była dostępna spoza sieci lokalnej. Dodatkowo, aby zapewnić płynne działanie systemu, powinno się zastosować usługi blokujące ataki typu odmowy usługi (DDoS) lub brute force. 
+\subsection{Założenie konta produkcyjnego Dotpay}
+Do poprawnego działania systemu, administrator jest zobowiązany do założenia konta produkcyjnego w serwisie Dotpay. Samodzielne utworzenie konta zwiększa bezpieczeństwo i zmniejsza prawdopodobieństwo dostania się go w niepowołane ręce. Administrator nadal jest zobowiązany dostarczyć do aplikacji wszystkie potrzebne dane, jakie posiada właściciel konta w serwisie Dotpay.
+
+\section{Historia dokumentu}
+
+\begin{tabularx}{\linewidth}{|X|l|l|X|}
+    \hline
+    Autor & Data & Wersja & Wprowadzone zmiany \\
+    \hline
+    Andrzej Westfalewicz & 04.01.2020 & v0.1 & Pierwsza wersja dokumentu \\
+    \hline
+    Andrzej Westfalewicz & 05.01.2020 & v0.1 & Poprawki pierwszej wersji dokumentu \\
+    \hline
+    Andrzej Westfalewicz, Filip Zyskowski & 06.01.2020 & v0.1 & Dodanie informacji o integracji z Dotpay i o aplikacji mobilnej  \\
+    \hline
+\end{tabularx}
+
+\end{document}
