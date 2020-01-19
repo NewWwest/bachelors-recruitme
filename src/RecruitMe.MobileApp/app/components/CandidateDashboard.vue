@@ -1,5 +1,5 @@
 <template>
-    <Page @loaded="onNavigatingTo" class="page">
+    <Page @navigatingTo="onNavigatingTo" class="page">
         <ActionBar class="action-bar">
             <StackLayout horizontalAlignment="left" orientation="horizontal">
                 <Image src="res://mobile_menu_white" width="32" height="32"
@@ -15,12 +15,13 @@
                 <GridLayout rows="150,auto,*" columns="auto,5*,6*,auto" class="pageBack">
                     <Label row="1" col="1" class="status-layout">
                         <FormattedString>
-                            <Span v-if="status === 1" class="fa fa-green text-center" text.decode="&#xf058;"/>
-                            <Span v-if="status === 2" class="fa fa-red text-center" text.decode="&#xf057;"/>
-                            <Span v-else class="fa fa-yellow text-center" text.decode="&#xf059;"/>
+                            <Span v-if="status == 1" class="fa fa-green" text.decode="&#xf058;"/>
+                            <Span v-else-if="status == 2" class="fa fa-red" text.decode="&#xf057;"/>
+                            <Span v-else-if="!status" class="fa fa-yellow" text.decode="&#xf059;"/>
                         </FormattedString>
                     </Label>
-                    <Label row="1" col="2" class="desc-layout text-center" :text="paymentDescription" textWrap="true"/>
+                    <Label row="1" col="2" class="desc-layout" :text="paymentDescription" 
+                        textWrap="true" @loaded="onDescLoaded"/>
                 </GridLayout>
             </ScrollView>
         </GridLayout>
@@ -38,6 +39,9 @@ import PopupFactory from '@/services/popupFactory';
 import { Color } from 'tns-core-modules/color/color';
 import { LocalStorageService } from '../services/localStorage/localStorageService';
 import { PersonalDataService } from '../services/personalData/personalDataService';
+import { EventData } from 'tns-core-modules/ui/page/page';
+import { Label } from 'tns-core-modules/ui/label';
+import { isAndroid } from 'tns-core-modules/platform';
 
 @Component({
     components: { NotFilledPersonalData }
@@ -50,7 +54,7 @@ export default class CandidateDashboard extends Vue {
     
     get paymentDescription() {
         if (this.status) {
-            return this.status === 1 ? "Gratulacje! Zostałeś przyjęty! Dalszych szczegółów możesz spodziewać się wkrótce drogą mailową lub telefoniczną."
+            return this.status === 1 ? "Gratulacje! Zostałeś przyjęty! Szczegóły zostaną przekazane wkrótce drogą mailową lub telefoniczną."
                 : "Niestety, ale nie jesteśmy w stanie przyjąć Ciebie do naszej szkoły.";
         }
         else return "Twój proces rekrutacji jest w trakcie. Pamiętaj by uzupełnić wszystkie potrzebne dane!";
@@ -90,12 +94,22 @@ export default class CandidateDashboard extends Vue {
                     title: `RecruitMe - masz ${count} nowych wiadomości`,
                     body: 'Kliknij, aby przejść do chatu',
                     badge: count,
-                    notificationLed: new Color("#ff0000")
+                    notificationLed: new Color("#00ff00")
                 }]);
             }
         })
     }
     
+    // centers description text
+    onDescLoaded(args: EventData) {
+        const centerConst : number = 17; // https://developer.android.com/reference/android/view/Gravity.html#CENTER
+        const lbl = args.object as Label;
+
+        if (isAndroid) {
+            lbl.android.setGravity(centerConst);
+        }
+    }
+
     onDrawerButtonTap() {
         utils.showDrawer();
     }
@@ -122,16 +136,15 @@ export default class CandidateDashboard extends Vue {
         background-color: #ffffff;
         border-radius: 20 0 0 20;
         text-align: center;
-        vertical-align: middle;
+        vertical-align: center;
     }
     .desc-layout {
         background-color: #dddddd;
         border-radius: 0 20 20 0;
         height: 100;
         word-wrap: break-word;
-        text-align: center;
-        padding-top: 18;
         font-size: 15;
+        text-align: center;
     }
 
     .dummyImage {
