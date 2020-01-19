@@ -14,7 +14,7 @@
                                 <Span class="fa" text.decode="&#xf007; "/>
                             </FormattedString>
                         </Label>
-                        <TextField v-model="username" hint="Login"
+                        <TextField v-model="username" hint="Login" autocorrect="false" autocapitalizationType="none"
                         :class="[!validUserName() ? 'form-input' : 'error-input', 'input-width']"/>
                     </FlexboxLayout>
                     <Label v-show="validUserName()" class="error-label"
