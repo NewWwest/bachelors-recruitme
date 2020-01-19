@@ -24,13 +24,18 @@ namespace RecruitMe.Logic.Operations.Administration.Candidate
 
         public override PagedResponse<GetCandidatesResultDto> Execute(PagingParameters request)
         {
+            if(request.PageSize < 0) //vuetify sends -1 when no limit is set
+            {
+                request.PageSize = 1_000_000;
+            }
+
             var dataTask = Get(
                 _dbContext.Users.Where(u => u.CandidateId != _businessConfiguration.AdminLogin),
                 request)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync();
-            var countTask = _dbContext.Users.CountAsync();
+            var countTask = _dbContext.Users.Where(u=>u.CandidateId != _businessConfiguration.AdminLogin).CountAsync();
             Task.WhenAll(dataTask, countTask).Wait();
             var count = countTask.Result;
             var data = dataTask.Result;

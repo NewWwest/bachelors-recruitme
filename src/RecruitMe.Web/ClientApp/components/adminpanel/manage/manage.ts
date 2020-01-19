@@ -17,7 +17,7 @@ export default class ManageComponent extends Vue {
     rowsTotal = 0;
     items: any = [];
     pagination: any = {
-        rowsPerPage: 5,
+        itemsPerPage: 5,
         page: 1
     }
 
@@ -176,13 +176,13 @@ export default class ManageComponent extends Vue {
             case SystemEntity.Candidate:
                 let paging: any = {
                     page: this.pagination.page,
-                    pageSize: this.pagination.rowsPerPage,
+                    pageSize: this.pagination.itemsPerPage,
                     sortBy: this.pagination.sortBy[0],
                     sortDesc: this.pagination.sortDesc[0]
                 }
                 this.apiGateway.listCandidates(paging).then(x => {
                     this.items = x.data;
-                    this.rowsTotal = x.total;
+                    this.rowsTotal = x.totalCount;
                 }, err => MessageBusService.emitError(getErrorMessage(err)));
                 break;
             default:

@@ -149,7 +149,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
                         .Replace("]", "")
                         .Split(".", StringSplitOptions.RemoveEmptyEntries)
                         .Select(s => s.Trim())
-                        .Select(s => int.Parse(s))
+                        .Select(s => int.Parse(s) + 1)
                         .ToList();
 
                     return grades;
