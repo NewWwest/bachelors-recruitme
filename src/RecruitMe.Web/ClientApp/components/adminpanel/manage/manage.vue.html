@@ -39,7 +39,8 @@
                               :items="items"
                               :options.sync="pagination"
                               @click:row="handleSelect"
-                              :server-items-length="rowsTotal">
+                              :server-items-length="rowsTotal"
+                              :hide-default-footer="SystemEntityEnum.Candidate!=currentSystemEntity">
                 </v-data-table>
             </v-card-text>
         </card-layout>

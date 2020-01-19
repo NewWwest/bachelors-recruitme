@@ -11,7 +11,7 @@ using System.Text;
 
 namespace RecruitMe.Logic.Tests.Helpers
 {
-    public static class StartupHelper
+    public static class SetupHelper
     {
         public static Mock<BaseDbContext> GetSetUpAsyncMethod<T>(
             Expression<Func<BaseDbContext, DbSet<T>>> tableExpression,

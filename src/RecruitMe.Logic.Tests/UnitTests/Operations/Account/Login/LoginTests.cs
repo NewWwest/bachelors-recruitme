@@ -19,7 +19,7 @@ namespace RecruitMe.Logic.Tests.Operations.Account.Login
         [SetUp]
         public void Setup()
         {
-            DbContext = StartupHelper.GetSetUpAsyncMethod(t => t.Users, GetUserCollection());
+            DbContext = SetupHelper.GetSetUpAsyncMethod(t => t.Users, GetUserCollection());
         }
 
         [Test]

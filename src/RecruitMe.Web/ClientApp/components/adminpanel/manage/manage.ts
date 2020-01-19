@@ -46,57 +46,69 @@ export default class ManageComponent extends Vue {
                 return [
                     {
                         text: 'ID egzaminu',
-                        value: 'id'
+                        value: 'id',
+                        sortable: false,
                     },
                     {
                         text: 'Czas rozpoczęcia',
-                        value: 'startDateTime'
+                        value: 'startDateTime',
+                        sortable: false,
                     },
                     {
                         text: 'Czas per kandydat [min]',
-                        value: 'durationInMinutes'
+                        value: 'durationInMinutes',
+                        sortable: false,
                     },
                     {
                         text: 'Liczba miejsc',
-                        value: 'seatCount'
+                        value: 'seatCount',
+                        sortable: false,
                     },
                     {
                         text: 'Kategoria',
-                        value: 'examCategory'
+                        value: 'examCategory',
+                        sortable: false,
                     }
                 ];
             case SystemEntity.ExamCategory:
                 return [
                     {
                         text: 'ID Kategorii',
-                        value: 'id'
+                        value: 'id',
+                        sortable: false,
                     },
                     {
                         text: 'Nazwa',
-                        value: 'name'
+                        value: 'name',
+                        sortable: false,
                     },
                     {
                         text: 'Typ Egzaminu',
-                        value: 'examTypeName'
+                        value: 'examTypeName',
+                        sortable: false,
                     }
                 ];
             case SystemEntity.Teacher:
                 return [
                     {
                         text: 'ID nauczyciela',
-                        value: 'id'
+                        value: 'id',
+                        sortable: false,
                     },
                     {
                         text: 'Imię',
-                        value: 'name'
+                        value: 'name',
+                        sortable: false,
                     },
                     {
                         text: 'Nazwisko',
-                        value: 'surname'
+                        value: 'surname',
+                        sortable: false,
                     },
                     {
                         text: 'Adres Email',
-                        value: 'email'
+                        value: 'email',
+                        sortable: false,
                     }
                 ];
         }
