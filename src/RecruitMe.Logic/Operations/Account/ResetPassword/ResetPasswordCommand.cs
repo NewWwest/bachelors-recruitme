@@ -39,7 +39,7 @@ namespace RecruitMe.Logic.Operations.Account.ResetPassword
             _sendEmailCommand.Execute(new EmailDto()
             {
                 To = user.Email,
-                Title = EmailContentConfiguration.RegisteredTitle,
+                Title = EmailContentConfiguration.ResetPasswordTitle,
                 Body = EmailContentConfiguration.ResetPasswordBody(_endpointConfig.SetNewPassword(passwordReset.Id.ToString()))
             });
 

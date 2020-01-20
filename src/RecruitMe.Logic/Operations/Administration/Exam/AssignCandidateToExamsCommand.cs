@@ -20,9 +20,21 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
 
         public async override Task<OperationResult> Execute(int userId)
         {
+            var alreadyAssigned = await _dbContext.ExamTakers.AnyAsync(et => et.UserId == userId);
+            if (alreadyAssigned)
+            {
+                throw new ValidationFailedException()
+                {
+                    ValidationResult = new ValidationResult($"Kandydat o Id:{userId} jest już zapisany na jakiś egzamin i nie może być zapisany automatycznie")
+                };
+            }
+
             List<Data.Entities.Exam> exams = await _dbContext.Exams
                 .Include(e => e.ExamCategory)
                 .Include(e => e.ExamTakers)
+                .Where(e => e.SeatCount > e.ExamTakers.Count())
+                .GroupBy(e => e.ExamCategoryId)
+                .Select(e => e.OrderBy(e2 => e2.StartDateTime).FirstOrDefault())
                 .ToListAsync();
 
             foreach (var exam in exams)
@@ -31,6 +43,7 @@ namespace RecruitMe.Logic.Operations.Administration.Exam
             }
 
             await _dbContext.SaveChangesAsync();
+            _logger.Log($"Kandydat o Id:{userId} został zapisany na {exams.Count} egzaminów ({string.Join(',', exams.Select(e => e.Id.ToString()))})");
             return new OperationSucceded();
         }
 

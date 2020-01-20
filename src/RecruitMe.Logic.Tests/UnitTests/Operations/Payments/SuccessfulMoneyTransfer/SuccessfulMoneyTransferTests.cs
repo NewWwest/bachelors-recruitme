@@ -34,7 +34,7 @@ namespace RecruitMe.Logic.Tests.UnitTests.Operations.Payments.SuccessfulMoneyTra
         public void Setup()
         {
             DateTimeProvider = new FakeDateProvider();
-            DbContext = StartupHelper.GetSetUpAsyncMethod(t => t.Users, GetUsers())
+            DbContext = SetupHelper.GetSetUpAsyncMethod(t => t.Users, GetUsers())
                             .Extend(t => t.Payments, GetPayments())
                             .Extend(t => t.ExamCategories, GetExamCategories())
                             .Extend(t => t.Exams, GetExams())
