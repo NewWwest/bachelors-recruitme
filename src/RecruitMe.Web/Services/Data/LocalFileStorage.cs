@@ -15,12 +15,19 @@ namespace RecruitMe.Web.Services.Data
         {
             File.Delete(url);
         }
-        
+
         public Stream Get(string url)
         {
-            return new FileStream(url, FileMode.Open);
+            using (var file = new FileStream(url, FileMode.Open))
+            {
+                //to adres the issue of "cannot delete file opened by another proces" we open it only to copy it to a temporary stream
+                var proxyStream = new MemoryStream();
+                file.CopyTo(proxyStream);
+                proxyStream.Seek(0, SeekOrigin.Begin);
+                return proxyStream;
+            }
         }
-        
+
         async Task<string> IFileSaver.SaveAsync(Stream stream, string name)
         {
             var url = FileStorageConfiguration.PrivateFilesRoot + Guid.NewGuid().ToString() + name;

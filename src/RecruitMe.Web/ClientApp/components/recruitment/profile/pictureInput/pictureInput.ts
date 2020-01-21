@@ -30,9 +30,14 @@ export default class PictureInput extends Vue {
 
     mounted() {
         this.video = this.$refs.video;
+        this.tryLoadPicture();
     }
 
     updated() {
+        this.tryLoadPicture();
+    }
+
+    tryLoadPicture() {
         if (this.fileId != null && this.fileId > 0 && !this.originaPictureLoaded) {
             this.apiGateway.getImage(this.fileId).then(d => {
                 this.originaPictureLoaded = true;
