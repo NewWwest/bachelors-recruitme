@@ -31,10 +31,10 @@ export class UserService {
             (response: AxiosResponse<number>) => {
                 if (response != null && response.data != null) {
                     console.log(`Registration succesfull, internal ID: ${response.data}`);
+                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji został wysłany mail z informacjami");
                 }
             }, err => {
                 console.error(err);
-
                 PopupFactory.GenericErrorPopup("" + err);
             });
     }

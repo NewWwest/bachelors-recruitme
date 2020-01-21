@@ -69,15 +69,8 @@ import LoaderService from '../services/loaderView/loader';
         onRegisterTap() {
             if (ConnectionService.IsConnectedToNetwork()) {
                 LoaderService.showLoader();
-                
                 this.userService.register(this.userData).then(data => {
                     LoaderService.hideLoader();
-                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji został wysłany mail z informacjami");
-                }).catch(err => {
-                    console.log(err);
-
-                    LoaderService.hideLoader();
-                    PopupFactory.GenericErrorPopup("" + err);
                 });
             }
             else {
