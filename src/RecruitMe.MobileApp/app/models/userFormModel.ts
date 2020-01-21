@@ -24,11 +24,6 @@ export interface IJwtClaims {
 export interface IResetPasswordRequest {
     login: string
 }
-export interface ISetNewPassword {
-    password: string;
-    confirmPassword: string;
-    token: string;
-}
 export interface IRemindLoginRequest {
     email: string;
     name: string | null;
