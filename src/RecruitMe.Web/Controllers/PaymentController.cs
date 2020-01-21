@@ -47,8 +47,8 @@ namespace RecruitMe.Web.Controllers
         {
             // redirect to web or mobile, depending on data
             string err = "";
-            if ("OK" != redirectDto.StatusCode?.ToUpperInvariant())
-                err = redirectDto.ErrorCode.ToString();
+            if ("OK" != redirectDto.status?.ToUpperInvariant())
+                err = redirectDto.error_code.ToString();
 
             string redirectUrl = Get<EndpointConfig>().PaymentsThankYou(err);
 
