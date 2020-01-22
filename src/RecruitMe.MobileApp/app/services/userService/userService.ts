@@ -2,8 +2,7 @@ import { ApiGateway } from "../common/apiGateway";
 import { LocalStorageService } from "../localStorage/localStorageService";
 import { AxiosResponse } from "axios";
 import { IAuthenticationResult, IRegistrationRequest,
-    IJwtClaims, IRemindLoginRequest,
-    IResetPasswordRequest, ISetNewPassword } from "../../models/userFormModel";
+    IJwtClaims, IRemindLoginRequest, IResetPasswordRequest } from "../../models/userFormModel";
 import PopupFactory from '../popupFactory';
 import { PersonalDataService } from '../personalData/personalDataService';
 
@@ -32,10 +31,10 @@ export class UserService {
             (response: AxiosResponse<number>) => {
                 if (response != null && response.data != null) {
                     console.log(`Registration succesfull, internal ID: ${response.data}`);
+                    PopupFactory.GenericSuccessPopup("Na adres e-mail podany w rejestracji został wysłany mail z informacjami");
                 }
-            },(err: any) => {
+            }, err => {
                 console.error(err);
-
                 PopupFactory.GenericErrorPopup("" + err);
             });
     }
@@ -44,18 +43,7 @@ export class UserService {
         return this._apiGateway.resetPassword(resetmodel).then(
             (response: AxiosResponse<number>) => {
                 PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji została wyslana wiadomosc z linkiem do zmiany hasla");
-            }, (err: any) => {
-                console.error(err);
-
-                PopupFactory.GenericErrorPopup("" + err);
-            });
-    }
-
-    public setNewPassword(resetModel: ISetNewPassword): Promise<void> {
-        return this._apiGateway.setNewPassword(resetModel).then(
-            (response: AxiosResponse<number>) => {
-
-            }, (err: any) => {
+            }, err => {
                 console.error(err);
 
                 PopupFactory.GenericErrorPopup("" + err);
@@ -66,7 +54,7 @@ export class UserService {
         return this._apiGateway.remindLogin(remindModel).then(
             (response: AxiosResponse<string>) => {
                 PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji został wysłany Twój login");
-            }, (err: any) => {
+            }, err => {
                 console.error(err);
 
                 const messageText = remindModel.pesel ? "Niepoprawny adres e-mail i/lub numer PESEL" :

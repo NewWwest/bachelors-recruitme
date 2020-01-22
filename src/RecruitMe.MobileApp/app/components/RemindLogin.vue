@@ -57,10 +57,6 @@ export default class RemindLogin extends Vue {
             LoaderService.showLoader();
             this.userService.remindLogin(this.remindData).then(() => {
                 LoaderService.hideLoader();
-                PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji został wysłany mail z informacjami");
-            }, err => {
-                LoaderService.hideLoader();
-                PopupFactory.GenericErrorPopup("" + err);
             });
         }
         else {
@@ -70,6 +66,8 @@ export default class RemindLogin extends Vue {
 
     switchChange() {
         this.remindData.pesel = "";
+        this.remindData.name = "";
+        this.remindData.surname = "";
     }
 }
 </script>

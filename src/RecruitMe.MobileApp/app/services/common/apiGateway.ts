@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { LocalStorageService } from '../localStorage/localStorageService';
-import { IRegistrationRequest, IResetPasswordRequest,
-     ISetNewPassword, IRemindLoginRequest } from '../../models/userFormModel';
+import { IRegistrationRequest, IResetPasswordRequest, IRemindLoginRequest } from '../../models/userFormModel';
 import { IProfileData } from '@/models/personalDataModel';
 import { Request, session, Task } from 'nativescript-background-http';
 import * as httpModule from "tns-core-modules/http/http";
@@ -49,10 +48,6 @@ export class ApiGateway {
     public resetPassword(resetPasswordRequest: IResetPasswordRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 
             '/api/Account/ResetPassword', resetPasswordRequest)
-    }
-    public setNewPassword(resetPasswordRequest: ISetNewPassword): Promise<AxiosResponse> {
-        return this.makeRequest(RequestType.POST, 
-            '/api/Account/SetNewPassword', resetPasswordRequest)
     }
     public remindLogin(remindModel: IRemindLoginRequest): Promise<AxiosResponse> {
         return this.makeRequest(RequestType.POST, 

@@ -38,11 +38,7 @@ export default class ResetPassword extends Vue {
             LoaderService.showLoader();
             this.userService.resetPassword(this.resetData).then(() => {
                 LoaderService.hideLoader();
-                PopupFactory.GenericSuccessPopup("Na adres e-mail podany przy rejestracji został wysłany mail z informacjami");
-            }, err => {
-                LoaderService.hideLoader();
-                PopupFactory.GenericErrorPopup("" + err);
-            });
+            })
         }
         else {
             PopupFactory.ConnectionError();

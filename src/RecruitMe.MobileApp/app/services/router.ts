@@ -31,12 +31,18 @@ export default function Router<RouterOptions>(Vue: typeof _Vue, options? : Route
 
 export class Goto {
     options: RouterOptions;
+    names: string[] = [];
 
     constructor(_options : any) {
         this.options = _options || new RouterOptions(false, true, new Transition("slide", 380, "easeIn"));
     }
 
     private navigate(component : VueConstructor, clearHistory?: boolean) {
+        if (this.names.length && this.names[this.names.length - 1] === component.name) {
+            return;
+        }
+        this.names.push(component.name);
+        
         SelectedPageService.getInstance().updateSelectedPage(component.name);
 
         let options = clearHistory ? new RouterOptions(true, true, new Transition("slide", 380, "easeIn"))
