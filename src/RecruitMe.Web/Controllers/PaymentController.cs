@@ -40,7 +40,7 @@ namespace RecruitMe.Web.Controllers
         }
 
         // redirect after payment method
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         [Route("afterPayment")]
         public ActionResult AfterPayment([FromQuery] DotpayRedirectDto redirectDto)
