@@ -25,17 +25,17 @@ export default class ChatWithComponent extends Vue {
     beforeMount() {
         this.person = this.$route.params.login;
         setInterval(this.getMessages, 15000);
-        this.getMessages(1);
+        this.getMessages();
     }
 
     sendMessage() {
         this.messageService.sendMessage(this.person, this.msg).then(msg => {
-            this.getMessages(1);
+            this.getMessages();
             this.msg = "";
         })
     }
 
-    getMessages(page: number = this.page) {
+    getMessages(page: number = 1) {
         if (!this.$route.fullPath.includes("chatwith")) {
             return;
         }
@@ -47,6 +47,7 @@ export default class ChatWithComponent extends Vue {
             if (d.count <= this.messages.length) {
                 this.readAll = true;
             }
+            this.page = page > 1 ? page : this.page;
 
             this.fetching = false;
         }, _ => {

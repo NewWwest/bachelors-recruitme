@@ -21,12 +21,8 @@ import { LocalStorageService } from './localStorage/localStorageService';
 export default function Router<RouterOptions>(Vue: typeof _Vue, options? : RouterOptions) {
     let goto : Goto;
 
-    //Vue.mixin({
-     //   beforeCreate() {
-            goto = new Goto(options);
-            Vue.prototype.$goto = goto;
-    //    }
-    //}) 
+    goto = new Goto(options);
+    Vue.prototype.$goto = goto;
 }
 
 export class Goto {
