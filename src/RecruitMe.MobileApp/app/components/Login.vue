@@ -36,7 +36,7 @@
                         text="Hasło jest wymagane" />
                     </StackLayout>
 
-                    <Button text="Login" @tap="onLoginButtonTap" class="my-button" />
+                    <Button text="zaloguj się" @tap="onLoginButtonTap" class="my-button" />
 
                     <FlexBoxLayout class="form-group" justifyContent="space-between" alignItems="center">
                         <Label @tap="$goto.RemindLogin()" text="Przypomnij login" />

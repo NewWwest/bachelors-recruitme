@@ -12,7 +12,7 @@
         <GridLayout rows="auto,auto,*">
             <NotFilledPersonalData row="0"></NotFilledPersonalData>
             <StackLayout row="1" class="pageBack-no-pad">
-                <Button v-if="!readAll" @tap="getMessages(page+1)" text="Ściągnij więcej wiadomości"/>
+                <Button v-if="!readAll" @tap="getMessages(page+1)" text="Pobierz więcej wiadomości"/>
             </StackLayout>
             <StackLayout row="2" class="pageBack-no-pad">
                 <ScrollView height="85%">
@@ -64,7 +64,7 @@ export default class Chat extends Vue {
     messages: IMessage[] = [];
 
     page: number = 1;
-    pageSize: number = 2;
+    pageSize: number = 15;
     messageService: MessageService = new MessageService();
 
     getMessages(page: number = 1) {
