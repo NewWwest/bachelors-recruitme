@@ -6,9 +6,9 @@
                 
                 <FlexBoxLayout row="1" justifyContent="space-between" alignItems="center">
                     <Button class="bottomButton" row="1" 
-                        @tap="$goto.Login()" text="login" />
+                        @tap="$goto.Login()" text="zaloguj" />
                     <Button class="bottomButton" row="1"
-                        @tap="$goto.Register()" text="register" />
+                        @tap="$goto.Register()" text="zarejestruj" />
                 </FlexBoxLayout>
             </GridLayout>
         </StackLayout>
@@ -45,7 +45,7 @@ export default class Home extends Vue {
         padding-bottom: 14;
         text-transform: uppercase;
         letter-spacing: 0.1;
-        width: 120em;
+        width: 140em;
         height: 55em;
     }
 

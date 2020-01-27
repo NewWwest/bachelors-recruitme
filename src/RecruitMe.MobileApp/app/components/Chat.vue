@@ -9,21 +9,24 @@
             </StackLayout>  
         </ActionBar>
 
-        <GridLayout rows="auto,*">
+        <GridLayout rows="auto,auto,*">
             <NotFilledPersonalData row="0"></NotFilledPersonalData>
             <StackLayout row="1" class="pageBack-no-pad">
+                <Button v-if="!readAll" @tap="getMessages(page+1)" text="Pobierz więcej wiadomości"/>
+            </StackLayout>
+            <StackLayout row="2" class="pageBack-no-pad">
                 <ScrollView height="85%">
-                    <!-- chat thingy -->
-                    <ListView for="item in messages" separatorColor="transparent" class="list">
-                        <v-template>
-                            <GridLayout columns="*" rows="auto" class="msg">
-                                <StackLayout :class="filter(item.isMine)" orientation="horizontal" :horizontalAlignment="align(item.isMine)">
-                                    <Label :text="item.message" class="msg_text" textWrap="true" verticalAlignment="top"></Label>
-                                </StackLayout>
-                            </GridLayout>
-                        </v-template>
-                    </ListView>
-                    <!-- end of chat thingy -->
+                        <!-- chat thingy -->
+                        <ListView for="item in messages" separatorColor="transparent" class="list">
+                            <v-template>
+                                <GridLayout columns="*" rows="auto" class="msg">
+                                    <StackLayout :class="filter(item.isMine)" orientation="horizontal" :horizontalAlignment="align(item.isMine)">
+                                        <Label :text="item.message" class="msg_text" textWrap="true" verticalAlignment="top"></Label>
+                                    </StackLayout>
+                                </GridLayout>
+                            </v-template>
+                        </ListView>
+                        <!-- end of chat thingy -->
                 </ScrollView>
                 <StackLayout height="15%">
                     <GridLayout columns="*,auto">
@@ -64,10 +67,11 @@ export default class Chat extends Vue {
     pageSize: number = 15;
     messageService: MessageService = new MessageService();
 
-    getNewMessages() {
-        this.messageService.getMessages(this.page, this.pageSize).then(req => {
-            this.processMessages(this.page, req.data);
+    getMessages(page: number = 1) {
+        this.messageService.getMessages(page, this.pageSize).then(req => {
+            this.processMessages(page, req.data);
 
+            this.page = page > 1 ? page : this.page;
             if (req.count <= this.messages.length) {
                 this.readAll = true;
             }
@@ -80,7 +84,7 @@ export default class Chat extends Vue {
     }
     sendMessage() {
         this.messageService.sendMessage(this.msg).then(m => {
-            this.getNewMessages();
+            this.getMessages();
             this.msg = "";
         }, err => {
         });
@@ -123,8 +127,8 @@ export default class Chat extends Vue {
     }
 
     onNavigatingTo() {
-        this.intervalId = setInterval(this.getNewMessages, 15000);
-        this.getNewMessages();
+        this.intervalId = setInterval(this.getMessages, 15000);
+        this.getMessages();
     }
     onNavigatingFrom() {
         clearInterval(this.intervalId);
@@ -154,7 +158,7 @@ export default class Chat extends Vue {
         border-radius: 4;
         height: 40;
     }
-    Button {
+    .chatBtn {
         padding: 5;
         margin: 5;
         background-color: dodgerblue;
