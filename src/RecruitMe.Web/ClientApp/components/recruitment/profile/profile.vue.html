@@ -1,0 +1,99 @@
+﻿<template>
+    <div class="mt-2">
+        <h2>Profil</h2>
+        <!--I asume here email is the marker if profile is loaded-->
+        <spinner v-if="!profile.email"></spinner>
+        <div v-if="profile && profile.status" class="m-3 row">
+            <v-container text-xs-center>
+                <v-row justify="center">
+                    <v-card row wrap align-center :class="className ? className : defaultClassName">
+                        <v-card-subtitle>
+                            <p v-if="RecruitmentStatusEnum.Accepted==profile.status">
+                                Gratulacje! Zostałeś przyjęty! Dalszych szczegółów możesz spodziewać się wkrótce drogą mailową lub telefoniczną.
+                            </p>
+                            <p v-if="RecruitmentStatusEnum.Rejected==profile.status">
+                                Niestety, ale nie jesteśmy w stanie przyjąć Ciebie do naszej szkoły.
+                            </p>
+                        </v-card-subtitle>
+                    </v-card>
+                </v-row>
+            </v-container>
+        </div>
+        <div class="row" v-if="profile.email">
+            <div class="col-sm-6">
+                <v-card class="mb-3">
+                    <v-card-subtitle>
+                        Dane podstawowe
+                    </v-card-subtitle>
+                    <v-card-text>
+                        <v-text-field readonly label="Login" v-model="profile.candidateId" name="profile.candidateId"></v-text-field>
+                        <v-text-field readonly label="Imię" v-model="profile.name" name="profile.name"></v-text-field>
+                        <v-text-field readonly label="Nazwisko" v-model="profile.surname" name="profile.surname"></v-text-field>
+                        <v-text-field readonly label="Adres email" v-model="profile.email" name="profile.email"></v-text-field>
+                        <v-text-field readonly label="Data urodzenia" v-model="birthDate" name="birthDate"></v-text-field>
+                        <v-text-field readonly v-if="profile.pesel" label="Nr PESEL" v-model="profile.pesel" name="profile.pesel"></v-text-field>
+                        <p>
+                            Dane podane przy rejestracji, nie mogą zostać zmienione, jeśli widzisz w nich jakiś błąd, skontaktuj się z administratorem.
+                        </p>
+                    </v-card-text>
+                </v-card>
+
+                <v-card class="mb-3">
+                    <v-card-subtitle>
+                        Dane dodatkowe
+                    </v-card-subtitle>
+                    <v-card-text>
+                        <v-text-field label="Adres" v-model="adress" name="adress"></v-text-field>
+                        <v-text-field label="Imię i nazwisko rodzica 1" v-model="fatherName" name="fatherName"></v-text-field>
+                        <v-text-field label="Imię i nazwisko rodzica 2" v-model="motherName" name="motherName"></v-text-field>
+                        <v-text-field label="Szkoła podstawowa" v-model="primarySchool" name="primarySchool"></v-text-field>
+                        <div class="form-group">
+                            <v-btn @click="handleSubmit">Zapisz dane</v-btn>
+                        </div>
+                        <p v-if="!adress || !fatherName || !motherName || !primarySchool">
+                            Pamiętaj aby uzupełnić te pola przed końcem rekrutacji.
+                        </p>
+                    </v-card-text>
+                </v-card>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="profile-picture mb-4">
+                    <PictureInput @picture-confirmed="PictureConfirmed" :fileId="profilePictureFileId" :fileName="profilePicName"></PictureInput>
+                </div>
+
+                <v-card>
+                    <v-card-subtitle>
+                        Dokumenty
+                    </v-card-subtitle>
+                    <v-card-text>
+                        <div class="mb-3">
+                            <v-file-input v-model="file"
+                                          placeholder="Świadectwo.pdf"
+                                          label="Wybierz dokument">
+                            </v-file-input>
+                            <v-btn @click="uploadDocument">
+                                Prześlij dokument
+                            </v-btn>
+                        </div>
+                        <div v-for="document in profile.documents">
+                            <v-card>
+                                <v-card-subtitle>{{document.name}}</v-card-subtitle>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="downloadDocument(document.id)">
+                                        Pobierz   <v-icon>file_download</v-icon>
+                                    </v-btn>
+                                    <v-btn @click="deleteDocument(document.id)">
+                                        Usuń   <v-icon>delete</v-icon>
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </div>
+                    </v-card-text>
+                </v-card>
+            </div>
+        </div>
+    </div>
+</template>
+<script src="./profile.ts"></script>

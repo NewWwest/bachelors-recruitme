@@ -1,0 +1,10 @@
+<template>
+    <v-container bg fill-height grid-list-md text-xs-center>
+        <v-row justify="center">
+            <v-card row wrap align-center  :class="className ? className : defaultClassName">
+                <slot></slot>
+            </v-card>
+        </v-row>
+    </v-container>
+</template>
+<script src="./cardLayout.ts"></script>

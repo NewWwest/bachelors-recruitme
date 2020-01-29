@@ -1,0 +1,60 @@
+﻿<script src="./register.ts"></script>
+<template>
+    <v-container fluid>
+        <card-layout v-if="!registrationCompleted" className="col-md-10">
+            <v-card-text>
+                <h2>Rejestracja</h2>
+                <v-text-field label="Imię" v-model="name" name="name" :rules="notEmptyRule"></v-text-field>
+                <v-text-field label="Nazwisko" v-model="surname" name="surname" :rules="notEmptyRule"></v-text-field>
+
+                <v-checkbox v-model="noPesel" label="Nie mam numeru PESEL"></v-checkbox>
+                <v-text-field v-if="!noPesel" label="Nr PESEL" v-model="pesel" name="pesel" :rules="peselHas11digit"></v-text-field>
+
+                <v-menu ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="birthDate"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px">
+                    <template v-slot:activator="{ on }">
+                        <v-text-field v-model="birthDate"
+                                      label="Data urodzenia"
+                                      prepend-icon="event"
+                                      readonly
+                                      v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker locale="pl"
+                                   v-model="birthDate" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">Anuluj</v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(birthDate)">OK</v-btn>
+                    </v-date-picker>
+                </v-menu>
+
+
+                <v-text-field label="Adres email" v-model="email" name="email" :rules="notEmptyRule"></v-text-field>
+
+                <v-text-field label="Hasło" v-model="password" name="password" type="password" :rules="notEmptyRule"></v-text-field>
+                <v-text-field label="Powtórz hasło" v-model="confirmPassword" name="confirmPassword" type="password" :rules="notEmptyRule"></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+                <div class="form-group">
+                    <v-btn :disabled="fetching" @click="handleSubmit">Zarejestruj się</v-btn>
+                    <img v-show="fetching" />
+                </div>
+            </v-card-actions>
+        </card-layout>
+        <card-layout v-if="registrationCompleted">
+            <v-card-text>
+                Zostałeś pomyślnie zarejestrowany.
+                Aby uzyskać dostęp do platformy potwierdź swój adres email linkiem przesłanym na wskazany adres.
+            </v-card-text>
+            <v-card-actions>
+                <v-btn to="/">
+                    Strona główna
+                </v-btn>
+            </v-card-actions>
+        </card-layout>
+    </v-container>
+</template>

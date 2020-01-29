@@ -1,0 +1,35 @@
+﻿<template>
+    <div>
+        <spinner v-if="!loaded"></spinner>
+
+        <card-layout v-if="loaded" className="col-lg-7 col-md-8 col-sm-10 col-xs-10">
+            <v-card-title>
+                Egzaminy
+            </v-card-title>
+            <v-card-text v-if="examsFormatted.length==0">
+                Nie chwilę obecną nie jesteś zapisany/a na żadne egzaminy.
+            </v-card-text>
+            <v-card-text>
+                <v-card v-for="exam in examsFormatted" :key="exam.key" class="mb-3">
+                    <v-card-text>
+                        <v-card-title>
+                            {{exam.categoryName}}
+                        </v-card-title>
+                        <v-card-subtitle>
+                            {{exam.examTypeName}}
+                        </v-card-subtitle>
+                        <v-card-text>
+                            <p>
+                                Start: {{exam.startDate}} o godzinie: {{exam.startHour}}
+                            </p>
+                            <p>
+                                Czas trwania: {{exam.durationInMinutes}} minut.
+                            </p>
+                        </v-card-text>
+                    </v-card-text>
+                </v-card>
+            </v-card-text>
+        </card-layout>
+    </div>
+</template>
+<script src="./myExams.ts"></script>

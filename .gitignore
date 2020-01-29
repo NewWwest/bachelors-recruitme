@@ -1,3 +1,7 @@
+#static files
+/src/RecruitMe.Web/assets/
+
+
 #GIT IGNORE FROM DOTNET NEW VUE 
 
 /Properties/launchSettings.json
@@ -582,3 +586,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# LaTEX files
+*.synctex.gz

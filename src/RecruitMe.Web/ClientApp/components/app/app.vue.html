@@ -1,0 +1,18 @@
+<template>
+    <div id='app-root' class="container-fluid">
+        <v-app>
+            <menu-component :userLoggedIn="userLoggedIn" :displayName="displayName" :messages="messages"/>
+            <router-view></router-view>
+
+            <v-snackbar v-model="snackbar">
+                <div v-html="errorMessage">
+                </div>
+                <v-btn color="pink" text @click="snackbar = false">
+                    Zamknij
+                </v-btn>
+            </v-snackbar>
+        </v-app>
+    </div>
+</template>
+
+<script src="./app.ts"></script>

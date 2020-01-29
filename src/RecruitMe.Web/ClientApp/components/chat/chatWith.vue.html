@@ -1,0 +1,71 @@
+﻿<template>
+    <card-layout className="col-md-10">
+        <v-toolbar dark>
+            <v-toolbar-title>Chat</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+            <v-list ref="mainList" shaped class="messagesList">
+                <v-list-item>
+                    <v-list-item-content >
+                        <v-btn v-if="!readAll" :enabled="!fetching" @click="getMessages(page+1)">Ściągnij więcej wiadomości</v-btn>
+                        <span class="text-center" v-else>Wszystkie wiadomości zostały przeczytane</span>
+                    </v-list-item-content>
+                </v-list-item>
+                <template v-for="message in messages">
+                    <v-list-item two-line riple="0">
+                        <v-spacer v-if="message.isMine"></v-spacer>
+                        <v-list-item-content class="m5">
+                            <v-card shaped :class="{'mineCard': message.isMine}">
+                                <v-card-text>{{message.message}}</v-card-text>
+                            </v-card>
+                            <v-list-item-subtitle :class="{'subMargin': true, 'mineSubtitle': message.isMine}">
+                                {{getDateText(message.timestamp)}}
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-list>
+        </v-card-text>
+        <v-card-actions>
+            <v-row>
+                <v-text-field v-model="msg" label="Wiadomość" outlined
+                full-width clearable counter maxlength="500" class="textField"
+                @keyup.enter="sendMessage"></v-text-field>
+                <v-btn fab dark small color="primary" type="submit" class="sendBtn" @click="sendMessage">
+                    <v-icon dark>send</v-icon>
+                </v-btn>
+            </v-row>
+        </v-card-actions>
+    </card-layout>
+</template>
+<script src="./chatWith.ts"></script>
+<style scoped>
+    .m5 {
+        padding-left: 5px;
+        padding-right: 5px;
+        max-width: 40vw;
+        display: inline-table;
+    }
+    .mineCard {
+        background-color: #b3d4fc!important;
+        color: white!important;
+    }
+    .mineSubtitle {
+        text-align: right;
+    }
+    .messagesList {
+        height: 50vh;
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+    .sendBtn {
+        margin-top: 8px;
+        margin-left: 10px;
+    }
+    .subMargin {
+        margin-top: 2px;
+    }
+    .textField {
+        margin-left: 8px!important;
+    }
+</style>

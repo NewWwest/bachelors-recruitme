@@ -1,0 +1,59 @@
+﻿<template>
+    <div>
+        <card-layout className="col-md-10">
+            <v-card-title>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Exam==currentSystemEntity">
+                    Dodaj termin egzaminu
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
+                    Dodaj kategorię egzaminu
+                </h3>
+                <h3 class="d-inline-block" v-if="SystemEntityEnum.Teacher==currentSystemEntity">
+                    Dodaj nauczyciela
+                </h3>
+                <v-btn class="ml-3"
+                       :to="'/adminPanel/manage/'+currentSystemEntity">
+                    Wróć
+                </v-btn>
+            </v-card-title>
+
+            <v-card-text>
+                <v-container v-if="SystemEntityEnum.Exam==currentSystemEntity">
+                    <v-datetime-picker label="Start Egzaminu"
+                                       v-model="exam.startDateTime">
+                    </v-datetime-picker>
+                    <v-text-field label="Liczba osób" v-model="exam.seatCount" name="exam.seatCount" type="number"></v-text-field>
+                    <v-text-field label="Czas trwania" v-model="exam.durationInMinutes" name="exam.durationInMinutes" type="number"></v-text-field>
+                    <v-select v-model="exam.examCategoryId"
+                              :items="examCategories"
+                              label="Kategoria egzaminu"
+                              item-text="name"
+                              item-value="id"></v-select>
+                </v-container>
+
+                <v-container v-if="SystemEntityEnum.ExamCategory==currentSystemEntity">
+                    <v-text-field label="Nazwa kategorii" v-model="examCategory.name" name="examCategory.name"></v-text-field>
+                    <v-select v-model="examCategory.examType"
+                              :items="examTypes"
+                              item-text="name"
+                              item-value="id"
+                              label="Typ egzaminu">
+                    </v-select>
+                </v-container>
+
+                <v-container v-if="SystemEntityEnum.Teacher==currentSystemEntity">
+                    <v-text-field label="Imię" v-model="teacher.name" name="teacher.name"></v-text-field>
+                    <v-text-field label="Nazwisko" v-model="teacher.surname" name="teacher.surname"></v-text-field>
+                    <v-text-field label="Adres Email" v-model="teacher.email" name="teacher.email"></v-text-field>
+                </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-btn @click="handleSubmit">
+                    Zapisz
+                </v-btn>
+            </v-card-actions>
+        </card-layout>
+    </div>
+</template>
+<script src="./add.ts"></script>
