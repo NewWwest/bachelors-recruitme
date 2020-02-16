@@ -33,6 +33,16 @@ quit
 docker build -t rm-api-image . 
 docker run -d --net=recruit-me-network --name rm-api -p 80:80 -p 443:443 --expose=80 --expose=443 rm-api-image
 
+#
+# AWS deployment
+#
+docker login
+docker build -t rm-api-image . 
+docker tag rm-api-image westfalewicza/recruitmetest
+docker push westfalewicza/recruitmetest
+docker pull westfalewicza/recruitmetest
+docker run -d --name rm-api -p 80:80 -p 443:443 --expose=80 --expose=443 westfalewicza/recruitmetest
+
 
 #
 # Other Important commands:
